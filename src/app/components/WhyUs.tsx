@@ -3,12 +3,12 @@ import { CTAButton } from './CTAButton';
 import { Check } from 'lucide-react';
 
 const features = [
-  { id: 'heat-pump', label: 'Tepelná čerpadla', img: '/images/heatpump.png'' },
+  { id: 'heat-pump', label: 'Tepelná čerpadla', img: '/images/heatpump.png' },
   { id: 'solar', label: 'Fotovoltaika', img: '/images/fve.png' },
-  { id: 'finance', label: 'Finance', img: '/images/finance.png'' },
-  { id: 'energie', label: 'Energie', img: '/images/energy.png'' },
-  { id: 'stavby', label: 'Stavby', img: '/images/house.png'' },
-  { id: 'servis', label: 'Servis', img: '/images/servis.png'' },
+  { id: 'finance', label: 'Finance', img: '/images/finance.png' },
+  { id: 'energie', label: 'Energie', img: '/images/energy.png' },
+  { id: 'stavby', label: 'Stavby', img: '/images/house.png' },
+  { id: 'servis', label: 'Servis', img: '/images/servis.png' },
 ];
 
 export const WhyUs = () => {
