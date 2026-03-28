@@ -13,7 +13,7 @@ const servicesData = [
     icon: <PanelTop className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "FOTOVOLTAIKA A TEPELNÁ ČERPADLA",
     desc: "Komplexní řešení FVE a TČ s řízením pomocí umělé inteligence.",
-    image: "https://images.unsplash.com/photo-1635424709870-cdc6e64f0e20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb29mdG9wJTIwc29sYXIlMjBpbnN0YWxsYXRpb258ZW58MXx8fHwxNzc0NjIyNjk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "/images/fve-house.png",
     partnerType: 'single',
     partnerLogo: <SchliegerLogo className="h-[20px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -23,7 +23,7 @@ const servicesData = [
     icon: <Home className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "ZATEPLENÍ",
     desc: "Efektivní a profesionální zateplení fasád, střech i stropů",
-    image: "https://images.unsplash.com/photo-1701538517775-f94a4a6805ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0aGVybWFsJTIwaW5zdWxhdGlvbiUyMGJ1aWxkaW5nfGVufDF8fHx8MTc3NDcwMTY1MXww&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "/images/zatepleni",    
     partnerType: 'single',
     partnerLogo: <CiperkaLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -33,7 +33,7 @@ const servicesData = [
     icon: <AppWindow className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "OKNA A DVEŘE",
     desc: "Okna a dveře na míru s důrazem na úsporu energie a moderní design",
-    image: "https://images.unsplash.com/photo-1758923530724-1ad597412421?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aW5kb3dzJTIwZG9vcnMlMjBpbnN0YWxsYXRpb258ZW58MXx8fHwxNzc0NjEzMzM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "/images/oknadvere.png",
     partnerType: 'single',
     partnerLogo: <LumixoLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -43,7 +43,7 @@ const servicesData = [
     icon: <Zap className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "ENERGIE A FINANCOVÁNÍ",
     desc: "Nejlevnější tarify a financování pro snadný doprodej a vaši provizi",
-    image: "https://images.unsplash.com/photo-1650698877967-734f036a0c08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2FsJTIwZW5lcmd5JTIwZW5naW5lZXJpbmd8ZW58MXx8fHwxNzc0NzAxNjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "/images/financovani.png",
     partnerType: 'double',
     doublePartners: [
       {
@@ -63,7 +63,7 @@ const servicesData = [
     icon: <Settings className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "SERVIS A POJIŠTĚNÍ",
     desc: "Doživotní servis a pojistka jako finální argument pro okamžitý podpis",
-    image: "https://images.unsplash.com/photo-1771340742493-52fbd5476ccb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNobmljYWwlMjBzZXJ2aWNlJTIwbWFpbnRlbmFuY2V8ZW58MXx8fHwxNzc0NzAxNjQ4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    image: "/images/servis.png",
     partnerType: 'single',
     partnerLabelOverride: (
       <div className="text-[16px] text-[#374151] leading-snug">
