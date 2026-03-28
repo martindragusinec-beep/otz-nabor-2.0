@@ -2,21 +2,13 @@ import React from 'react';
 import { CTAButton } from './CTAButton';
 import { Check } from 'lucide-react';
 
-import imgMainHouse from "figma:asset/8a2e82c42160e18f66b88e6947812076ddee761f.png";
-import imgEnergie from "figma:asset/8982a72ee9368e1f231f052f4587165eef06e69e.png";
-import imgHeatPump from "figma:asset/0747df5514ba66674e8463ff41958b516276a079.png";
-import imgStavby from "figma:asset/27b16e5265441a650fa28197c1c5a6d5ae9230d6.png";
-import imgServis from "figma:asset/e0f9f2292aab210d43ef2c9ad39b9dea8d92a4e6.png";
-import imgFinance from "figma:asset/4cbca1269f8a6ffa1a1a989e59d61ae3534d7735.png";
-import imgSolar from "figma:asset/8003da1f06d50e25093f9af10f203233724d337c.png";
-
 const features = [
-  { id: 'heat-pump', label: 'Tepelná čerpadla', img: imgHeatPump },
-  { id: 'solar', label: 'Fotovoltaika', img: imgSolar },
-  { id: 'finance', label: 'Finance', img: imgFinance },
-  { id: 'energie', label: 'Energie', img: imgEnergie },
-  { id: 'stavby', label: 'Stavby', img: imgStavby },
-  { id: 'servis', label: 'Servis', img: imgServis },
+  { id: 'heat-pump', label: 'Tepelná čerpadla', img: 'https://images.unsplash.com/photo-1756482681036-73b894513086?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWF0JTIwcHVtcCUyMHRlY2hub2xvZ3l8ZW58MXx8fHwxNzc0NzAxNjQ3fDA&ixlib=rb-4.1.0&q=80&w=1080' },
+  { id: 'solar', label: 'Fotovoltaika', img: 'https://images.unsplash.com/photo-1635424709870-cdc6e64f0e20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyb29mdG9wJTIwc29sYXIlMjBpbnN0YWxsYXRpb258ZW58MXx8fHwxNzc0NjIyNjk5fDA&ixlib=rb-4.1.0&q=80&w=1080' },
+  { id: 'finance', label: 'Finance', img: 'https://images.unsplash.com/photo-1764231467854-db276777da58?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5hbmNpYWwlMjBwbGFubmluZyUyMGRvY3VtZW50c3xlbnwxfHx8fDE3NzQ3MDE2NDl8MA&ixlib=rb-4.1.0&q=80&w=1080' },
+  { id: 'energie', label: 'Energie', img: 'https://images.unsplash.com/photo-1650698877967-734f036a0c08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpY2FsJTIwZW5lcmd5JTIwZW5naW5lZXJpbmd8ZW58MXx8fHwxNzc0NzAxNjUyfDA&ixlib=rb-4.1.0&q=80&w=1080' },
+  { id: 'stavby', label: 'Stavby', img: 'https://images.unsplash.com/photo-1630259970029-7b1e1160243e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjBidWlsZGluZyUyMHNpdGV8ZW58MXx8fHwxNzc0NjE2Njc1fDA&ixlib=rb-4.1.0&q=80&w=1080' },
+  { id: 'servis', label: 'Servis', img: 'https://images.unsplash.com/photo-1771340742493-52fbd5476ccb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNobmljYWwlMjBzZXJ2aWNlJTIwbWFpbnRlbmFuY2V8ZW58MXx8fHwxNzc0NzAxNjQ4fDA&ixlib=rb-4.1.0&q=80&w=1080' },
 ];
 
 export const WhyUs = () => {
@@ -84,7 +76,7 @@ export const WhyUs = () => {
             {/* Top Image Section */}
             <div className="relative h-[260px] sm:h-[360px] w-full shrink-0 bg-[#1a2332]">
               <img 
-                src={imgMainHouse} 
+                src="https://images.unsplash.com/photo-1630259970029-7b1e1160243e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjBidWlsZGluZyUyMHNpdGV8ZW58MXx8fHwxNzc0NjE2Njc1fDA&ixlib=rb-4.1.0&q=80&w=1080" 
                 alt="Rodinný dům s moderními technologiemi" 
                 className="w-full h-full object-cover opacity-90"
               />

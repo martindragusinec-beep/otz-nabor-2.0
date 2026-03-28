@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ChevronDown, Plus, Minus } from 'lucide-react';
-import imgRedBlob from "figma:asset/e07f4f089b2165667a35cc5e0f64ff390174f883.png";
 
 const faqs = [
   {

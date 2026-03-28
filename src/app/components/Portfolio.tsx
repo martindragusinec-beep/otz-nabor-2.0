@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { CTAButton } from './CTAButton';
-import imgOptionImageContainer from "figma:asset/7ae6a9d02585c66d449c8f52a11e11c1664146b3.png";
-import imgOptionImageContainer1 from "figma:asset/d46ea1643b33d230cc91fc4ad4e2a9b0c82130ec.png";
-import imgOptionImageContainer2 from "figma:asset/1b3f9ef28cb67c7f9cb8fcd252516bfe35e3d29b.png";
-import imgOptionImageContainer3 from "figma:asset/60d7a763132248e1973ed296b48fad3c594ef5ac.png";
 
 const categories = ["Prodaná řešení", "Aktivní poptávky"];
 
 const items = [
   {
     id: 1,
-    img: imgOptionImageContainer,
+    img: "https://images.unsplash.com/photo-1668911494481-1643ee3e1235?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwcHJvcGVydHklMjBob3VzZXxlbnwxfHx8fDE3NzQ3MDE2NTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
     title: "Zateplení fasády domu",
     feature: "Vyšší komfort pro rodinu",
     provize: "Provize pro obchodníka 68 000 Kč",
@@ -19,7 +15,7 @@ const items = [
   },
   {
     id: 2,
-    img: imgOptionImageContainer1,
+    img: "https://images.unsplash.com/photo-1672508013582-035e75fb76ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXNpZGVudGlhbCUyMGJ1aWxkaW5nJTIwZXh0ZXJpb3J8ZW58MXx8fHwxNzc0Njg5MTgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
     title: "Výměna oken",
     feature: "Nové řešení pro zákazníka v dotaci",
     provize: "Provize pro obchodníka 43 000 Kč",
@@ -27,7 +23,7 @@ const items = [
   },
   {
     id: 3,
-    img: imgOptionImageContainer2,
+    img: "https://images.unsplash.com/photo-1764983265127-8ec30a9c7b64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tZXJjaWFsJTIwcHJvcGVydHklMjBidWlsZGluZ3xlbnwxfHx8fDE3NzQ2NzQ1NjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
     title: "Fotovoltaika s čerpadlem",
     feature: "Západ - Středočeský kraj, rodinný dům",
     provize: "Provize pro obchodníka 75 000 Kč",
@@ -35,7 +31,7 @@ const items = [
   },
   {
     id: 4,
-    img: imgOptionImageContainer3,
+    img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDF8fHx8MTc3NDYxOTgxNXww&ixlib=rb-4.1.0&q=80&w=1080",
     title: "Fotovoltaika",
     feature: "Západ - Středočeský kraj, rodinný dům",
     provize: "Provize pro obchodníka 52 000 Kč",

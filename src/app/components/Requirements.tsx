@@ -1,6 +1,5 @@
 import React from 'react';
 import { Target, TrendingUp, Award } from 'lucide-react';
-import imgImage from "figma:asset/89d44b489ef77f7c4d2b3f7ba77db6c287504991.png";
 
 export const Requirements = () => {
   return (
@@ -12,7 +11,7 @@ export const Requirements = () => {
           <div className="relative w-full max-w-lg mx-auto lg:max-w-none order-2 lg:order-1">
             <div className="relative w-full overflow-hidden rounded-[32px] bg-gray-50">
               <img 
-                src={imgImage} 
+                src="https://images.unsplash.com/photo-1652265540589-46f91535337b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdWNjZXNzZnVsJTIwc2FsZXNwZXJzb24lMjBwcmVzZW50YXRpb258ZW58MXx8fHwxNzc0NzAxNjUyfDA&ixlib=rb-4.1.0&q=80&w=1080" 
                 alt="Obchodník DOMIDOMI" 
                 className="w-full object-cover object-top aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5]"
               />

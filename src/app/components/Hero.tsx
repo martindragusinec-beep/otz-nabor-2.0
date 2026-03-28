@@ -1,5 +1,4 @@
 import React from 'react';
-import imgHero from "figma:asset/8bcaad357dd251d15ad74ecdaad21e2c1dc184ec.png";
 
 const YellowCheckIcon = () => (
   <svg className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 drop-shadow-sm" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +41,7 @@ export const Hero = () => {
         <img 
           alt="Rodinný dům na pozadí" 
           className="absolute w-full h-full object-cover object-center lg:object-[80%_center] opacity-90" 
-          src={imgHero} 
+          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDF8fHx8MTc3NDYxOTgxNXww&ixlib=rb-4.1.0&q=80&w=1080"
         />
         {/* Gradient overlays to ensure text readability on all screen sizes */}
         {/* Mobile: Top to bottom gradient */}
