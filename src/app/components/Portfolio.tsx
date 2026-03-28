@@ -50,7 +50,7 @@ export const Portfolio = () => {
   };
 
   return (
-    <section className="bg-gray-50 py-20 px-6 md:px-16">
+    <section className="bg-gray-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 md:px-12 lg:px-16">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         
         <div className="w-full mb-12 flex flex-col md:flex-row items-center justify-between gap-6">

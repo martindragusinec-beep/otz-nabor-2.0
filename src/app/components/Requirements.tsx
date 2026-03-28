@@ -3,7 +3,7 @@ import { Target, TrendingUp, Award } from 'lucide-react';
 
 export const Requirements = () => {
   return (
-    <section className="bg-white py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden">
+    <section className="bg-white py-12 sm:py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden">
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center mb-16">
           

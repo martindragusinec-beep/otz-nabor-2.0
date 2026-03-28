@@ -82,7 +82,7 @@ export const Services = () => {
   const activeService = servicesData[activeTab];
 
   return (
-    <section className="bg-white py-16 sm:py-24 px-4 sm:px-6 md:px-12 relative overflow-hidden">
+    <section className="bg-white py-12 sm:py-16 lg:py-24 px-4 sm:px-6 md:px-12 relative overflow-hidden">
       <div className="max-w-[1280px] mx-auto flex flex-col gap-14">
         
         {/* Header */}

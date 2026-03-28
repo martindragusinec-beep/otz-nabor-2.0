@@ -9,11 +9,10 @@ import { Requirements } from "./Requirements";
 import { Portfolio } from "./Portfolio";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
-import { StickyCTA } from "./StickyCTA";
 
 export const Home = () => {
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden flex flex-col relative pb-20 md:pb-0">
+    <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden flex flex-col relative">
       <Header />
       <main className="flex-grow">
         <Hero />
@@ -30,7 +29,6 @@ export const Home = () => {
         <LeadBanner />
       </main>
       <Footer />
-      <StickyCTA />
     </div>
   );
 };

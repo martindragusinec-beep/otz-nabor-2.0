@@ -644,7 +644,7 @@ export const LeadBanner = () => {
   const progressWidth = progressPercentages[currentStep - 1];
 
   return (
-    <section className="bg-[#f0f4f8] py-12 px-4 overflow-hidden flex justify-center">
+    <section className="bg-[#f0f4f8] py-12 sm:py-16 lg:py-20 px-4 overflow-hidden flex justify-center">
       <div className="w-full max-w-[1280px] mx-auto bg-[#111928] rounded-[16px] relative flex flex-col sm:flex-row overflow-hidden shadow-[0_15px_40px_-15px_rgba(0,0,0,0.3)]">
         
         {/* Background red polygon */}

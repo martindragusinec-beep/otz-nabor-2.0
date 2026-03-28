@@ -5,7 +5,7 @@ import svgPaths from "../../imports/svg-2q3vvqouzy";
 
 export const Stats = () => {
   return (
-    <section className="bg-[#f8fafc] py-20 lg:py-32 px-4 sm:px-6 md:px-12 border-y border-gray-100 overflow-hidden">
+    <section className="bg-[#f8fafc] py-16 sm:py-20 lg:py-32 px-4 sm:px-6 md:px-12 border-y border-gray-100 overflow-hidden">
       <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         {/* Left Side: Copy & Benefits */}
         <motion.div 

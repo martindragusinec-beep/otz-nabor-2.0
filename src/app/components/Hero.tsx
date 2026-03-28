@@ -57,14 +57,14 @@ export const Hero = () => {
           
           {/* Red Badge */}
           <div className="bg-[#E30A1A] text-white px-5 py-3 sm:px-6 sm:py-4 rounded-xl shadow-xl shadow-red-500/20 w-full sm:inline-block sm:w-auto" style={{ animation: 'gentleGlow 3s ease-in-out infinite' }}>
-            <h2 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-tight tracking-tight flex flex-row items-baseline gap-2 sm:gap-3 justify-center sm:justify-start">
-              <span className="opacity-90 text-[28px] sm:text-[40px]">Vydělej si až</span>
-              <span className="font-extrabold text-[32px] sm:text-4xl md:text-5xl lg:text-[52px] tracking-tighter whitespace-nowrap">200 000+ Kč</span>
+            <h2 className="font-semibold leading-tight tracking-tight text-center sm:text-left">
+              <span className="text-xl sm:text-3xl md:text-4xl lg:text-[42px] opacity-90">Vydělej si až </span>
+              <span className="text-2xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold tracking-tighter whitespace-nowrap">200 000+ Kč</span>
             </h2>
           </div>
           
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-bold leading-[1.1] tracking-tight max-w-[700px] text-white drop-shadow-md">
+          <h1 className="text-3xl sm:text-5xl lg:text-[64px] font-bold leading-[1.15] sm:leading-[1.1] tracking-tight max-w-[700px] text-white drop-shadow-md">
             Hledáme jen <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">3 TOP obchodníky</span> <br className="hidden sm:block" />
             s citem pro cross-sell
@@ -77,11 +77,11 @@ export const Hero = () => {
               'Prodáváš celý ekosystém řešení',
               'Nemáš strop na provizi'
             ].map((item, i) => (
-              <li key={i} className="flex items-center gap-3 sm:gap-4 w-full">
-                <div>
+              <li key={i} className="flex items-start gap-3 sm:gap-4 w-full">
+                <div className="mt-0.5">
                   <YellowCheckIcon />
                 </div>
-                <span className="font-medium text-[17px] sm:text-xl lg:text-2xl text-white/95 leading-snug">{item}</span>
+                <span className="font-medium text-base sm:text-xl lg:text-2xl text-white/95 leading-snug">{item}</span>
               </li>
             ))}
           </ul>

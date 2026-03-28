@@ -28,7 +28,7 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="bg-white py-24 px-6 md:px-16 relative overflow-hidden">
+    <section className="bg-white py-16 sm:py-20 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 relative overflow-hidden">
       {/* Decorative Blob */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 opacity-10 pointer-events-none hidden md:block">
          

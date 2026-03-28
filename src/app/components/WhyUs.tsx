@@ -20,7 +20,7 @@ export const WhyUs = () => {
   };
 
   return (
-    <section className="relative w-full bg-[#111928] text-white overflow-hidden py-20 sm:py-28 px-4 sm:px-6 md:px-12 lg:px-8 flex items-center">
+    <section className="relative w-full bg-[#111928] text-white overflow-hidden py-16 sm:py-20 lg:py-28 px-4 sm:px-6 md:px-12 lg:px-8 flex items-center">
       
       {/* Subtle ambient glow behind the layout */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#76A9FA]/5 blur-[120px] rounded-full pointer-events-none" aria-hidden="true" />
