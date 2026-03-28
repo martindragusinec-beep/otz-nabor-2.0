@@ -23,7 +23,7 @@ const servicesData = [
     icon: <Home className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "ZATEPLENÍ",
     desc: "Efektivní a profesionální zateplení fasád, střech i stropů",
-    image: "/images/zatepleni",    
+    image: "/images/zatepleni.png",    
     partnerType: 'single',
     partnerLogo: <CiperkaLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -63,7 +63,7 @@ const servicesData = [
     icon: <Settings className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "SERVIS A POJIŠTĚNÍ",
     desc: "Doživotní servis a pojistka jako finální argument pro okamžitý podpis",
-    image: "/images/servis.png",
+    image: "/images/servis-pojisteni.png",
     partnerType: 'single',
     partnerLabelOverride: (
       <div className="text-[16px] text-[#374151] leading-snug">
