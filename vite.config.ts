@@ -16,7 +16,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'esbuild',
+  },
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
