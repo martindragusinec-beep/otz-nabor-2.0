@@ -41,7 +41,7 @@ export const Hero = () => {
         <img 
           alt="Rodinný dům na pozadí" 
           className="absolute w-full h-full object-cover object-center lg:object-[80%_center] opacity-90" 
-          src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDF8fHx8MTc3NDYxOTgxNXww&ixlib=rb-4.1.0&q=80&w=1080"
+          src="assets/hero-bg.png"
         />
         {/* Gradient overlays to ensure text readability on all screen sizes */}
         {/* Mobile: Top to bottom gradient */}
