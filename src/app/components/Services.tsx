@@ -4,6 +4,12 @@ import imgFve from "figma:asset/043a62b9626b1a8f237667680c73da1920f3c00c.png";
 import imgZat from "figma:asset/ba75a1fac7c058304153f035748da86c71b02129.png";
 import imgOkna from "figma:asset/4250ce923c5b9d7be4dc97feb3c67fd0d88c6378.png";
 import imgEnergie from "figma:asset/ad8c0a232e1e17f513868b48f798bd44a6f3da97.png";
+import { CiperkaLogo } from './logos/CiperkaLogo';
+import { LumixoLogo } from './logos/LumixoLogo';
+import { DomiDomiEnergieLogo } from './logos/DomiDomiEnergieLogo';
+import { DomiDomiFinanceLogo } from './logos/DomiDomiFinanceLogo';
+import { DomiDomiCareLogo } from './logos/DomiDomiCareLogo';
+import { SchliegerLogo } from './logos/SchliegerLogo';
 
 const servicesData = [
   {
@@ -13,14 +19,7 @@ const servicesData = [
     desc: "Komplexní řešení FVE a TČ s řízením pomocí umělé inteligence.",
     image: imgFve,
     partnerType: 'single',
-    partnerLogo: (
-      <div className="flex items-center gap-1.5">
-        <div className="flex gap-0.5 text-[#DA000F] -ml-1">
-           <Activity className="w-6 h-6" strokeWidth={2.5} />
-        </div>
-        <span className="font-extrabold text-[20px] tracking-tight text-black">SCHLIEGER</span>
-      </div>
-    ),
+    partnerLogo: <SchliegerLogo className="h-[20px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
   },
   {
@@ -30,12 +29,7 @@ const servicesData = [
     desc: "Efektivní a profesionální zateplení fasád, střech i stropů",
     image: imgZat,
     partnerType: 'single',
-    partnerLogo: (
-      <div className="flex items-center gap-1.5">
-        <Home className="w-6 h-6 text-[#FF2500]" strokeWidth={2.5} />
-        <span className="font-extrabold text-[20px] tracking-tight text-black">ČIPERKA</span>
-      </div>
-    ),
+    partnerLogo: <CiperkaLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
   },
   {
@@ -45,16 +39,7 @@ const servicesData = [
     desc: "Okna a dveře na míru s důrazem na úsporu energie a moderní design",
     image: imgOkna,
     partnerType: 'single',
-    partnerLogo: (
-      <div className="flex items-center gap-1.5">
-        <div className="flex items-center gap-0.5 text-[#F0423B]">
-          <div className="w-1.5 h-4 bg-current transform -skew-x-12"></div>
-          <div className="w-1.5 h-5 bg-current transform -skew-x-12"></div>
-          <div className="w-1.5 h-6 bg-current transform -skew-x-12"></div>
-        </div>
-        <span className="font-extrabold text-[20px] tracking-wide text-black">LUMIXO</span>
-      </div>
-    ),
+    partnerLogo: <LumixoLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
   },
   {
@@ -68,24 +53,12 @@ const servicesData = [
       {
         label1: "Realizační partner",
         label2: "pro energie:",
-        logo: (
-          <div className="flex flex-col items-start leading-none ml-3">
-            <span className="font-extrabold text-[18px] text-black tracking-tight">DOMI</span>
-            <span className="font-extrabold text-[18px] text-black tracking-tight flex items-center">DOM<span className="w-2 h-2 bg-[#E30A1A] mx-0.5 inline-block"></span>I</span>
-            <span className="text-[8px] font-bold tracking-widest mt-0.5 text-black">ENERGIE</span>
-          </div>
-        )
+        logo: <DomiDomiEnergieLogo className="h-[48px] w-auto ml-3" />
       },
       {
         label1: "Realizační partner",
         label2: "pro finance:",
-        logo: (
-          <div className="flex flex-col items-start leading-none ml-3">
-            <span className="font-extrabold text-[18px] text-black tracking-tight">DOMI</span>
-            <span className="font-extrabold text-[18px] text-black tracking-tight flex items-center">DOM<span className="w-2 h-2 bg-[#E30A1A] mx-0.5 inline-block"></span>I</span>
-            <span className="text-[8px] font-bold tracking-widest mt-0.5 text-black">FINANCE</span>
-          </div>
-        )
+        logo: <DomiDomiFinanceLogo className="h-[48px] w-auto ml-3" />
       }
     ]
   },
@@ -102,13 +75,7 @@ const servicesData = [
         <span className="font-bold">pro pojištění a servis:</span>
       </div>
     ),
-    partnerLogo: (
-      <div className="flex flex-col items-start leading-none ml-3">
-        <span className="font-extrabold text-[22px] text-black tracking-tight">DOMI</span>
-        <span className="font-extrabold text-[22px] text-black tracking-tight flex items-center">DOM<span className="w-2.5 h-2.5 bg-[#E30A1A] mx-0.5 inline-block"></span>I</span>
-        <span className="text-[10px] font-bold tracking-widest mt-1 text-black">CARE</span>
-      </div>
-    ),
+    partnerLogo: <DomiDomiCareLogo className="h-[48px] w-auto ml-3" />,
     stats: null
   }
 ];
@@ -131,21 +98,103 @@ export const Services = () => {
             Naše síla spočívá v našem portfoliu služeb. <span className="font-bold text-[#E30A1A]">Upsell / crossell musíš mít v malíčku.</span>
           </p>
           <p className="text-[16px] text-[#374151] leading-relaxed max-w-[1160px]">
-            Pomáháme lidem modernizovat jejich domovy a šetřit na energiích – chytře a efektivně. Vždy hledáme to nejlepší řešení pro konkrétní dům. Nabízíme široké spektrum řešení a pro zákazníka představujeme jedinečný “one-stop solution” - všechno na jednom místě.
+            Pomáháme lidem modernizovat jejich domovy a šetřit na energiích – chytře a efektivně. Vždy hledáme to nejlepší řešení pro konkrétní dům. Nabízíme široké spektrum řešení a pro zákazníka představujeme jedinečný "one-stop solution" - všechno na jednom místě.
           </p>
         </div>
 
-        {/* Content Layout */}
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
+        {/* Mobile: Accordion Layout */}
+        <div className="flex flex-col gap-3 lg:hidden">
+          {servicesData.map((service, idx) => {
+            const isActive = activeTab === idx;
+            return (
+              <div key={service.id} className="w-full">
+                <div 
+                  onClick={() => setActiveTab(isActive ? -1 : idx)}
+                  className={`relative w-full rounded-lg cursor-pointer transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-white border-[#E30A1A] border-[1.5px] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]' 
+                      : 'bg-white border-[#E5E7EB] border hover:border-gray-300'
+                  }`}
+                >
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
+                      <div className="size-10 shrink-0 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg flex items-center justify-center p-1">
+                        {service.icon}
+                      </div>
+                      <h3 className={`font-bold text-[20px] uppercase leading-tight ${isActive ? 'text-[#E30A1A]' : 'text-[#111928]'}`}>
+                        {service.title}
+                      </h3>
+                    </div>
+                    <p className="text-[#374151] text-[16px] leading-relaxed ml-[52px]">
+                      {service.desc}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Expanded Image for Mobile */}
+                {isActive && (
+                  <div className="mt-3 relative rounded-lg overflow-hidden min-h-[300px]">
+                    <img 
+                      src={service.image} 
+                      alt={service.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    
+                    {/* Partner Banner */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      {service.partnerType === 'single' && (
+                        <div className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] p-4 flex flex-col gap-2">
+                          <div className="flex items-center gap-4">
+                            {service.partnerLabelOverride ? (
+                              service.partnerLabelOverride
+                            ) : (
+                              <p className="text-[#374151] text-[14px] whitespace-nowrap">
+                                Realizační partner:
+                              </p>
+                            )}
+                            {service.partnerLogo}
+                          </div>
+                          {service.stats && (
+                            <p className="text-[#374151] text-[14px]">
+                              {service.stats}
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {service.partnerType === 'double' && service.doublePartners && (
+                        <div className="flex flex-col gap-3">
+                          {service.doublePartners.map((partner, pIdx) => (
+                            <div key={pIdx} className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] p-4 flex items-center gap-4">
+                              <p className="text-[#374151] text-[14px] leading-snug">
+                                {partner.label1}<br/>
+                                <span className="font-bold">{partner.label2}</span>
+                              </p>
+                              {partner.logo}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop: Side-by-Side Layout */}
+        <div className="hidden lg:flex flex-row gap-8 items-stretch">
           
           {/* Left Column: Tabs */}
-          <div className="w-full lg:w-5/12 flex flex-col gap-3 shrink-0">
+          <div className="w-5/12 flex flex-col gap-3 shrink-0">
             {servicesData.map((service, idx) => {
               const isActive = activeTab === idx;
               return (
                 <div 
                   key={service.id}
                   onClick={() => setActiveTab(idx)}
+                  onMouseEnter={() => setActiveTab(idx)}
                   className={`relative w-full rounded-lg cursor-pointer transition-all duration-300 ${
                     isActive 
                       ? 'bg-white border-[#E30A1A] border-[1.5px] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)] z-10' 
@@ -171,7 +220,7 @@ export const Services = () => {
           </div>
 
           {/* Right Column: Image and Partner Banner */}
-          <div className="w-full lg:w-7/12 relative rounded-lg overflow-hidden shrink-0 flex-1 min-h-[400px] lg:min-h-[568px]">
+          <div className="w-7/12 relative rounded-lg overflow-hidden shrink-0 flex-1 min-h-[568px]">
             <div className="absolute inset-0">
               <img 
                 src={activeService.image} 
@@ -181,9 +230,9 @@ export const Services = () => {
             </div>
             
             {/* Floating Partner Banner */}
-            <div className="absolute bottom-5 right-5 sm:bottom-6 sm:right-6 left-5 sm:left-auto">
+            <div className="absolute bottom-6 right-6 left-auto">
               {activeService.partnerType === 'single' && (
-                <div className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] p-4 sm:px-[18px] sm:py-[16px] flex flex-col gap-2 items-start justify-center">
+                <div className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-[18px] py-[16px] flex flex-col gap-2 items-start justify-center">
                   <div className="flex items-center gap-4">
                     {activeService.partnerLabelOverride ? (
                       activeService.partnerLabelOverride
@@ -195,7 +244,7 @@ export const Services = () => {
                     {activeService.partnerLogo}
                   </div>
                   {activeService.stats && (
-                    <p className="text-[#374151] text-[14px] sm:text-[16px] whitespace-nowrap pt-1">
+                    <p className="text-[#374151] text-[16px] whitespace-nowrap pt-1">
                       {activeService.stats}
                     </p>
                   )}
@@ -203,9 +252,9 @@ export const Services = () => {
               )}
 
               {activeService.partnerType === 'double' && activeService.doublePartners && (
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-row gap-4">
                   {activeService.doublePartners.map((partner, pIdx) => (
-                    <div key={pIdx} className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] p-4 sm:px-[18px] sm:py-[16px] flex items-center gap-4">
+                    <div key={pIdx} className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] px-[18px] py-[16px] flex items-center gap-4">
                       <p className="text-[#374151] text-[16px] leading-snug">
                         {partner.label1}<br/>
                         <span className="font-bold">{partner.label2}</span>

@@ -70,21 +70,62 @@ export const Requirements = () => {
         </div>
 
         {/* Bottom Banner - Clean, light, without CTA */}
-        <div className="bg-gray-50 border border-gray-100/50 rounded-[20px] p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4 sm:gap-5">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 border border-gray-100 p-2">
-              <div className="w-full h-full flex flex-col rounded-[1px] overflow-hidden">
-                <div className="h-1/3 bg-[#111111]"></div>
+        <div className="bg-[#111928] rounded-[8px] p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+          <div className="flex items-center gap-4 sm:gap-5 flex-1">
+            <div className="w-12 h-12 bg-[#f9fafb] rounded-lg flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 flex flex-col rounded-[1px] overflow-hidden">
+                <div className="h-1/3 bg-[#000000]"></div>
                 <div className="h-1/3 bg-[#DD0000]"></div>
                 <div className="h-1/3 bg-[#FFCE00]"></div>
               </div>
             </div>
-            <div>
-              <p className="text-[15px] sm:text-[16px] text-gray-600">
-                <strong className="font-medium text-gray-900">Umíš německy?</strong> Hledáme i B2B obchodníky pro německy mluvící trhy.
+            <div className="flex-1">
+              <p className="text-white font-semibold text-[18px] sm:text-[20px] leading-[1.3] mb-1">
+                Umíš německy? Dej nám o sobě vědět!
+              </p>
+              <p className="text-white/90 text-[14px] sm:text-[16px] leading-[1.5]">
+                Rozšiřujeme tým i s B2B obchodníky v německy mluvících zemích.
               </p>
             </div>
           </div>
+          
+          <button
+            onClick={() => {
+              const leadBanner = document.getElementById('lead-banner-form');
+              if (leadBanner) {
+                leadBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }}
+            className="group bg-[#e30a1a] hover:bg-[#c90816] flex gap-6 items-center justify-center h-[56px] pl-8 pr-1.5 py-[18px] rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0"
+          >
+            <span className="font-bold text-[16px] leading-[1.5] text-white whitespace-nowrap">
+              Chci dělat B2B v Německu
+            </span>
+            
+            {/* White Circle with Arrow Icon */}
+            <div className="bg-white flex items-center justify-center rounded-full shrink-0 size-[42px] transition-transform duration-300 group-hover:scale-110">
+              <svg 
+                className="size-[24px] transition-transform duration-300 group-hover:translate-x-0.5" 
+                fill="none" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  d="M19 12L5 12" 
+                  stroke="#111928" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2"
+                />
+                <path 
+                  d="M12 19L19 12L12 5" 
+                  stroke="#111928" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </div>
     </section>

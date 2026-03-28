@@ -1,6 +1,5 @@
 import React from 'react';
-import { Phone, Mail, ArrowRight, Linkedin, Facebook } from 'lucide-react';
-import { Logo } from './Logo';
+import { Phone, Mail } from 'lucide-react';
 
 export const Footer = () => {
   return (
@@ -8,7 +7,7 @@ export const Footer = () => {
       <div className="max-w-[1280px] mx-auto flex flex-col gap-12">
         
         {/* Top Section - Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_2fr] gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
           
           {/* Column 1 - Phone */}
           <div className="bg-[#1F2A37] rounded-[8px] p-6 lg:p-8 flex flex-col items-start gap-8">
@@ -31,32 +30,6 @@ export const Footer = () => {
               <span className="text-[18px] text-white tracking-wide whitespace-nowrap">info@domidomi.cz</span>
             </a>
           </div>
-
-          {/* Column 3 - Careers */}
-          
-          
-        </div>
-
-        {/* Middle Section - Socials & Logo */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 w-full pt-2">
-          
-          {/* Logo (DOMI DOMI style approximation) */}
-          <div className="shrink-0">
-            <Logo className="w-[120px] h-[56px]" fill="#ffffff" arrowFill="#E30A1A" />
-          </div>
-
-          {/* Socials */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <span className="text-[14px] text-white font-medium">Sledujte nás na sociálních sítích:</span>
-            <div className="flex items-center gap-3">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all group">
-                <Linkedin className="w-4 h-4 text-white group-hover:scale-110 transition-transform" strokeWidth={1.5} fill="currentColor" fillOpacity={0.2} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all group">
-                <Facebook className="w-4 h-4 text-white group-hover:scale-110 transition-transform" strokeWidth={1.5} fill="currentColor" fillOpacity={0.2} />
-              </a>
-            </div>
-          </div>
           
         </div>
 
@@ -66,7 +39,7 @@ export const Footer = () => {
           
           <div className="flex flex-col gap-2 mt-2">
             <p className="text-[14px] text-white font-medium">
-              © Copyright 2025© Schlieger - Všechna práva vyhrazena. | Ochrana osobních údajů (GDPR)
+              © Copyright 2025© Schlieger - Všechna práva vyhrazena. | <a href="/podminky-ochrany-osobnich-udaju" className="hover:text-[#FFE142] transition-colors underline">Ochrana osobních údajů (GDPR)</a>
             </p>
             <p className="text-[12px] text-[#9CA3AF] font-normal leading-relaxed max-w-5xl">
               Společnost Schlieger s.r.o. | IČ 28787803 se sídlem U nákladového nádraží 3265/10, Strašnice, 130 00 Praha 3 | C 385508/MSPH Městský soud v Praze

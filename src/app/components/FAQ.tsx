@@ -32,7 +32,7 @@ export const FAQ = () => {
     <section className="bg-white py-24 px-6 md:px-16 relative overflow-hidden">
       {/* Decorative Blob */}
       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/3 opacity-10 pointer-events-none hidden md:block">
-         <img src={imgRedBlob} alt="Decorative" className="w-[600px] h-[600px] object-contain" />
+         
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">

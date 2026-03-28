@@ -7,7 +7,26 @@ const YellowCheckIcon = () => (
   </svg>
 );
 
+const experienceOptions = [
+  { id: 'exp1', value: 'less_than_year', label: 'Méně než rok' },
+  { id: 'exp2', value: '1_2_years', label: '1 - 2 roky' },
+  { id: 'exp3', value: 'more_than_3', label: 'Více než 3 roky' }
+];
+
 export const Hero = () => {
+  const handleExperienceSelect = (value: string) => {
+    // Save to localStorage
+    localStorage.setItem('heroFormData', JSON.stringify({ salesExperience: value }));
+    
+    // Scroll to LeadBanner form
+    setTimeout(() => {
+      const leadBanner = document.getElementById('lead-banner-form');
+      if (leadBanner) {
+        leadBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 300);
+  };
+
   return (
     <section className="relative w-full bg-[#111928] text-white overflow-hidden min-h-[auto] lg:min-h-[700px] flex flex-col justify-center py-12 sm:py-16 md:py-24 px-4 sm:px-6 md:px-12 lg:px-16">
       <style>{`
@@ -38,10 +57,10 @@ export const Hero = () => {
         <div className="flex flex-col items-start gap-6 sm:gap-8 w-full lg:w-3/5">
           
           {/* Red Badge */}
-          <div className="bg-[#E30A1A] text-white px-5 py-3 sm:px-6 sm:py-4 rounded-xl shadow-xl shadow-red-500/20 inline-block">
-            <h2 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-tight tracking-tight flex flex-col sm:flex-row items-start sm:items-baseline sm:gap-3">
-              <span className="opacity-90 text-[40px]">Vydělej si až</span>
-              <span className="font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[52px] tracking-tighter">200 000+ Kč</span>
+          <div className="bg-[#E30A1A] text-white px-5 py-3 sm:px-6 sm:py-4 rounded-xl shadow-xl shadow-red-500/20 w-full sm:inline-block sm:w-auto" style={{ animation: 'gentleGlow 3s ease-in-out infinite' }}>
+            <h2 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-tight tracking-tight flex flex-row items-baseline gap-2 sm:gap-3 justify-center sm:justify-start">
+              <span className="opacity-90 text-[28px] sm:text-[40px]">Vydělej si až</span>
+              <span className="font-extrabold text-[32px] sm:text-4xl md:text-5xl lg:text-[52px] tracking-tighter whitespace-nowrap">200 000+ Kč</span>
             </h2>
           </div>
           
@@ -59,8 +78,8 @@ export const Hero = () => {
               'Prodáváš celý ekosystém řešení',
               'Nemáš strop na provizi'
             ].map((item, i) => (
-              <li key={i} className="flex items-start sm:items-center gap-3 sm:gap-4 w-full backdrop-blur-md bg-black/10 sm:bg-transparent rounded-xl p-3 sm:p-0 border border-white/5 sm:border-none">
-                <div className="mt-1 sm:mt-0">
+              <li key={i} className="flex items-center gap-3 sm:gap-4 w-full">
+                <div>
                   <YellowCheckIcon />
                 </div>
                 <span className="font-medium text-[17px] sm:text-xl lg:text-2xl text-white/95 leading-snug">{item}</span>
@@ -75,8 +94,9 @@ export const Hero = () => {
             
             {/* Top Text Header */}
             <div className="flex flex-col gap-1.5 items-center mb-6">
-              <h3 className="text-[#111928] text-xl sm:text-2xl leading-tight">
-                <span className="font-bold">Máš na to u nás pracovat? </span>
+              <h3 className="text-[#111928] text-xl sm:text-2xl leading-tight text-center">
+                <span className="font-bold">Máš na to u nás pracovat?</span>
+                <br />
                 <span className="font-black text-[#4ca400] uppercase tracking-wide">Ověř si!</span>
               </h3>
               <p className="font-medium text-[#4b5563] text-sm sm:text-base">Zabere ti to max. 2 minuty</p>
@@ -107,18 +127,14 @@ export const Hero = () => {
                       strokeLinejoin="round"
                       strokeDasharray="1"
                       pathLength="1"
-                      style={{ animation: 'drawArrowDown 1s ease-out forwards', strokeDashoffset: 1 }}
+                      style={{ animation: 'drawArrowDown 1.5s ease-in-out infinite', strokeDashoffset: 1 }}
                     />
                   </svg>
                 </div>
               </div>
 
               <div className="flex flex-col gap-3 w-full relative z-20">
-                {[
-                  { id: 'exp1', label: 'Méně než rok' },
-                  { id: 'exp2', label: '1 - 2 roky' },
-                  { id: 'exp3', label: 'Více než 3 roky' }
-                ].map((option) => (
+                {experienceOptions.map((option) => (
                   <label 
                     key={option.id} 
                     htmlFor={option.id}
@@ -128,7 +144,8 @@ export const Hero = () => {
                       type="radio" 
                       id={option.id}
                       name="hero_experience" 
-                      className="peer sr-only" 
+                      className="peer sr-only"
+                      onChange={() => handleExperienceSelect(option.value)}
                     />
                     {/* Custom Radio Button */}
                     <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-gray-300 flex items-center justify-center group-hover:border-[#4ca400] peer-checked:border-[#4ca400] peer-checked:border-[7px] transition-all duration-200 bg-white shrink-0 shadow-inner"></div>

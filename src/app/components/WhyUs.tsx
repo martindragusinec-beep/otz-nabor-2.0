@@ -1,5 +1,6 @@
 import React from 'react';
-import { ArrowRight, Check } from 'lucide-react';
+import { CTAButton } from './CTAButton';
+import { Check } from 'lucide-react';
 
 import imgMainHouse from "figma:asset/8a2e82c42160e18f66b88e6947812076ddee761f.png";
 import imgEnergie from "figma:asset/8982a72ee9368e1f231f052f4587165eef06e69e.png";
@@ -19,6 +20,13 @@ const features = [
 ];
 
 export const WhyUs = () => {
+  const scrollToForm = () => {
+    const leadBanner = document.getElementById('lead-banner-form');
+    if (leadBanner) {
+      leadBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   return (
     <section className="relative w-full bg-[#111928] text-white overflow-hidden py-20 sm:py-28 px-4 sm:px-6 md:px-12 lg:px-8 flex items-center">
       
@@ -39,7 +47,7 @@ export const WhyUs = () => {
             Proč prodávat <br className="hidden sm:block" />v DOMIDOMI?
           </h2>
 
-          <div className="h-[3px] w-12 bg-[#e30a1a] rounded-full mb-8"></div>
+          
 
           <div className="flex flex-col gap-6 text-base sm:text-lg leading-[1.7] text-gray-400">
             <p>
@@ -62,10 +70,9 @@ export const WhyUs = () => {
             </ul>
           </div>
 
-          <button className="mt-10 bg-[#e30a1a] text-white font-semibold rounded-full py-4 px-8 flex items-center gap-3 hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 group">
-            <span className="text-lg">Chci obchod, který dává smysl</span>
-            <ArrowRight size={20} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          <CTAButton onClick={scrollToForm} className="mt-10">
+            Chci obchod, který dává smysl
+          </CTAButton>
         </div>
 
         {/* Right Column - Premium "Feature Layout" */}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
+import { CTAButton } from './CTAButton';
 import imgOptionImageContainer from "figma:asset/7ae6a9d02585c66d449c8f52a11e11c1664146b3.png";
 import imgOptionImageContainer1 from "figma:asset/d46ea1643b33d230cc91fc4ad4e2a9b0c82130ec.png";
 import imgOptionImageContainer2 from "figma:asset/1b3f9ef28cb67c7f9cb8fcd252516bfe35e3d29b.png";
@@ -45,6 +46,13 @@ const items = [
 export const Portfolio = () => {
   const [activeTab, setActiveTab] = useState(categories[0]);
 
+  const scrollToForm = () => {
+    const leadBanner = document.getElementById('lead-banner-form');
+    if (leadBanner) {
+      leadBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
   return (
     <section className="bg-gray-50 py-20 px-6 md:px-16">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
@@ -84,9 +92,9 @@ export const Portfolio = () => {
           ))}
         </div>
 
-        <button className="bg-[#E30A1A] hover:bg-[#c90816] text-white font-bold py-4 px-10 rounded-full transition-colors flex items-center justify-center gap-2 group shadow-lg shadow-red-500/30">
-          Začít vydělávat ještě dnes <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </button>
+        <CTAButton onClick={scrollToForm}>
+          Začít vydělávat ještě dnes
+        </CTAButton>
       </div>
     </section>
   );
