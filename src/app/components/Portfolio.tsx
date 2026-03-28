@@ -7,7 +7,7 @@ const categories = ["Prodaná řešení", "Aktivní poptávky"];
 const items = [
   {
     id: 1,
-    img: "public/images/res1.png",
+    img: "/images/res1.png",
     title: "Zateplení fasády domu",
     feature: "Vyšší komfort pro rodinu",
     provize: "Provize pro obchodníka 68 000 Kč",
@@ -15,7 +15,7 @@ const items = [
   },
   {
     id: 2,
-    img: "public/images/res2.png",    
+    img: "/images/res2.png",    
     title: "Výměna oken",
     feature: "Nové řešení pro zákazníka v dotaci",
     provize: "Provize pro obchodníka 43 000 Kč",
@@ -23,7 +23,7 @@ const items = [
   },
   {
     id: 3,
-    img: "public/images/res3.png",    
+    img: "/images/res3.png",    
     title: "Fotovoltaika s čerpadlem",
     feature: "Západ - Středočeský kraj, rodinný dům",
     provize: "Provize pro obchodníka 75 000 Kč",
@@ -31,7 +31,7 @@ const items = [
   },
   {
     id: 4,
-    img: "public/images/res4.png",    
+    img: "/images/res4.png",    
     title: "Fotovoltaika",
     feature: "Západ - Středočeský kraj, rodinný dům",
     provize: "Provize pro obchodníka 52 000 Kč",
