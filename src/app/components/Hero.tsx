@@ -45,9 +45,6 @@ export const Hero = () => {
         />
         {/* Gradient overlays to ensure text readability on all screen sizes */}
         {/* Mobile: Top to bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#111928] via-[#111928]/90 to-[#111928]/40 lg:hidden" />
-        {/* Desktop: Left to right gradient */}
-        <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-[#111928] via-[#111928]/95 via-30% to-transparent" />
       </div>
 
       <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-8">
