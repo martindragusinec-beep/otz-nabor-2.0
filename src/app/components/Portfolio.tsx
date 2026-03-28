@@ -7,7 +7,7 @@ const categories = ["Prodaná řešení", "Aktivní poptávky"];
 const items = [
   {
     id: 1,
-    img: "https://images.unsplash.com/photo-1668911494481-1643ee3e1235?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlJTIwcHJvcGVydHklMjBob3VzZXxlbnwxfHx8fDE3NzQ3MDE2NTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    img: "public/images/res1.png",
     title: "Zateplení fasády domu",
     feature: "Vyšší komfort pro rodinu",
     provize: "Provize pro obchodníka 68 000 Kč",
@@ -15,7 +15,7 @@ const items = [
   },
   {
     id: 2,
-    img: "https://images.unsplash.com/photo-1672508013582-035e75fb76ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXNpZGVudGlhbCUyMGJ1aWxkaW5nJTIwZXh0ZXJpb3J8ZW58MXx8fHwxNzc0Njg5MTgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+    img: "public/images/res2.png",    
     title: "Výměna oken",
     feature: "Nové řešení pro zákazníka v dotaci",
     provize: "Provize pro obchodníka 43 000 Kč",
@@ -23,7 +23,7 @@ const items = [
   },
   {
     id: 3,
-    img: "https://images.unsplash.com/photo-1764983265127-8ec30a9c7b64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tZXJjaWFsJTIwcHJvcGVydHklMjBidWlsZGluZ3xlbnwxfHx8fDE3NzQ2NzQ1NjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    img: "public/images/res3.png",    
     title: "Fotovoltaika s čerpadlem",
     feature: "Západ - Středočeský kraj, rodinný dům",
     provize: "Provize pro obchodníka 75 000 Kč",
@@ -31,7 +31,7 @@ const items = [
   },
   {
     id: 4,
-    img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDF8fHx8MTc3NDYxOTgxNXww&ixlib=rb-4.1.0&q=80&w=1080",
+    img: "public/images/res4.png",    
     title: "Fotovoltaika",
     feature: "Západ - Středočeský kraj, rodinný dům",
     provize: "Provize pro obchodníka 52 000 Kč",
