@@ -33,7 +33,7 @@ const servicesData = [
     icon: <AppWindow className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "OKNA A DVEŘE",
     desc: "Okna a dveře na míru s důrazem na úsporu energie a moderní design",
-    image: "/images/oknadvere.ong",
+    image: "/images/oknadvere.png",
     partnerType: 'single',
     partnerLogo: <LumixoLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
