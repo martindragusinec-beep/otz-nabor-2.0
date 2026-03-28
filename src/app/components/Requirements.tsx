@@ -11,7 +11,7 @@ export const Requirements = () => {
           <div className="relative w-full max-w-lg mx-auto lg:max-w-none order-2 lg:order-1">
             <div className="relative w-full overflow-hidden rounded-[32px] bg-gray-50">
               <img 
-                src="/public/images/obchodnik-velka.png" 
+                src="/images/obchodnik-velka.png" 
                 alt="Obchodník DOMIDOMI" 
                 className="w-full object-cover object-top aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5]"
               />
