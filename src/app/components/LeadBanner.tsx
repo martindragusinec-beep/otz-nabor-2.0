@@ -19,7 +19,7 @@ interface StepProps {
   formData: FormData;
 }
 
-const WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE'; // Replace with actual webhook URL
+const WEBHOOK_URL = 'https://hook.eu1.make.com/l5t9g2zh9a1emivilr30m041cgn0t4o6';
 
 // Step Components
 const Step1: React.FC<StepProps> = ({ onNext, formData }) => {

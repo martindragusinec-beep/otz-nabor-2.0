@@ -26,13 +26,17 @@ Moderní, responzivní a vysoce konverzní náborová landing page pro DOMIDOMI 
    - **Output Directory**: `dist`
    - **Install Command**: `npm install`
 
-### Environment Variables (pokud potřebuješ)
+### ✅ Webhook URL nakonfigurována
 
-V Vercel Dashboard → Settings → Environment Variables přidej:
+Make.com webhook je již nakonfigurován v kódu:
+```
+https://hook.eu1.make.com/l5t9g2zh9a1emivilr30m041cgn0t4o6
+```
 
-```
-VITE_WEBHOOK_URL=https://your-webhook-url.com
-```
+Webhook automaticky přijímá data z obou formulářů:
+- **Hero formulář** - `source: "hero_form"`
+- **LeadBanner formulář** - `source: "lead_banner_form"`
+- **RecruitmentForm** - `source: "recruitment_form"`
 
 ## 📦 Lokální vývoj
 
