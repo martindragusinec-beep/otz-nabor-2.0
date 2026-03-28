@@ -1,5 +1,4 @@
-<!-- Favicon PNG 32x32 - Base64 encoded -->
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#E30A1A"/>
-  <path d="M16 8L20 12H18V16H20L16 20L12 16H14V12H12L16 8Z" fill="white"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M21.7898 1L15.6377 6.63084L9.48551 1H3V23.4463H9.48551V15.0569H21.7878V23.4463H28.2734V1H21.7878H21.7898Z" fill="#111928"/>
+<path d="M21.7901 15.055V25.5841L15.6399 31.213L9.48779 25.5841V15.055H21.7901Z" fill="#E30A1A"/>
 </svg>
