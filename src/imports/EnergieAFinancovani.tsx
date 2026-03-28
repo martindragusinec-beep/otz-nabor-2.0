@@ -1,7 +1,7 @@
-import svgPaths from "./svg-n0lzhdv4wp";
-import imgEngineersShakingHandsAgainstHighVoltageTower20260310020531Utc1 from "figma:asset/ad8c0a232e1e17f513868b48f798bd44a6f3da97.png";
+import svgPaths from "./svg-7pjt7e7of8";
+import imgMenWorkersInstallingSolarPanelsOnRoofOfHou20260317014109Utc1 from "figma:asset/ee98d39d37187a751a93b2d590691aa3df7fe776.png";
 
-function Frame7() {
+function Frame6() {
   return (
     <div className="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full">
       <p className="font-['Open_Sans:SemiBold',sans-serif] font-semibold leading-[0] relative shrink-0 text-[#111928] text-[0px] tracking-[-2px] whitespace-nowrap" style={{ fontVariationSettings: "'wdth' 100" }}>
@@ -22,7 +22,7 @@ function Frame7() {
   );
 }
 
-function Group3() {
+function Group2() {
   return (
     <div className="aspect-[37.498046875/30.691503524780273] relative shrink-0 w-full">
       <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 32 26.1914">
@@ -44,14 +44,14 @@ function Layer() {
   return (
     <div className="bg-[#f9fafb] relative rounded-[8px] shrink-0 size-[40px]" data-name="Layer_1">
       <div className="content-stretch flex flex-col items-center justify-center overflow-clip p-[4px] relative rounded-[inherit] size-full">
-        <Group3 />
+        <Group2 />
       </div>
       <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
     </div>
   );
 }
 
-function Frame12() {
+function Frame11() {
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
       <Layer />
@@ -67,7 +67,7 @@ function Frame1() {
     <div className="bg-white relative rounded-[8px] shrink-0 w-full">
       <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
       <div className="content-stretch flex flex-col gap-[8px] items-start p-[16px] relative w-full">
-        <Frame12 />
+        <Frame11 />
         <p className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#374151] text-[16px] w-full" style={{ fontVariationSettings: "'wdth' 100" }}>
           Komplexní řešení FVE a TČ s řízením pomocí umělé inteligence.
         </p>
@@ -90,7 +90,7 @@ function Layer1() {
   );
 }
 
-function Frame13() {
+function Frame12() {
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
       <Layer1 />
@@ -106,14 +106,14 @@ function Frame() {
     <div className="bg-white relative rounded-[8px] shrink-0 w-full">
       <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
       <div className="content-stretch flex flex-col gap-[8px] items-start p-[16px] relative w-full">
-        <Frame13 />
+        <Frame12 />
         <p className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#374151] text-[16px] w-full whitespace-pre-wrap" style={{ fontVariationSettings: "'wdth' 100" }}>{`Efektivní a profesionální  zateplení fasád, střech i stropů`}</p>
       </div>
     </div>
   );
 }
 
-function Group4() {
+function Group3() {
   return (
     <div className="relative shrink-0 size-[25.655px]">
       <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 25.6553 25.6553">
@@ -133,14 +133,14 @@ function Layer2() {
   return (
     <div className="bg-[#f9fafb] relative rounded-[8px] shrink-0 size-[40px]" data-name="Layer_1">
       <div className="content-stretch flex flex-col items-center justify-center overflow-clip p-[4px] relative rounded-[inherit] size-full">
-        <Group4 />
+        <Group3 />
       </div>
       <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
     </div>
   );
 }
 
-function Frame14() {
+function Frame13() {
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
       <Layer2 />
@@ -156,7 +156,7 @@ function Frame2() {
     <div className="bg-white relative rounded-[8px] shrink-0 w-full">
       <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
       <div className="content-stretch flex flex-col gap-[8px] items-start p-[16px] relative w-full">
-        <Frame14 />
+        <Frame13 />
         <p className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#374151] text-[16px] w-full" style={{ fontVariationSettings: "'wdth' 100" }}>
           Okna a dveře na míru s důrazem na úsporu energie a moderní design
         </p>
@@ -190,23 +190,23 @@ function Layer3() {
   );
 }
 
-function Frame15() {
+function Frame14() {
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
       <Layer3 />
-      <p className="font-['Open_Sans:Bold',sans-serif] font-bold leading-[1.2] relative shrink-0 text-[#e30a1a] text-[24px] uppercase whitespace-nowrap" style={{ fontVariationSettings: "'wdth' 100" }}>
+      <p className="font-['Open_Sans:Bold',sans-serif] font-bold leading-[1.2] relative shrink-0 text-[#111928] text-[24px] uppercase whitespace-nowrap" style={{ fontVariationSettings: "'wdth' 100" }}>
         Energie a Financování
       </p>
     </div>
   );
 }
 
-function Frame5() {
+function Frame4() {
   return (
     <div className="bg-white relative rounded-[8px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border-[#e30a1a] border-[1.5px] border-solid inset-0 pointer-events-none rounded-[8px] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]" />
+      <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
       <div className="content-stretch flex flex-col gap-[8px] items-start p-[16px] relative w-full">
-        <Frame15 />
+        <Frame14 />
         <p className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#374151] text-[16px] w-full" style={{ fontVariationSettings: "'wdth' 100" }}>
           Lorem Ipsum
         </p>
@@ -242,23 +242,23 @@ function Layer4() {
   );
 }
 
-function Frame16() {
+function Frame15() {
   return (
     <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
       <Layer4 />
-      <p className="font-['Open_Sans:Bold',sans-serif] font-bold leading-[1.2] relative shrink-0 text-[#111928] text-[24px] uppercase whitespace-nowrap" style={{ fontVariationSettings: "'wdth' 100" }}>
+      <p className="font-['Open_Sans:Bold',sans-serif] font-bold leading-[1.2] relative shrink-0 text-[#e30a1a] text-[24px] uppercase w-[227px]" style={{ fontVariationSettings: "'wdth' 100" }}>
         Servis a pojištění
       </p>
     </div>
   );
 }
 
-function Frame4() {
+function Frame7() {
   return (
     <div className="bg-white relative rounded-[8px] shrink-0 w-full">
-      <div aria-hidden="true" className="absolute border border-[#e5e7eb] border-solid inset-0 pointer-events-none rounded-[8px]" />
+      <div aria-hidden="true" className="absolute border-[#e30a1a] border-[1.5px] border-solid inset-0 pointer-events-none rounded-[8px] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]" />
       <div className="content-stretch flex flex-col gap-[8px] items-start p-[16px] relative w-full">
-        <Frame16 />
+        <Frame15 />
         <p className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[1.5] relative shrink-0 text-[#374151] text-[16px] w-full" style={{ fontVariationSettings: "'wdth' 100" }}>
           Lorem Ipsum
         </p>
@@ -273,34 +273,31 @@ function Frame3() {
       <Frame1 />
       <Frame />
       <Frame2 />
-      <Frame5 />
       <Frame4 />
+      <Frame7 />
     </div>
   );
 }
 
 function Group1() {
   return (
-    <div className="aspect-[82.1418685913086/58.0408935546875] h-full relative shrink-0">
-      <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 67.9316 48">
-        <g id="Group 6">
-          <path d={svgPaths.p36284000} fill="var(--fill-0, #E30A1A)" id="Vector" />
-          <path d={svgPaths.p29379880} fill="var(--fill-0, #111928)" id="Vector_2" />
-          <path d={svgPaths.pd0a4600} fill="var(--fill-0, #111928)" id="Vector_3" />
-          <path d={svgPaths.p8946a80} fill="var(--fill-0, #111928)" id="Vector_4" />
-          <path d={svgPaths.pefe3500} fill="var(--fill-0, #111928)" id="Vector_5" />
-          <path d={svgPaths.p7651600} fill="var(--fill-0, #111928)" id="Vector_6" />
-          <path d={svgPaths.pece7700} fill="var(--fill-0, #111928)" id="Vector_7" />
-          <path d={svgPaths.p1ed53a80} fill="var(--fill-0, #111928)" id="Vector_8" />
-          <path d={svgPaths.p1c2fd380} fill="var(--fill-0, #111928)" id="Vector_9" />
-          <g id="ENERGIE">
-            <path d={svgPaths.p1c2b9600} fill="var(--fill-0, #111928)" id="Vector_10" />
-            <path d={svgPaths.p7dfba80} fill="var(--fill-0, #111928)" id="Vector_11" />
-            <path d={svgPaths.p382da000} fill="var(--fill-0, #111928)" id="Vector_12" />
-            <path d={svgPaths.p10e70d80} fill="var(--fill-0, #111928)" id="Vector_13" />
-            <path d={svgPaths.p158ba800} fill="var(--fill-0, #111928)" id="Vector_14" />
-            <path d={svgPaths.p179e7380} fill="var(--fill-0, #111928)" id="Vector_15" />
-            <path d={svgPaths.p318ff880} fill="var(--fill-0, #111928)" id="Vector_16" />
+    <div className="aspect-[582.9805297851562/412.93609619140625] h-full relative shrink-0">
+      <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 67.7661 48">
+        <g id="Group 9">
+          <path d={svgPaths.pdf4fe80} fill="var(--fill-0, #E30A1A)" id="Vector" />
+          <path d={svgPaths.p2bfc6880} fill="var(--fill-0, #111928)" id="Vector_2" />
+          <path d={svgPaths.p3a996b00} fill="var(--fill-0, #111928)" id="Vector_3" />
+          <path d={svgPaths.p2b82ac00} fill="var(--fill-0, #111928)" id="Vector_4" />
+          <path d={svgPaths.p20a2f700} fill="var(--fill-0, #111928)" id="Vector_5" />
+          <path d={svgPaths.p11e99400} fill="var(--fill-0, #111928)" id="Vector_6" />
+          <path d={svgPaths.p336c1bf0} fill="var(--fill-0, #111928)" id="Vector_7" />
+          <path d={svgPaths.pee31300} fill="var(--fill-0, #111928)" id="Vector_8" />
+          <path d={svgPaths.p361c09b0} fill="var(--fill-0, #111928)" id="Vector_9" />
+          <g id="CARE">
+            <path d={svgPaths.p3be0cdf0} fill="var(--fill-0, #111928)" id="Vector_10" />
+            <path d={svgPaths.p7802b10} fill="var(--fill-0, #111928)" id="Vector_11" />
+            <path d={svgPaths.p1fb8df70} fill="var(--fill-0, #111928)" id="Vector_12" />
+            <path d={svgPaths.p24c88500} fill="var(--fill-0, #111928)" id="Vector_13" />
           </g>
         </g>
       </svg>
@@ -308,14 +305,14 @@ function Group1() {
   );
 }
 
-function Frame11() {
+function Frame10() {
   return (
-    <div className="content-stretch flex gap-[16px] items-center relative shrink-0 w-full">
-      <div className="flex-[1_0_0] font-['Open_Sans:Regular',sans-serif] font-normal leading-[0] min-h-px min-w-px relative text-[#374151] text-[0px]" style={{ fontVariationSettings: "'wdth' 100" }}>
+    <div className="content-stretch flex gap-[16px] items-center relative shrink-0">
+      <div className="font-['Open_Sans:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#374151] text-[0px] whitespace-nowrap" style={{ fontVariationSettings: "'wdth' 100" }}>
         <p className="leading-[1.5] mb-0 text-[16px]">Realizační partner</p>
         <p className="text-[16px]">
           <span className="font-['Open_Sans:Bold',sans-serif] font-bold leading-[1.5]" style={{ fontVariationSettings: "'wdth' 100" }}>
-            pro energie
+            pro pojištění a servis
           </span>
           <span className="leading-[1.5]">:</span>
         </p>
@@ -329,101 +326,38 @@ function Frame11() {
 
 function Frame8() {
   return (
-    <div className="bg-white flex-[1_0_0] min-h-px min-w-px relative rounded-[4px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-      <div className="flex flex-col justify-center size-full">
-        <div className="content-stretch flex flex-col items-start justify-center px-[18px] py-[16px] relative w-full">
-          <Frame11 />
-        </div>
-      </div>
+    <div className="bg-white content-stretch flex flex-col items-start justify-center px-[18px] py-[16px] relative rounded-[4px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] shrink-0">
+      <Frame10 />
     </div>
   );
 }
 
-function Group2() {
+function Frame16() {
   return (
-    <div className="aspect-[582.9815063476562/419.47869873046875] h-full relative shrink-0">
-      <svg className="absolute block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 66.7093 48">
-        <g id="Group 7">
-          <path d={svgPaths.p7e57bb2} fill="var(--fill-0, #E30A1A)" id="Vector" />
-          <path d={svgPaths.p31cde780} fill="var(--fill-0, #111928)" id="Vector_2" />
-          <path d={svgPaths.p8ddde80} fill="var(--fill-0, #111928)" id="Vector_3" />
-          <path d={svgPaths.p1bf84c00} fill="var(--fill-0, #111928)" id="Vector_4" />
-          <path d={svgPaths.p9917f00} fill="var(--fill-0, #111928)" id="Vector_5" />
-          <path d={svgPaths.p3bbb1600} fill="var(--fill-0, #111928)" id="Vector_6" />
-          <path d={svgPaths.p1d0bce00} fill="var(--fill-0, #111928)" id="Vector_7" />
-          <path d={svgPaths.p35462f00} fill="var(--fill-0, #111928)" id="Vector_8" />
-          <path d={svgPaths.p1c41ccf0} fill="var(--fill-0, #111928)" id="Vector_9" />
-          <g id="FINANCE">
-            <path d={svgPaths.p3dde63b0} fill="var(--fill-0, #111928)" id="Vector_10" />
-            <path d={svgPaths.p3d2ea380} fill="var(--fill-0, #111928)" id="Vector_11" />
-            <path d={svgPaths.p3c5f2680} fill="var(--fill-0, #111928)" id="Vector_12" />
-            <path d={svgPaths.p2dad0d80} fill="var(--fill-0, #111928)" id="Vector_13" />
-            <path d={svgPaths.p247c9d00} fill="var(--fill-0, #111928)" id="Vector_14" />
-            <path d={svgPaths.p3fde6800} fill="var(--fill-0, #111928)" id="Vector_15" />
-            <path d={svgPaths.p2a54f400} fill="var(--fill-0, #111928)" id="Vector_16" />
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-function Frame18() {
-  return (
-    <div className="content-stretch flex gap-[16px] items-center relative shrink-0 w-full">
-      <div className="flex-[1_0_0] font-['Open_Sans:Regular',sans-serif] font-normal leading-[0] min-h-px min-w-px relative text-[#374151] text-[0px]" style={{ fontVariationSettings: "'wdth' 100" }}>
-        <p className="leading-[1.5] mb-0 text-[16px]">Realizační partner</p>
-        <p className="text-[16px]">
-          <span className="font-['Open_Sans:Bold',sans-serif] font-bold leading-[1.5]" style={{ fontVariationSettings: "'wdth' 100" }}>
-            pro finance
-          </span>
-          <span className="leading-[1.5]">:</span>
-        </p>
-      </div>
-      <div className="flex flex-row items-center self-stretch">
-        <Group2 />
-      </div>
+    <div className="absolute content-stretch flex items-center justify-end left-0 p-[16px] top-[456px] w-[574px]">
+      <Frame8 />
     </div>
   );
 }
 
 function Frame9() {
   return (
-    <div className="bg-white flex-[1_0_0] min-h-px min-w-px relative rounded-[4px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-      <div className="flex flex-col justify-center size-full">
-        <div className="content-stretch flex flex-col items-start justify-center px-[18px] py-[16px] relative w-full">
-          <Frame18 />
+    <div className="flex-[1_0_0] min-h-px min-w-px overflow-clip relative rounded-[8px] self-stretch">
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[568px] left-[calc(50%-71.29px)] top-1/2 w-[852.52px]" data-name="men-workers-installing-solar-panels-on-roof-of-hou-2026-03-17-01-41-09-utc 1">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[100.07%] left-[21.6%] max-w-none top-[-0.04%] w-full" src={imgMenWorkersInstallingSolarPanelsOnRoofOfHou20260317014109Utc1} />
         </div>
       </div>
+      <Frame16 />
     </div>
   );
 }
 
-function Frame17() {
-  return (
-    <div className="absolute content-stretch flex gap-[16px] items-center left-0 p-[16px] top-[456px] w-[574px]">
-      <Frame8 />
-      <Frame9 />
-    </div>
-  );
-}
-
-function Frame10() {
-  return (
-    <div className="flex-[1_0_0] min-h-px min-w-px overflow-clip relative rounded-[8px] self-stretch">
-      <div className="absolute h-[568px] left-[-82.18px] top-0 w-[851.896px]" data-name="engineers-shaking-hands-against-high-voltage-tower-2026-03-10-02-05-31-utc 1">
-        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEngineersShakingHandsAgainstHighVoltageTower20260310020531Utc1} />
-      </div>
-      <Frame17 />
-    </div>
-  );
-}
-
-function Frame6() {
+function Frame5() {
   return (
     <div className="content-stretch flex gap-[24px] items-start relative shrink-0 w-full">
       <Frame3 />
-      <Frame10 />
+      <Frame9 />
     </div>
   );
 }
@@ -431,8 +365,8 @@ function Frame6() {
 export default function EnergieAFinancovani() {
   return (
     <div className="bg-white content-stretch flex flex-col gap-[56px] items-center justify-center px-[60px] py-[64px] relative size-full" data-name="Energie a financování">
-      <Frame7 />
       <Frame6 />
+      <Frame5 />
     </div>
   );
 }
