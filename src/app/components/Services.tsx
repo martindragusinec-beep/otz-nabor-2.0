@@ -23,7 +23,7 @@ const servicesData = [
     icon: <Home className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "ZATEPLENÍ",
     desc: "Efektivní a profesionální zateplení fasád, střech i stropů",
-    image: "/images/zatepleni.png",    
+    image: "/images/zatepleni.png",
     partnerType: 'single',
     partnerLogo: <CiperkaLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -33,7 +33,7 @@ const servicesData = [
     icon: <AppWindow className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "OKNA A DVEŘE",
     desc: "Okna a dveře na míru s důrazem na úsporu energie a moderní design",
-    image: "/images/oknadvere.png",
+    image: "/images/oknadvere.ong",
     partnerType: 'single',
     partnerLogo: <LumixoLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -130,8 +130,17 @@ export const Services = () => {
                 {/* Expanded Image for Mobile */}
                 {isActive && (
                   <div className="mt-3 relative rounded-lg overflow-hidden min-h-[300px]">
+                    {/* Background Image */}
+                    <div className="absolute inset-0">
+                      <img 
+                        src={service.image} 
+                        alt={service.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
                     {/* Partner Banner */}
-                    <div className="absolute bottom-4 left-4 right-4">
+                    <div className="absolute bottom-4 left-4 right-4 z-10">
                       {service.partnerType === 'single' && (
                         <div className="bg-white rounded-md shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] p-4 flex flex-col gap-2">
                           <div className="flex items-center gap-4">
