@@ -14,9 +14,9 @@ export const Footer = () => {
             <div className="bg-white px-5 py-2.5 rounded-full inline-flex items-center justify-center">
               <span className="text-[14px] font-medium text-[#111928]">Zavolejte nám</span>
             </div>
-            <a href="tel:+420777888999" className="flex items-center gap-3 mt-auto hover:opacity-80 transition-opacity">
+            <a href="tel:+420226223800" className="flex items-center gap-3 mt-auto hover:opacity-80 transition-opacity">
               <Phone className="w-6 h-6 text-white" strokeWidth={1.5} />
-              <span className="text-[18px] text-white tracking-wide whitespace-nowrap">+420 777 888 999</span>
+              <span className="text-[18px] text-white tracking-wide whitespace-nowrap">226 223 800</span>
             </a>
           </div>
 
