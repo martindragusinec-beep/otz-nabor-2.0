@@ -67,43 +67,46 @@ const Step1: React.FC<StepProps> = ({ onNext, formData }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 items-center w-full">
-      <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
-        Jak dlouho už děláš v obchodu?
-      </h3>
-      
-      <div className="flex flex-col gap-3 w-full">
-        {options.map((option) => {
-          const isSelected = selected === option.value;
-          return (
-            <button
-              key={option.value}
-              onClick={() => handleSelect(option.value)}
-              type="button"
-              className={`w-full flex items-center p-4 sm:p-5 rounded-xl cursor-pointer transition-all duration-200 border-2 shadow-sm ${
-                isSelected 
-                  ? 'border-[#4ca400] bg-[#f0fdf4] shadow-md' 
-                  : 'border-[#e5e7eb] bg-white hover:border-[#4ca400]/60 hover:bg-[#f0fdf4]/50'
-              }`}
-            >
-              <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center flex-shrink-0 mr-4 transition-all duration-200 bg-white shadow-inner ${
-                isSelected ? 'border-2 border-[#4ca400] border-[7px]' : 'border-2 border-gray-300'
-              }`}>
-              </div>
-              
-              <span className={`text-base sm:text-lg font-semibold text-left transition-colors duration-200 ${
-                isSelected ? 'text-[#111928]' : 'text-[#374151]'
-              }`}>
-                {option.label}
-              </span>
-            </button>
-          );
-        })}
+    <div className="flex flex-col h-full">
+      <div className="flex flex-col gap-6 items-center w-full">
+        <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
+          Jak dlouho už děláš v obchodu?
+        </h3>
+        
+        <div className="flex flex-col gap-3 w-full">
+          {options.map((option) => {
+            const isSelected = selected === option.value;
+            return (
+              <button
+                key={option.value}
+                onClick={() => handleSelect(option.value)}
+                type="button"
+                className={`w-full flex items-center p-4 sm:p-5 rounded-xl cursor-pointer transition-all duration-200 border-2 shadow-sm ${
+                  isSelected 
+                    ? 'border-[#4ca400] bg-[#f0fdf4] shadow-md' 
+                    : 'border-[#e5e7eb] bg-white hover:border-[#4ca400]/60 hover:bg-[#f0fdf4]/50'
+                }`}
+              >
+                <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center flex-shrink-0 mr-4 transition-all duration-200 bg-white shadow-inner ${
+                  isSelected ? 'border-2 border-[#4ca400] border-[7px]' : 'border-2 border-gray-300'
+                }`}>
+                </div>
+                
+                <span className={`text-base sm:text-lg font-semibold text-left transition-colors duration-200 ${
+                  isSelected ? 'text-[#111928]' : 'text-[#374151]'
+                }`}>
+                  {option.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
-
-      <p className="text-center text-[12px] text-gray-500 font-medium mt-2">
-        Výběrem automaticky pokračujete na další krok
-      </p>
+      <div className="mt-auto pt-4">
+        <p className="text-center text-[12px] text-gray-500 font-medium">
+          Výběrem automaticky pokračujete na další krok
+        </p>
+      </div>
     </div>
   );
 };
@@ -147,7 +150,7 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
             Máš platný řidičský průkaz sk. B a jsi aktivní řidič/ka?
@@ -183,7 +186,7 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="pt-6">
+      <div className="mt-auto pt-6">
         <button
           onClick={onBack}
           className="px-4 py-2 border border-[#e5e7eb] rounded-md text-[#6b7280] hover:bg-gray-50 transition-colors text-sm"
@@ -235,7 +238,7 @@ const Step3: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
             Kam až jsi ochotný cestovat za klienty?
@@ -271,7 +274,7 @@ const Step3: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="pt-6">
+      <div className="mt-auto pt-6">
         <button
           onClick={onBack}
           className="px-4 py-2 border border-[#e5e7eb] rounded-md text-[#6b7280] hover:bg-gray-50 transition-colors text-sm"
@@ -322,7 +325,7 @@ const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
             Jsi ochoten pracovat na IČO?
@@ -358,7 +361,7 @@ const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="pt-6">
+      <div className="mt-auto pt-6">
         <button
           onClick={onBack}
           className="px-4 py-2 border border-[#e5e7eb] rounded-md text-[#6b7280] hover:bg-gray-50 transition-colors text-sm"
@@ -382,7 +385,7 @@ const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <h3 className="text-[17px] font-medium text-center text-[#111928]">
             Kolik si chceš průměrně měsíčně vydělat?
@@ -403,7 +406,7 @@ const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="flex gap-3 pt-6">
+      <div className="mt-auto flex gap-3 pt-6">
         <button
           type="button"
           onClick={onBack}
@@ -426,7 +429,7 @@ const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
   );
 };
 
-const Step6: React.FC<StepProps & { onSubmit: (data: Partial<FormData>) => void }> = ({ onSubmit, onBack, formData }) => {
+const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data: Partial<FormData>) => void }> = ({ onSubmit, onBack, formData }) => {
   const [fullName, setFullName] = useState(formData.fullName || '');
   const [phone, setPhone] = useState(formData.phone || '');
   const [email, setEmail] = useState(formData.email || '');

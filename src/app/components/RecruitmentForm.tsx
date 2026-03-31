@@ -47,7 +47,7 @@ const Step1: React.FC<StepProps> = ({ onNext, formData }) => {
   };
 
   return (
-    <div className="flex flex-col gap-8 items-center w-full">
+    <div className="flex flex-col h-full">
       <div className="flex flex-col gap-6 items-center w-full">
         <p className="font-normal text-xl text-[#111928] text-center">
           Jak dlouho už děláš v obchodu?
@@ -78,9 +78,11 @@ const Step1: React.FC<StepProps> = ({ onNext, formData }) => {
           ))}
         </div>
       </div>
-      <p className="text-sm text-[#4b5563] text-center">
-        Výběrem automaticky pokračujete na další krok
-      </p>
+      <div className="mt-auto pt-4">
+        <p className="text-sm text-[#4b5563] text-center">
+          Výběrem automaticky pokračujete na další krok
+        </p>
+      </div>
     </div>
   );
 };
@@ -102,7 +104,7 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <p className="font-normal text-xl text-[#111928] text-center">
             Máš platný řidičský průkaz sk. B a jsi aktivní řidič/ka?
@@ -134,7 +136,7 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="pt-8">
+      <div className="mt-auto pt-8">
         <button
           onClick={onBack}
           className="px-4 py-2.5 border border-[#e5e7eb] rounded-md text-[#6b7280] hover:bg-gray-50 transition-colors shadow-sm"
@@ -164,7 +166,7 @@ const Step3: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <p className="font-normal text-xl text-[#111928] text-center">
             Kam až jsi ochotný cestovat za klienty?
@@ -196,7 +198,7 @@ const Step3: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="pt-8">
+      <div className="mt-auto pt-8">
         <button
           onClick={onBack}
           className="px-4 py-2.5 border border-[#e5e7eb] rounded-md text-[#6b7280] hover:bg-gray-50 transition-colors shadow-sm"
@@ -225,7 +227,7 @@ const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <p className="font-normal text-xl text-[#111928] text-center">
             Jsi ochoten pracovat na IČO?
@@ -256,7 +258,7 @@ const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="pt-8">
+      <div className="mt-auto pt-8">
         <button
           onClick={onBack}
           className="px-4 py-2.5 border border-[#e5e7eb] rounded-md text-[#6b7280] hover:bg-gray-50 transition-colors shadow-sm"
@@ -280,7 +282,7 @@ const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <p className="font-normal text-xl text-[#111928] text-center">
             Kolik si chceš průměrně měsíčně vydělat?
@@ -300,7 +302,7 @@ const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="flex gap-4 pt-8">
+      <div className="mt-auto flex gap-4 pt-8">
         <button
           type="button"
           onClick={onBack}
@@ -323,7 +325,7 @@ const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
   );
 };
 
-const Step6: React.FC<StepProps & { onSubmit: (data: Partial<FormData>) => void }> = ({ onSubmit, onBack, formData }) => {
+const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data: Partial<FormData>) => void }> = ({ onSubmit, onBack, formData }) => {
   const [fullName, setFullName] = useState(formData.fullName || '');
   const [phone, setPhone] = useState(formData.phone || '');
   const [email, setEmail] = useState(formData.email || '');
