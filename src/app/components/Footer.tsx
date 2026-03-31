@@ -39,7 +39,7 @@ export const Footer = () => {
           
           <div className="flex flex-col gap-2 mt-2">
             <p className="text-[14px] text-white font-medium">
-              © Copyright 2025© Schlieger - Všechna práva vyhrazena. | <a href="/podminky-ochrany-osobnich-udaju" className="hover:text-[#FFE142] transition-colors underline">Ochrana osobních údajů (GDPR)</a>
+              © Copyright 2026© Schlieger - Všechna práva vyhrazena. | <a href="/podminky-ochrany-osobnich-udaju" className="hover:text-[#FFE142] transition-colors underline">Ochrana osobních údajů (GDPR)</a>
             </p>
             <p className="text-[12px] text-[#9CA3AF] font-normal leading-relaxed max-w-5xl">
               Společnost Schlieger s.r.o. | IČ 28787803 se sídlem U nákladového nádraží 3265/10, Strašnice, 130 00 Praha 3 | C 385508/MSPH Městský soud v Praze
