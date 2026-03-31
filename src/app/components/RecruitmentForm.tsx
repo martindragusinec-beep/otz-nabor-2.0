@@ -22,6 +22,12 @@ interface StepProps {
 
 const WEBHOOK_URL = 'https://hook.eu1.make.com/l5t9g2zh9a1emivilr30m041cgn0t4o6'; // Replace with actual webhook URL
 
+const TRAVEL_WILLINGNESS_LABELS: Record<string, string> = {
+  region_only: 'Pouze v daném regionu',
+  whole_country: 'Po celé ČR',
+  germany: 'Do Německa'
+};
+
 // Step Components
 const Step1: React.FC<StepProps> = ({ onNext, formData }) => {
   const [selected, setSelected] = useState(formData.salesExperience || '');
@@ -145,7 +151,8 @@ const Step3: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
 
   const options = [
     { value: 'region_only', label: 'Pouze v daném regionu' },
-    { value: 'whole_country', label: 'Po celé ČR' }
+    { value: 'whole_country', label: 'Po celé ČR' },
+    { value: 'germany', label: 'Do Německa' }
   ];
 
   const handleSelect = (value: string) => {
@@ -459,6 +466,7 @@ export const RecruitmentForm: React.FC = () => {
         },
         body: JSON.stringify({
           ...finalData,
+          travelWillingnessLabel: TRAVEL_WILLINGNESS_LABELS[finalData.travelWillingness] || finalData.travelWillingness,
           timestamp: new Date().toISOString(),
           source: 'recruitment_form'
         })
