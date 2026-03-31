@@ -13,7 +13,7 @@ const servicesData = [
     icon: <PanelTop className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "FOTOVOLTAIKA A TEPELNÁ ČERPADLA",
     desc: "Komplexní řešení FVE a TČ s řízením pomocí umělé inteligence.",
-    image: "/images/fve-house.png",
+    image: "/images/fve-house.jpg",
     partnerType: 'single',
     partnerLogo: <SchliegerLogo className="h-[20px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -23,7 +23,7 @@ const servicesData = [
     icon: <Home className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "ZATEPLENÍ",
     desc: "Efektivní a profesionální zateplení fasád, střech i stropů",
-    image: "/images/zatepleni.png",
+    image: "/images/zatepleni.jpg",
     partnerType: 'single',
     partnerLogo: <CiperkaLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -33,7 +33,7 @@ const servicesData = [
     icon: <AppWindow className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "OKNA A DVEŘE",
     desc: "Okna a dveře na míru s důrazem na úsporu energie a moderní design",
-    image: "/images/oknadvere.png",
+    image: "/images/oknadvere.jpg",
     partnerType: 'single',
     partnerLogo: <LumixoLogo className="h-[24px] w-auto" />,
     stats: "15 let na trhu | 23 000 zákazníků | 2% reklamovanosti"
@@ -43,7 +43,7 @@ const servicesData = [
     icon: <Zap className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "ENERGIE A FINANCOVÁNÍ",
     desc: "Nejlevnější tarify a financování pro snadný doprodej a vaši provizi",
-    image: "/images/financovani.png",
+    image: "/images/financovani.jpg",
     partnerType: 'double',
     doublePartners: [
       {
@@ -63,7 +63,7 @@ const servicesData = [
     icon: <Settings className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
     title: "SERVIS A POJIŠTĚNÍ",
     desc: "Doživotní servis a pojistka jako finální argument pro okamžitý podpis",
-    image: "/images/servis-pojisteni.png",
+    image: "/images/servis-pojisteni.jpg",
     partnerType: 'single',
     partnerLabelOverride: (
       <div className="text-[16px] text-[#374151] leading-snug">

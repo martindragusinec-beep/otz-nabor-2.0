@@ -41,7 +41,7 @@ export const Hero = () => {
         <img 
           alt="Rodinný dům na pozadí" 
           className="absolute w-full h-full object-cover object-center lg:object-[80%_center] opacity-90" 
-          src="/images/hero-bg.png"
+          src="/images/hero-bg.jpg"
         />
         {/* Gradient overlays to ensure text readability on all screen sizes */}
         {/* Mobile: Top to bottom gradient */}
