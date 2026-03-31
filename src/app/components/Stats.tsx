@@ -132,9 +132,11 @@ export const Stats = () => {
                 "Za 2 roky jsem se dostal na 120 000 Kč měsíčně. Férový systém a skvělý tým."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-gray-200 object-cover object-top shadow-sm border border-gray-100 flex items-center justify-center text-2xl font-bold text-gray-500">
-                  T
-                </div>
+                <img
+                  src="/images/tomas-novak.png"
+                  alt="Tomáš Novák"
+                  className="w-11 h-11 rounded-full object-cover object-top shadow-sm border border-gray-100"
+                />
                 <div>
                   <h5 className="font-bold text-[#111928] text-sm">Tomáš Novák</h5>
                   <p className="text-gray-500 text-xs">B2B obchodník, 2 roky</p>
