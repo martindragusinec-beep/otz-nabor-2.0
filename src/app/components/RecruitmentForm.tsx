@@ -12,6 +12,7 @@ interface FormData {
   fullName: string;
   phone: string;
   email: string;
+  zipCode: string;
 }
 
 interface StepProps {
@@ -337,10 +338,11 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
   const [fullName, setFullName] = useState(formData.fullName || '');
   const [phone, setPhone] = useState(formData.phone || '');
   const [email, setEmail] = useState(formData.email || '');
+  const [zipCode, setZipCode] = useState(formData.zipCode || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ fullName, phone, email });
+    onSubmit({ fullName, phone, email, zipCode });
   };
 
   return (
@@ -390,6 +392,21 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
                 required
               />
             </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-xs text-[#9ca3af]">
+              PSČ<span className="text-[#ff8080]">*</span>
+            </label>
+            <input
+              type="text"
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+              placeholder="123 45"
+              className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              required
+            />
           </div>
         </div>
       </div>
@@ -445,7 +462,8 @@ export const RecruitmentForm: React.FC = () => {
     salesExperience: '',
     fullName: '',
     phone: '',
-    email: ''
+    email: '',
+    zipCode: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
