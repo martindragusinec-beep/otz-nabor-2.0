@@ -37,6 +37,35 @@ const pushJobsFormSentEvent = () => {
   });
 };
 
+const formatZipCodeInput = (value: string) => {
+  const digits = value.replace(/\D/g, '').slice(0, 5);
+  if (digits.length <= 3) return digits;
+  return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+};
+
+const formatPhoneInput = (value: string) => {
+  const trimmed = value.trimStart();
+  const hasLeadingPlus = trimmed.startsWith('+');
+  const digits = value.replace(/\D/g, '');
+  const formatLocal = (localDigits: string) => [localDigits.slice(0, 3), localDigits.slice(3, 6), localDigits.slice(6, 9)].filter(Boolean).join(' ');
+
+  if (hasLeadingPlus) {
+    const countryCode = digits.slice(0, 3);
+    if (!countryCode) return '+';
+    if (countryCode.length < 3) return `+${countryCode}`;
+    if (countryCode !== '420') return '+420';
+    const local = digits.slice(3, 12);
+    return local ? `+420 ${formatLocal(local)}` : '+420';
+  }
+
+  if (digits.startsWith('420') && digits.length > 9) {
+    const local = digits.slice(3, 12);
+    return local ? `+420 ${formatLocal(local)}` : '+420';
+  }
+
+  return formatLocal(digits.slice(0, 9));
+};
+
 // Step Components
 const Step1: React.FC<StepProps> = ({ onNext, formData }) => {
   const [selected, setSelected] = useState(formData.salesExperience || '');
@@ -373,9 +402,10 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
               <input
                 type="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
                 placeholder="+420 123 456 789"
                 className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
+                maxLength={14}
                 required
               />
             </div>
@@ -386,11 +416,12 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
               <input
                 type="text"
                 value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
+                onChange={(e) => setZipCode(formatZipCodeInput(e.target.value))}
                 placeholder="123 45"
                 className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
                 inputMode="numeric"
                 autoComplete="postal-code"
+                maxLength={6}
                 required
               />
             </div>
