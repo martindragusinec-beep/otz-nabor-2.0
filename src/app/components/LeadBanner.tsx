@@ -5,13 +5,13 @@ import { Logo } from './Logo';
 interface FormData {
   salesExperience: string;
   hasDrivingLicense: string;
+  region: string;
   travelWillingness: string;
   icoWillingness: string;
   desiredIncome: string;
   fullName: string;
   phone: string;
   email: string;
-  zipCode: string;
 }
 
 interface StepProps {
@@ -36,11 +36,22 @@ const pushJobsFormSentEvent = () => {
   });
 };
 
-const formatZipCodeInput = (value: string) => {
-  const digits = value.replace(/\D/g, '').slice(0, 5);
-  if (digits.length <= 3) return digits;
-  return `${digits.slice(0, 3)} ${digits.slice(3)}`;
-};
+const CZECH_REGIONS = [
+  'Hlavní město Praha',
+  'Středočeský kraj',
+  'Jihočeský kraj',
+  'Plzeňský kraj',
+  'Karlovarský kraj',
+  'Ústecký kraj',
+  'Liberecký kraj',
+  'Královéhradecký kraj',
+  'Pardubický kraj',
+  'Kraj Vysočina',
+  'Jihomoravský kraj',
+  'Olomoucký kraj',
+  'Zlínský kraj',
+  'Moravskoslezský kraj'
+];
 
 const formatPhoneInput = (value: string) => {
   const trimmed = value.trimStart();
@@ -235,7 +246,60 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
   );
 };
 
-const Step3: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
+const StepRegion: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
+  const [region, setRegion] = useState(formData.region || '');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (region) {
+      onNext({ region });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col h-full">
+      <div className="flex-1 flex flex-col items-center">
+        <div className="flex flex-col gap-6 items-center w-full">
+          <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
+            V jakém kraji bydlíte?
+          </h3>
+          <select
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+            className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] text-[#111928] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 bg-white"
+            required
+          >
+            <option value="" disabled>
+              Vyberte kraj
+            </option>
+            {CZECH_REGIONS.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="mt-auto flex gap-3 pt-6">
+        <button
+          type="button"
+          onClick={onBack}
+          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
+        >
+          ← Zpět
+        </button>
+        <button
+          type="submit"
+          className="flex-1 bg-[#5BA318] text-white px-5 py-3 rounded-lg font-semibold hover:bg-[#4a8b13] transition-all text-[15px] flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+        >
+          <span>Pokračovat</span>
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const StepTravel: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
   const [selected, setSelected] = useState(formData.travelWillingness || '');
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -470,11 +534,10 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
   const [fullName, setFullName] = useState(formData.fullName || '');
   const [phone, setPhone] = useState(formData.phone || '');
   const [email, setEmail] = useState(formData.email || '');
-  const [zipCode, setZipCode] = useState(formData.zipCode || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ fullName, phone, email, zipCode });
+    onSubmit({ fullName, phone, email });
   };
 
   return (
@@ -521,24 +584,7 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
               />
             </div>
 
-            {/* ZIP Input */}
-            <div className="flex flex-col gap-2 sm:col-span-1">
-              <label className="text-[13px] text-[#374151] font-semibold">
-                PSČ <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="postal-code"
-                autoComplete="postal-code"
-                inputMode="numeric"
-                value={zipCode}
-                onChange={(e) => setZipCode(formatZipCodeInput(e.target.value))}
-                placeholder="123 45"
-                className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] placeholder:text-[#9ca3af] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 transition-all"
-                maxLength={6}
-                required
-              />
-            </div>
+            <div />
           </div>
 
           {/* Email Input */}
@@ -622,13 +668,13 @@ export const LeadBanner = () => {
   const [formData, setFormData] = useState<FormData>({
     salesExperience: '',
     hasDrivingLicense: '',
+    region: '',
     travelWillingness: '',
     icoWillingness: '',
     desiredIncome: '',
     fullName: '',
     phone: '',
-    email: '',
-    zipCode: ''
+    email: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -668,8 +714,8 @@ export const LeadBanner = () => {
     };
   }, []);
 
-  const totalSteps = 6;
-  const progressPercentages = [14, 28, 42, 56, 70, 95, 100];
+  const totalSteps = 7;
+  const progressPercentages = [12, 24, 36, 48, 60, 72, 95, 100];
 
   const handleNext = (data: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...data }));
@@ -702,7 +748,7 @@ export const LeadBanner = () => {
       if (response.ok) {
         pushJobsFormSentEvent();
         setIsSuccess(true);
-        setCurrentStep(7);
+        setCurrentStep(8);
       } else {
         throw new Error('Submission failed');
       }
@@ -760,10 +806,11 @@ export const LeadBanner = () => {
                 <>
                   {currentStep === 1 && <Step1 onNext={handleNext} onBack={handleBack} formData={formData} />}
                   {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} formData={formData} />}
-                  {currentStep === 3 && <Step3 onNext={handleNext} onBack={handleBack} formData={formData} />}
-                  {currentStep === 4 && <Step4 onNext={handleNext} onBack={handleBack} formData={formData} />}
-                  {currentStep === 5 && <Step5 onNext={handleNext} onBack={handleBack} formData={formData} />}
-                  {currentStep === 6 && <Step6 onSubmit={handleSubmit} onBack={handleBack} formData={formData} />}
+                  {currentStep === 3 && <StepRegion onNext={handleNext} onBack={handleBack} formData={formData} />}
+                  {currentStep === 4 && <StepTravel onNext={handleNext} onBack={handleBack} formData={formData} />}
+                  {currentStep === 5 && <Step4 onNext={handleNext} onBack={handleBack} formData={formData} />}
+                  {currentStep === 6 && <Step5 onNext={handleNext} onBack={handleBack} formData={formData} />}
+                  {currentStep === 7 && <Step6 onSubmit={handleSubmit} onBack={handleBack} formData={formData} />}
                 </>
               ) : (
                 <SuccessStep />
