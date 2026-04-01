@@ -184,13 +184,19 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-8 flex gap-4 min-h-[52px]">
         <button
           onClick={onBack}
           className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
         >
           ← Zpět
         </button>
+        <button
+          type="button"
+          className="flex-1 rounded-lg opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );
@@ -213,21 +219,30 @@ const StepRegion: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           <p className="font-normal text-xl text-[#111928] text-center">
             V jakém kraji bydlíte?
           </p>
-          <select
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-            className="w-full p-4 border border-[#9ca3af] rounded-md text-lg outline-none focus:border-[#4ca400] bg-white"
-            required
-          >
-            <option value="" disabled>
-              Vyberte kraj
-            </option>
-            {CZECH_REGIONS.map((item) => (
-              <option key={item} value={item}>
-                {item}
+          <div className="relative w-full">
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              className="w-full p-4 pr-12 border border-[#9ca3af] rounded-md text-lg outline-none focus:border-[#4ca400] bg-white appearance-none"
+              required
+            >
+              <option value="" disabled>
+                Vyberte kraj
               </option>
-            ))}
-          </select>
+              {CZECH_REGIONS.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <svg
+              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
         </div>
       </div>
       <div className="mt-auto flex gap-4 pt-8">
@@ -299,13 +314,19 @@ const StepTravel: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-8 flex gap-4 min-h-[52px]">
         <button
           onClick={onBack}
           className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
         >
           ← Zpět
         </button>
+        <button
+          type="button"
+          className="flex-1 rounded-lg opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );
@@ -359,13 +380,19 @@ const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-8 flex gap-4 min-h-[52px]">
         <button
           onClick={onBack}
           className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
         >
           ← Zpět
         </button>
+        <button
+          type="button"
+          className="flex-1 rounded-lg opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );
@@ -456,8 +483,8 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
               required
             />
           </div>
-          <div className="flex gap-6">
-            <div className="flex-1 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <label className="text-xs text-[#9ca3af]">
                 Telefonní číslo<span className="text-[#ff8080]">*</span>
               </label>
@@ -471,7 +498,6 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
                 required
               />
             </div>
-            <div className="flex-1" />
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-xs text-[#9ca3af]">

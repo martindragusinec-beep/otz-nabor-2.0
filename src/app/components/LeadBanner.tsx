@@ -234,13 +234,19 @@ const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-auto pt-6">
+      <div className="mt-auto pt-6 flex gap-3 min-h-[52px]">
         <button
           onClick={onBack}
           className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
         >
           ← Zpět
         </button>
+        <button
+          type="button"
+          className="flex-1 rounded-lg opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );
@@ -263,21 +269,30 @@ const StepRegion: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           <h3 className="text-[18px] sm:text-[20px] font-bold text-center text-[#111928]">
             V jakém kraji bydlíte?
           </h3>
-          <select
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-            className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] text-[#111928] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 bg-white"
-            required
-          >
-            <option value="" disabled>
-              Vyberte kraj
-            </option>
-            {CZECH_REGIONS.map((item) => (
-              <option key={item} value={item}>
-                {item}
+          <div className="relative w-full">
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              className="w-full px-4 pr-12 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] text-[#111928] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 bg-white appearance-none"
+              required
+            >
+              <option value="" disabled>
+                Vyberte kraj
               </option>
-            ))}
-          </select>
+              {CZECH_REGIONS.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <svg
+              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
         </div>
       </div>
       <div className="mt-auto flex gap-3 pt-6">
@@ -375,13 +390,19 @@ const StepTravel: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-auto pt-6">
+      <div className="mt-auto pt-6 flex gap-3 min-h-[52px]">
         <button
           onClick={onBack}
           className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
         >
           ← Zpět
         </button>
+        <button
+          type="button"
+          className="flex-1 rounded-lg opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );
@@ -462,13 +483,19 @@ const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
           </div>
         </div>
       </div>
-      <div className="mt-auto pt-6">
+      <div className="mt-auto pt-6 flex gap-3 min-h-[52px]">
         <button
           onClick={onBack}
           className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
         >
           ← Zpět
         </button>
+        <button
+          type="button"
+          className="flex-1 rounded-lg opacity-0 pointer-events-none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
       </div>
     </div>
   );
@@ -565,9 +592,9 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
             />
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
             {/* Phone Input */}
-            <div className="flex flex-col gap-2 sm:col-span-1">
+            <div className="flex flex-col gap-2">
               <label className="text-[13px] text-[#374151] font-semibold">
                 Telefonní číslo <span className="text-red-500">*</span>
               </label>
@@ -583,8 +610,6 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
                 required
               />
             </div>
-
-            <div />
           </div>
 
           {/* Email Input */}
