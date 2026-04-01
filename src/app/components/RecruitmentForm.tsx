@@ -48,18 +48,16 @@ const formatPhoneInput = (value: string) => {
   const hasLeadingPlus = trimmed.startsWith('+');
   const digits = value.replace(/\D/g, '');
   const formatLocal = (localDigits: string) => [localDigits.slice(0, 3), localDigits.slice(3, 6), localDigits.slice(6, 9)].filter(Boolean).join(' ');
+  const normalizeCzPhoneDigits = (inputDigits: string) => {
+    let normalized = inputDigits;
+    while (normalized.startsWith('420') && normalized.length > 9) {
+      normalized = normalized.slice(3);
+    }
+    return normalized.slice(0, 9);
+  };
 
-  if (hasLeadingPlus) {
-    const countryCode = digits.slice(0, 3);
-    if (!countryCode) return '+';
-    if (countryCode.length < 3) return `+${countryCode}`;
-    if (countryCode !== '420') return '+420';
-    const local = digits.slice(3, 12);
-    return local ? `+420 ${formatLocal(local)}` : '+420';
-  }
-
-  if (digits.startsWith('420') && digits.length > 9) {
-    const local = digits.slice(3, 12);
+  if (hasLeadingPlus || (digits.startsWith('420') && digits.length > 9)) {
+    const local = normalizeCzPhoneDigits(digits);
     return local ? `+420 ${formatLocal(local)}` : '+420';
   }
 
@@ -405,7 +403,7 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
                 onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
                 placeholder="+420 123 456 789"
                 className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
-                maxLength={14}
+                maxLength={16}
                 required
               />
             </div>
