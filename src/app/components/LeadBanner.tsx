@@ -474,21 +474,41 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
             />
           </div>
           
-          {/* Phone Input */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] text-[#374151] font-semibold">
-              Telefonní číslo <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="tel"
-              name="tel"
-              autoComplete="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+420 123 456 789"
-              className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] placeholder:text-[#9ca3af] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 transition-all"
-              required
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Phone Input */}
+            <div className="flex flex-col gap-2 sm:col-span-1">
+              <label className="text-[13px] text-[#374151] font-semibold">
+                Telefonní číslo <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                name="tel"
+                autoComplete="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+420 123 456 789"
+                className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] placeholder:text-[#9ca3af] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 transition-all"
+                required
+              />
+            </div>
+
+            {/* ZIP Input */}
+            <div className="flex flex-col gap-2 sm:col-span-1">
+              <label className="text-[13px] text-[#374151] font-semibold">
+                PSČ <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="postal-code"
+                autoComplete="postal-code"
+                inputMode="numeric"
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+                placeholder="123 45"
+                className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] placeholder:text-[#9ca3af] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 transition-all"
+                required
+              />
+            </div>
           </div>
 
           {/* Email Input */}
@@ -503,24 +523,6 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="vas.email@gmail.com"
-              className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] placeholder:text-[#9ca3af] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 transition-all"
-              required
-            />
-          </div>
-
-          {/* ZIP Input */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] text-[#374151] font-semibold">
-              PSČ <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="postal-code"
-              autoComplete="postal-code"
-              inputMode="numeric"
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
-              placeholder="123 45"
               className="w-full px-4 py-3.5 border-2 border-[#e5e7eb] rounded-lg text-[15px] placeholder:text-[#9ca3af] outline-none focus:border-[#5BA318] focus:ring-2 focus:ring-[#5BA318]/20 transition-all"
               required
             />

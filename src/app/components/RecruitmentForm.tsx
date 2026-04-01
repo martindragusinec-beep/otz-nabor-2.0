@@ -381,30 +381,30 @@ const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data
             </div>
             <div className="flex-1 flex flex-col gap-2">
               <label className="text-xs text-[#9ca3af]">
-                E-mailová adresa<span className="text-[#ff8080]">*</span>
+                PSČ<span className="text-[#ff8080]">*</span>
               </label>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="např. email@email.cz"
+                type="text"
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
+                placeholder="123 45"
                 className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
+                inputMode="numeric"
+                autoComplete="postal-code"
                 required
               />
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-xs text-[#9ca3af]">
-              PSČ<span className="text-[#ff8080]">*</span>
+              E-mailová adresa<span className="text-[#ff8080]">*</span>
             </label>
             <input
-              type="text"
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
-              placeholder="123 45"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="např. email@email.cz"
               className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
-              inputMode="numeric"
-              autoComplete="postal-code"
               required
             />
           </div>
