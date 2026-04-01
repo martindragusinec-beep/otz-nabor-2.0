@@ -47,16 +47,17 @@ const formatPhoneInput = (value: string) => {
   const hasLeadingPlus = trimmed.startsWith('+');
   const digits = value.replace(/\D/g, '');
   const formatLocal = (localDigits: string) => [localDigits.slice(0, 3), localDigits.slice(3, 6), localDigits.slice(6, 9)].filter(Boolean).join(' ');
-  const normalizeCzPhoneDigits = (inputDigits: string) => {
-    let normalized = inputDigits;
-    while (normalized.startsWith('420') && normalized.length > 9) {
-      normalized = normalized.slice(3);
-    }
-    return normalized.slice(0, 9);
-  };
 
-  if (hasLeadingPlus || (digits.startsWith('420') && digits.length > 9)) {
-    const local = normalizeCzPhoneDigits(digits);
+  // Normalize duplicated country code prefixes like +420 420 ...
+  const stripRepeatedCzPrefix = (inputDigits: string) => inputDigits.replace(/^(?:420)+/, '');
+
+  if (hasLeadingPlus) {
+    const local = stripRepeatedCzPrefix(digits).slice(0, 9);
+    return local ? `+420 ${formatLocal(local)}` : '+420';
+  }
+
+  if (digits.startsWith('420') && digits.length > 9) {
+    const local = stripRepeatedCzPrefix(digits).slice(0, 9);
     return local ? `+420 ${formatLocal(local)}` : '+420';
   }
 
