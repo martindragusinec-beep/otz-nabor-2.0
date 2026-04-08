@@ -53,11 +53,11 @@ export const WhyUs = () => {
           </CTAButton>
         </div>
 
-        <div className="flex w-full min-w-0 justify-center lg:flex-1 lg:justify-end">
+        <div className="flex w-full min-w-0 justify-center items-center lg:flex-1 lg:justify-center">
           <img
             src="/images/why-us-circle.png"
             alt="Kompletní portfolio DOMIDOMI — dům, fotovoltaika, tepelná čerpadla a služby"
-            className="h-auto w-full max-w-[520px] object-contain"
+            className="h-auto w-full max-w-[520px] object-contain lg:max-w-[min(100%,680px)] xl:max-w-[min(100%,760px)]"
             loading="lazy"
             decoding="async"
           />
