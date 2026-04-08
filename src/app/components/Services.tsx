@@ -21,8 +21,8 @@ const servicesData = [
   {
     id: 1,
     icon: <Home className="w-5 h-5 text-[#374151]" strokeWidth={1.5} />,
-    title: "ZATEPLENÍ",
-    desc: "Efektivní a profesionální zateplení fasád, střech i stropů",
+    title: "STAVBY",
+    desc: "Novostavby, přístavby i rekonstrukce – komplexní řešení od projektu po předání stavby.",
     image: "/images/zatepleni.jpg",
     partnerType: 'single',
     partnerLogo: <CiperkaLogo className="h-[24px] w-auto" />,
