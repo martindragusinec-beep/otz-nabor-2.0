@@ -1,70 +1,102 @@
 import React from 'react';
 import { Play } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { CTAButton } from './CTAButton';
 import { useRecruitmentModal } from './RecruitmentModalContext';
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const heroContainer = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.09, delayChildren: 0.06 },
+  },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.52, ease } },
+};
+
 export const Hero = () => {
   const { openModal } = useRecruitmentModal();
+  const reduced = useReducedMotion();
 
   return (
-    <section className="relative overflow-hidden bg-[#111928] px-4 py-12 text-white sm:px-6 sm:py-14 md:px-12 lg:min-h-[calc(100vh-80px)] lg:px-16 lg:py-10 xl:py-12">
+    <section className="relative overflow-hidden bg-[#0c111d] px-4 py-14 text-white sm:px-6 sm:py-16 md:px-12 lg:min-h-[calc(100vh-80px)] lg:px-16 lg:py-12">
       <div className="absolute inset-0">
         <img
           src="/images/hero-bg.jpg"
           alt=""
-          className="h-full w-full object-cover object-center opacity-25"
+          className="h-full w-full object-cover object-center opacity-[0.22]"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(227,10,26,0.22),transparent_42%),linear-gradient(110deg,rgba(17,25,40,0.97)_0%,rgba(17,25,40,0.9)_48%,rgba(17,25,40,0.78)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0c111d]/95 via-[#111928]/88 to-[#0f172a]/80" />
+        <div
+          className="absolute inset-0 opacity-[0.35]"
+          style={{
+            backgroundImage: `radial-gradient(ellipse 80% 50% at 20% 0%, rgba(227,10,26,0.18), transparent 55%)`,
+          }}
+        />
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-10 lg:min-h-[calc(100vh-144px)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
-        <div className="flex max-w-3xl flex-col items-start self-center lg:justify-center">
-          <h1 className="max-w-[820px] text-[34px] font-bold leading-[1.05] tracking-tight text-white sm:text-[46px] lg:text-[52px] xl:text-[56px]">
+      <div className="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 lg:min-h-[calc(100vh-144px)] lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+        <motion.div
+          className="flex max-w-[640px] flex-col items-start"
+          initial={reduced ? 'show' : 'hidden'}
+          animate="show"
+          variants={heroContainer}
+        >
+          <motion.h1 variants={heroItem} className="text-[32px] font-semibold leading-[1.08] tracking-[-0.02em] text-white sm:text-[44px] lg:text-[52px]">
             Získej svobodu, pasivní příjem a práci, která dává smysl.
-          </h1>
+          </motion.h1>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-white/78 sm:text-lg lg:text-[19px]">
+          <motion.p variants={heroItem} className="mt-5 max-w-xl text-[15px] leading-[1.65] text-white/75 sm:text-[17px] lg:text-[18px] lg:leading-relaxed">
             Neprodáváme produkt, ale kompletní řešení pro dům. S námi neřešíš cold maily – dodáme ti horké leady.
-          </p>
+          </motion.p>
 
-          <div className="mt-7 flex w-full max-w-xl flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+          <motion.div variants={heroItem} className="mt-8 flex w-full max-w-xl flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-4">
             <CTAButton onClick={openModal}>Chci se přidat k týmu</CTAButton>
-            <div className="rounded-2xl border border-white/12 bg-white/5 px-4 py-3 text-sm leading-6 text-white/85 backdrop-blur-md">
-              <span className="font-semibold text-white">Průměrný výdělek našich OZ:</span>{' '}
-              <span className="whitespace-nowrap font-bold text-[#BDFF84]">80 000 – 150 000 Kč</span>
+            <div className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-[13px] leading-snug text-white/90 backdrop-blur-md sm:justify-start sm:py-3.5 sm:text-sm">
+              <span className="text-center sm:text-left">
+                <span className="font-medium text-white/90">Průměrný výdělek našich OZ:</span>{' '}
+                <span className="whitespace-nowrap font-semibold tabular-nums text-[#c8f28d]">80 000 – 150 000 Kč</span>
+              </span>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="relative flex justify-center lg:justify-end">
-          <div className="absolute -inset-10 rounded-[48px] bg-[#E30A1A]/15 blur-3xl" aria-hidden />
+        <motion.div
+          initial={reduced ? false : { opacity: 0, scale: 0.98, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: reduced ? 0 : 0.15, ease }}
+          className="relative flex justify-center lg:justify-end"
+        >
           <button
             type="button"
             onClick={openModal}
-            className="group relative w-full max-w-[520px] overflow-hidden rounded-[32px] border border-white/12 bg-black/20 text-left shadow-[0_40px_90px_rgba(0,0,0,0.45)] outline-none ring-offset-2 ring-offset-[#111928] transition-transform duration-500 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-[#E30A1A]"
+            className="group relative w-full max-w-[480px] overflow-hidden rounded-3xl border border-white/10 bg-[#0a0f18] text-left shadow-[0_32px_64px_-12px_rgba(0,0,0,0.55)] outline-none ring-offset-2 ring-offset-[#0c111d] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_40px_80px_-16px_rgba(0,0,0,0.6)] focus-visible:ring-2 focus-visible:ring-[#E30A1A]"
           >
             <div className="relative aspect-[16/11] w-full sm:aspect-[16/10] lg:aspect-[5/4]">
               <img
                 src="/images/obchodnik-velka.jpg"
-                alt="Tým a práce obchodně-technického zástupce DOMIDOMI — video a fotky připravujeme"
-                className="h-full w-full object-cover object-top opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+                alt="Obchodně technický zástupce DOMIDOMI — video a fotky připravujeme"
+                className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111928]/85 via-[#111928]/15 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c111d]/90 via-[#0c111d]/20 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-[#111928] shadow-[0_18px_40px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-105">
-                  <Play className="ml-1 h-7 w-7 fill-current" />
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-[#111928] shadow-lg transition-transform duration-300 group-hover:scale-105">
+                  <Play className="ml-0.5 h-6 w-6 fill-current" />
                 </span>
               </div>
               <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-white/65">Video & příběhy — brzy</div>
-                <p className="mt-2 max-w-md text-sm font-medium leading-6 text-white/90">
-                  Natáčíme a fotíme reálné lidi z terénu. Zatím držíme placeholdery, ale vibe bude stejný jako u referencí ve
-                  stylu Schlieger.
+                <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/55">Video & příběhy</div>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/80">
+                  Placeholder — brzy doplníme reálné záběry z terénu.
                 </p>
               </div>
             </div>
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

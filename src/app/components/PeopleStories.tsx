@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { Reveal, RevealChild, Stagger } from './motion/Reveal';
 
 const colleagues = [
   {
@@ -22,46 +24,50 @@ const colleagues = [
 ] as const;
 
 export const PeopleStories = () => {
-  return (
-    <section className="bg-white px-4 py-14 sm:px-6 sm:py-16 md:px-12 lg:px-16 lg:py-20">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#E30A1A]/10 bg-[#FFF6F7] px-3 py-1.5 text-sm font-semibold text-[#E30A1A]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#E30A1A]" />
-            Příběhy našich lidí
-          </div>
-          <h2 className="mt-4 text-[30px] font-bold leading-[1.06] tracking-tight text-[#111928] sm:text-[40px] lg:text-[46px]">
-            Tváře z terénu — ne stock fotky.
-          </h2>
-          <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[#4B5563] sm:text-[16px]">
-            Krátký citát o tom, jak se jim změnil život — reálné tváře z obchodu, ne ilustrační fotky.
-          </p>
-        </div>
+  const reduced = useReducedMotion();
 
-        <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+  return (
+    <section className="border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
+      <div className="mx-auto max-w-[1200px]">
+        <Reveal>
+          <div className="max-w-2xl">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#64748B]">Příběhy našich lidí</p>
+            <h2 className="mt-3 text-[28px] font-semibold leading-[1.12] tracking-[-0.02em] text-[#0f172a] sm:text-[36px] lg:text-[40px]">
+              Tváře z terénu
+            </h2>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#475569]">
+              Krátké citáty o tom, jak jim práce u nás změnila život.
+            </p>
+          </div>
+        </Reveal>
+
+        <Stagger className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6" stagger={0.08} delayChildren={0.08}>
           {colleagues.map((person) => (
-            <article
-              key={person.name}
-              className="group relative flex min-h-[420px] flex-col overflow-hidden rounded-[28px] bg-[#111928] shadow-[0_22px_55px_rgba(17,25,40,0.12)]"
-            >
-              <div className="relative flex-1 overflow-hidden">
-                <img
-                  src={person.image}
-                  alt={person.name}
-                  className={`h-full min-h-[280px] w-full transition-transform duration-700 ease-out group-hover:scale-[1.03] ${person.imageClassName}`}
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111928] via-[#111928]/35 to-transparent" />
-              </div>
-              <div className="relative z-[1] -mt-16 flex flex-1 flex-col justify-end px-6 pb-7 pt-10 sm:px-7">
-                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-white/55">Obchodně technický zástupce</div>
-                <h3 className="mt-2 text-[28px] font-bold leading-tight text-white sm:text-[30px]">{person.name}</h3>
-                <p className="mt-4 text-[15px] font-medium leading-7 text-white/85">„{person.quote}“</p>
-              </div>
-            </article>
+            <RevealChild key={person.name}>
+              <motion.article
+                whileHover={reduced ? undefined : { y: -4 }}
+                transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+                className="group flex min-h-[400px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#111827] shadow-[0_20px_50px_-24px_rgba(15,23,42,0.35)]"
+              >
+                <div className="relative flex-1 overflow-hidden">
+                  <img
+                    src={person.image}
+                    alt={person.name}
+                    className={`h-full min-h-[280px] w-full transition-transform duration-500 ease-out group-hover:scale-[1.02] ${person.imageClassName}`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/25 to-transparent" />
+                </div>
+                <div className="relative z-[1] -mt-14 flex flex-1 flex-col justify-end px-6 pb-7 pt-10 sm:px-7">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/55">Obchodně technický zástupce</div>
+                  <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.02em] text-white sm:text-[26px]">{person.name}</h3>
+                  <p className="mt-3 text-[14px] font-medium leading-relaxed text-white/85">„{person.quote}“</p>
+                </div>
+              </motion.article>
+            </RevealChild>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

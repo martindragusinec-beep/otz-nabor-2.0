@@ -1,5 +1,6 @@
 import React from 'react';
 import { Globe2, MapPin } from 'lucide-react';
+import { Reveal } from './motion/Reveal';
 
 type MarqueeTile =
   | {
@@ -106,7 +107,7 @@ const branchDots: { label: string; left: string; top: string }[] = [
 
 export const Stats = () => {
   return (
-    <section className="overflow-hidden bg-[#F0F4FA] px-4 py-14 sm:px-6 sm:py-16 md:px-12 lg:px-16 lg:py-20">
+    <section className="overflow-hidden border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
       <style>{`
         @keyframes domidomi-marquee {
           from { transform: translate3d(0, 0, 0); }
@@ -118,25 +119,24 @@ export const Stats = () => {
         }
       `}</style>
 
-      <div className="mx-auto max-w-[1280px]">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#E30A1A]/12 bg-white px-3 py-1.5 text-sm font-semibold text-[#E30A1A] shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#E30A1A]" />
-            Stabilita a dosah
+      <div className="mx-auto max-w-[1200px]">
+        <Reveal>
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#64748B]">Stabilita a dosah</p>
+            <h2 className="mt-3 text-[28px] font-semibold leading-[1.12] tracking-[-0.02em] text-[#0f172a] sm:text-[36px] lg:text-[40px]">
+              <span className="block">Pobočky v Česku i na Slovensku,</span>
+              <span className="mt-1 block text-[#475569]">Mezinárodní skupina v zádech.</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-[#475569]">
+              Know-how, servis a infrastruktura — ať obchoduješ kdekoliv, nejsi na to sám.
+            </p>
           </div>
-          <h2 className="mt-4 text-[30px] font-bold leading-[1.06] tracking-tight text-[#111928] sm:text-[38px] lg:text-[48px]">
-            Pobočky v Česku i na Slovensku,
-            <br className="hidden sm:block" /> mezinárodní skupina v zádech.
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-[15px] leading-7 text-[#4B5563] sm:text-[17px]">
-            Jsme součástí silné skupiny s know-how, servisem a infrastrukturou — ať obchoduješ kdekoliv, máš víc než jen „lokální
-            značku“.
-          </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
-          <div className="relative overflow-hidden rounded-[28px] border border-white/70 bg-white p-6 shadow-[0_20px_50px_rgba(17,25,40,0.07)] sm:p-8 lg:col-span-7">
-            <div className="flex items-center gap-2 text-sm font-semibold text-[#111928]">
+        <div className="mt-12 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12 lg:gap-8">
+          <Reveal className="lg:col-span-7" delay={0.05}>
+            <div className="relative overflow-hidden rounded-3xl border border-[#E8EDF3] bg-white p-6 sm:p-8">
+            <div className="flex items-center gap-2 text-[14px] font-semibold text-[#0f172a]">
               <MapPin className="h-4 w-4 text-[#E30A1A]" />
               Pobočky a zázemí (ČR + SK)
             </div>
@@ -164,48 +164,49 @@ export const Stats = () => {
                 </div>
               ))}
             </div>
-            <p className="mt-8 text-center text-sm leading-6 text-[#4B5563]">
-              Slovensko pokrýváme zázemím v <span className="font-semibold text-[#111928]">Bratislavě</span> — stejný standard
+            <p className="mt-8 text-center text-[14px] leading-relaxed text-[#475569]">
+              Slovensko pokrýváme zázemím v <span className="font-semibold text-[#0f172a]">Bratislavě</span> — stejný standard
               služeb jako v ČR.
             </p>
           </div>
+          </Reveal>
 
-          <div className="flex flex-col justify-between gap-5 lg:col-span-5">
-            <div className="rounded-[28px] border border-[#E7ECF3] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FAFC_100%)] p-7 shadow-[0_18px_44px_rgba(17,25,40,0.06)]">
+          <Reveal className="flex flex-col justify-between gap-4 lg:col-span-5" delay={0.1}>
+            <div className="rounded-3xl border border-[#E8EDF3] bg-white p-7">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#111928] text-white">
-                  <Globe2 className="h-6 w-6" strokeWidth={2} />
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#0f172a] text-white">
+                  <Globe2 className="h-5 w-5" strokeWidth={2} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#111928]">Mezinárodní skupina</h3>
-                  <p className="mt-2 text-[15px] leading-7 text-[#4B5563]">
-                    Sdílené procesy, nákupní síla a servisní síť — abys prodával s klidem, ne s chaosem v zádech.
+                  <h3 className="text-lg font-semibold tracking-[-0.01em] text-[#0f172a]">Mezinárodní skupina</h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-[#475569]">
+                    Sdílené procesy, nákupní síla a servisní síť — prodáváš s klidem, ne v chaosu.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-[22px] border border-[#E7ECF3] bg-white p-5 text-center shadow-sm">
-                <div className="text-[28px] font-bold tabular-nums text-[#111928] sm:text-[32px]">ČR + SK</div>
-                <div className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#6B7280]">působení</div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-[#E8EDF3] bg-white p-5 text-center">
+                <div className="text-[26px] font-semibold tabular-nums tracking-tight text-[#0f172a] sm:text-[28px]">ČR + SK</div>
+                <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#64748B]">působení</div>
               </div>
-              <div className="rounded-[22px] border border-[#E7ECF3] bg-white p-5 text-center shadow-sm">
-                <div className="text-[28px] font-bold tabular-nums text-[#E30A1A] sm:text-[32px]">23k+</div>
-                <div className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#6B7280]">realizací</div>
+              <div className="rounded-2xl border border-[#E8EDF3] bg-white p-5 text-center">
+                <div className="text-[26px] font-semibold tabular-nums tracking-tight text-[#E30A1A] sm:text-[28px]">23k+</div>
+                <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#64748B]">realizací</div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
 
-        <div className="relative mt-14 sm:mt-16">
-          <div className="mb-6 flex flex-col gap-2 text-center sm:mb-8">
-            <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6B7280]">V terénu to vypadá takhle</div>
-            <p className="text-lg font-bold text-[#111928] sm:text-xl">Carousel realizací a čísla, co drží směr.</p>
+        <Reveal className="relative mt-16 sm:mt-20" delay={0.06}>
+          <div className="mb-8 flex flex-col gap-1 text-center">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#64748B]">Realizace & čísla</p>
+            <p className="text-[18px] font-semibold tracking-[-0.02em] text-[#0f172a] sm:text-xl">Pás, který ukazuje šířku skupiny</p>
           </div>
 
-          <div className="pointer-events-none absolute inset-y-0 left-1/2 z-10 w-16 -translate-x-[50vw] bg-gradient-to-r from-[#F0F4FA] via-[#F0F4FA]/96 to-transparent sm:w-24 lg:w-32" />
-          <div className="pointer-events-none absolute inset-y-0 right-1/2 z-10 w-16 translate-x-[50vw] bg-gradient-to-l from-[#F0F4FA] via-[#F0F4FA]/96 to-transparent sm:w-24 lg:w-32" />
+          <div className="pointer-events-none absolute inset-y-0 left-1/2 z-10 w-16 -translate-x-[50vw] bg-gradient-to-r from-[#FAFBFC] via-[#FAFBFC]/96 to-transparent sm:w-24 lg:w-32" />
+          <div className="pointer-events-none absolute inset-y-0 right-1/2 z-10 w-16 translate-x-[50vw] bg-gradient-to-l from-[#FAFBFC] via-[#FAFBFC]/96 to-transparent sm:w-24 lg:w-32" />
 
           <div
             className="flex w-max gap-4 sm:gap-5"
@@ -243,7 +244,7 @@ export const Stats = () => {
               );
             })}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

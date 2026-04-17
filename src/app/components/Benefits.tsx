@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { Reveal, RevealChild, Stagger } from './motion/Reveal';
 
 const usps = [
   {
@@ -26,33 +26,30 @@ const usps = [
 
 export const Benefits = () => {
   return (
-    <section className="relative overflow-hidden bg-white px-4 py-14 sm:px-6 sm:py-16 md:px-12 lg:px-16 lg:py-20">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(227,10,26,0.06),transparent_45%),radial-gradient(circle_at_90%_20%,rgba(91,163,24,0.08),transparent_40%)]" aria-hidden />
-
-      <div className="relative z-10 mx-auto max-w-[1280px]">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#E30A1A]/15 bg-[#FFF6F7] px-3 py-1.5 text-sm font-semibold text-[#E30A1A]">
-            <Sparkles className="h-4 w-4" strokeWidth={2.2} />
-            Proč DOMIDOMI OTZ
+    <section className="border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
+      <div className="mx-auto max-w-[1200px]">
+        <Reveal>
+          <div className="max-w-2xl">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#64748B]">Proč DOMIDOMI OTZ</p>
+            <h2 className="mt-3 text-[28px] font-semibold leading-[1.12] tracking-[-0.02em] text-[#0f172a] sm:text-[36px] lg:text-[40px]">
+              Pět věcí, které ti změní tempo i výsledek.
+            </h2>
           </div>
-          <h2 className="mt-4 text-[30px] font-bold leading-[1.06] tracking-tight text-[#111928] sm:text-[40px] lg:text-[46px]">
-            Pět věcí, které ti změní tempo i výsledek.
-          </h2>
-        </div>
+        </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <Stagger className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" stagger={0.06} delayChildren={0.08}>
           {usps.map((item, index) => (
-            <article
-              key={item.title}
-              className="group relative overflow-hidden rounded-[22px] border border-[#E8EDF4] bg-[linear-gradient(180deg,#FFFFFF_0%,#F9FBFD_100%)] p-6 shadow-[0_10px_30px_rgba(17,25,40,0.05)] transition-shadow duration-300 hover:shadow-[0_18px_44px_rgba(17,25,40,0.08)]"
-              style={{ animationDelay: `${index * 60}ms` }}
-            >
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#E30A1A]/[0.06] blur-2xl transition-transform duration-500 group-hover:scale-110" aria-hidden />
-              <h3 className="text-lg font-bold text-[#111928] sm:text-xl">{item.title}</h3>
-              <p className="mt-3 text-[15px] leading-7 text-[#4B5563]">{item.body}</p>
-            </article>
+            <RevealChild key={item.title}>
+              <article className="group flex h-full flex-col rounded-2xl border border-[#E8EDF3] bg-white p-6 shadow-[0_1px_0_rgba(15,23,42,0.04)] transition-[box-shadow,transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-[#dce3ee] hover:shadow-[0_12px_40px_-18px_rgba(15,23,42,0.12)]">
+                <span className="font-mono text-[11px] font-medium tabular-nums text-[#94a3b8]">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mt-3 text-[17px] font-semibold tracking-[-0.01em] text-[#0f172a]">{item.title}</h3>
+                <p className="mt-2 flex-1 text-[15px] leading-relaxed text-[#475569]">{item.body}</p>
+              </article>
+            </RevealChild>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

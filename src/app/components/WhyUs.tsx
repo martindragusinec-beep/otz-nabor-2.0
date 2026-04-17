@@ -1,95 +1,71 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { motion, useReducedMotion } from 'motion/react';
 import { CTAButton } from './CTAButton';
 import { useRecruitmentModal } from './RecruitmentModalContext';
+import { Reveal } from './motion/Reveal';
 
 export const WhyUs = () => {
   const { openModal } = useRecruitmentModal();
+  const reduced = useReducedMotion();
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#111928] px-4 py-16 text-white sm:px-6 sm:py-20 md:px-12 lg:flex lg:items-center lg:px-8 lg:py-[72px]">
-      <style>{`
-        @keyframes domidomi-float-slow {
-          0%, 100% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(-12px) scale(1.01); }
-        }
-        @keyframes domidomi-ring {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
+    <section className="relative w-full overflow-hidden bg-[#0c111d] px-4 py-16 text-white sm:px-6 sm:py-20 md:px-12 lg:flex lg:items-center lg:px-16 lg:py-[4.5rem]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_40%_at_80%_20%,rgba(227,10,26,0.09),transparent_55%)]" aria-hidden />
 
-      <div className="pointer-events-none absolute -left-40 top-1/4 h-[320px] w-[320px] rounded-full bg-[#E30A1A]/18 blur-[100px]" aria-hidden />
-      <div className="pointer-events-none absolute -right-32 bottom-0 h-[300px] w-[300px] rounded-full bg-[#5BA318]/10 blur-[90px]" aria-hidden />
+      <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col gap-14 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+        <Reveal className="flex w-full flex-col items-start lg:max-w-[min(100%,480px)] lg:shrink-0">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#f87171]/90">Ekosystém DOMIDOMI</p>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col gap-14 lg:flex-row lg:items-center lg:justify-between lg:gap-12 xl:gap-20">
-        <div className="flex w-full flex-col items-start lg:max-w-[min(100%,520px)] lg:shrink-0">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-red-500/25 bg-red-500/10 px-3 py-1.5 text-sm font-semibold text-red-300">
-            <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
-            Ekosystém DOMIDOMI
-          </div>
-
-          <h2 className="mb-6 text-[34px] font-bold leading-[1.06] tracking-tight text-white sm:text-[42px] lg:text-[52px]">
-            Neprodáváš jeden
-            <br className="hidden sm:block" />
-            produkt. Prodáváš
-            <br className="hidden sm:block" />
-            funkční celek.
+          <h2 className="mt-4 text-[28px] font-semibold leading-[1.1] tracking-[-0.02em] text-white sm:text-[38px] lg:text-[44px]">
+            Neprodáváš jeden produkt.
+            <span className="mt-1 block text-white/85">Prodáváš funkční celek.</span>
           </h2>
 
-          <div className="flex max-w-xl flex-col gap-6 text-base leading-[1.7] text-gray-400 sm:text-lg">
+          <div className="mt-6 flex max-w-xl flex-col gap-5 text-[15px] leading-relaxed text-white/55 sm:text-[16px]">
             <p>
               U nás neprodáváš jen jeden produkt. Dáme ti do ruky{' '}
-              <strong className="font-medium text-white">kompletní řešení pro moderní dům</strong>. Pro klienta už nejsi jen
+              <strong className="font-semibold text-white/95">kompletní řešení pro moderní dům</strong>. Pro klienta už nejsi jen
               další prodejce v řadě, ale partner, co mu vyřeší bezstarostné a smysluplné bydlení.
             </p>
 
-            <ul className="mt-2 flex flex-col gap-4">
+            <ul className="flex flex-col gap-3">
               <li className="flex items-start gap-3">
-                <div className="mt-1 shrink-0 rounded-full bg-[#BDFF84]/10 p-1">
-                  <Check className="h-4 w-4 text-[#BDFF84]" strokeWidth={3} />
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#a3e635]/12">
+                  <Check className="h-3.5 w-3.5 text-[#a3e635]" strokeWidth={2.5} />
                 </div>
-                <span className="text-gray-300">Na jedné schůzce otevřeš víc příležitostí.</span>
+                <span>Na jedné schůzce otevřeš víc příležitostí.</span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="mt-1 shrink-0 rounded-full bg-[#BDFF84]/10 p-1">
-                  <Check className="h-4 w-4 text-[#BDFF84]" strokeWidth={3} />
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#a3e635]/12">
+                  <Check className="h-3.5 w-3.5 text-[#a3e635]" strokeWidth={2.5} />
                 </div>
-                <span className="text-gray-300">Klient v tobě vidí partnera, ne jen prodejce.</span>
+                <span>Klient v tobě vidí partnera, ne jen prodejce.</span>
               </li>
             </ul>
           </div>
 
-          <CTAButton onClick={openModal} className="mt-10 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+          <CTAButton onClick={openModal} className="mt-10">
             Chci vědět víc
           </CTAButton>
-        </div>
+        </Reveal>
 
-        <div className="relative flex w-full min-w-0 flex-1 items-center justify-center lg:justify-center">
-          <div
-            className="pointer-events-none absolute inset-[-18%] rounded-full opacity-35 blur-3xl"
-            style={{
-              background: 'conic-gradient(from 90deg, rgba(227,10,26,0.35), rgba(91,163,24,0.25), rgba(227,10,26,0.35))',
-              animation: 'domidomi-ring 28s linear infinite',
-            }}
-            aria-hidden
-          />
-          <div className="relative w-full max-w-[520px] lg:max-w-[min(100%,680px)] xl:max-w-[min(100%,760px)]">
-            <div
-              className="relative will-change-transform"
-              style={{ animation: 'domidomi-float-slow 9s ease-in-out infinite' }}
-            >
-              <div className="absolute -inset-3 rounded-[40px] bg-gradient-to-br from-white/12 via-transparent to-[#5BA318]/20 opacity-70 blur-xl" aria-hidden />
-              <img
-                src="/images/why-us-circle.png"
-                alt="Kompletní portfolio DOMIDOMI — dům, fotovoltaika, tepelná čerpadla a služby"
-                className="relative h-auto w-full object-contain drop-shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-        </div>
+        <Reveal className="relative flex w-full min-w-0 flex-1 items-center justify-center" delay={0.08}>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.06),transparent_62%)]" aria-hidden />
+          <motion.div
+            className="relative w-full max-w-[560px]"
+            animate={reduced ? undefined : { y: [0, -7, 0] }}
+            transition={reduced ? undefined : { duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <img
+              src="/images/why-us-circle.png"
+              alt="Kompletní portfolio DOMIDOMI — dům, fotovoltaika, tepelná čerpadla a služby"
+              className="relative h-auto w-full object-contain drop-shadow-[0_24px_48px_rgba(0,0,0,0.35)]"
+              loading="lazy"
+              decoding="async"
+            />
+          </motion.div>
+        </Reveal>
       </div>
     </section>
   );
