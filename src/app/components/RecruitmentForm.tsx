@@ -279,7 +279,7 @@ export const RecruitmentForm: React.FC = () => {
                         }`}
                       >
                         <div className={`flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border-2 bg-white sm:h-6 sm:w-6 ${isSelected ? 'border-[#111928] border-[6px] sm:border-[7px]' : 'border-[#D1D5DB]'}`} />
-                        <span className="text-[15px] font-semibold leading-5.5 text-[#111928] sm:text-[18px] sm:leading-7">{option.label}</span>
+                        <span className="text-[14px] font-semibold leading-5 text-[#111928] sm:text-[18px] sm:leading-7">{option.label}</span>
                       </button>
                     );
                   })}
