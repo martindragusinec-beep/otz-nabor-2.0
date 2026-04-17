@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { SectionSpotlight } from './SectionSpotlight';
 import { Reveal, RevealChild, Stagger } from './motion/Reveal';
 
 const colleagues = [
@@ -28,7 +29,8 @@ export const PeopleStories = () => {
 
   return (
     <section className="border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
-      <div className="mx-auto max-w-[1200px]">
+      <SectionSpotlight index={4}>
+        <div className="mx-auto max-w-[1200px]">
         <Reveal>
           <div className="max-w-2xl">
             <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#64748B]">Příběhy našich lidí</p>
@@ -68,7 +70,8 @@ export const PeopleStories = () => {
             </RevealChild>
           ))}
         </Stagger>
-      </div>
+        </div>
+      </SectionSpotlight>
     </section>
   );
 };

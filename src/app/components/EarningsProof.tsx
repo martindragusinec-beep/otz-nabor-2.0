@@ -3,6 +3,7 @@ import { TrendingUp } from 'lucide-react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { CTAButton } from './CTAButton';
 import { useRecruitmentModal } from './RecruitmentModalContext';
+import { SectionSpotlight } from './SectionSpotlight';
 import { Reveal } from './motion/Reveal';
 
 const bars = [
@@ -49,7 +50,8 @@ export const EarningsProof = () => {
     <section className="relative overflow-hidden bg-[#0a0f18] px-4 py-16 text-white sm:px-6 sm:py-20 md:px-12 lg:px-16">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_15%_0%,rgba(227,10,26,0.12),transparent_50%)]" aria-hidden />
 
-      <div className="relative z-10 mx-auto max-w-[1200px]">
+      <SectionSpotlight index={2} dark>
+        <div className="relative z-10 mx-auto max-w-[1200px]">
         <Reveal>
           <div className="max-w-2xl">
             <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-white/45">Výdělek & důvěra</p>
@@ -166,7 +168,8 @@ export const EarningsProof = () => {
             </Reveal>
           </div>
         </div>
-      </div>
+        </div>
+      </SectionSpotlight>
     </section>
   );
 };

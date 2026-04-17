@@ -1,4 +1,5 @@
 import React from 'react';
+import { SectionSpotlight } from './SectionSpotlight';
 import { Reveal, RevealChild, Stagger } from './motion/Reveal';
 
 const usps = [
@@ -27,7 +28,8 @@ const usps = [
 export const Benefits = () => {
   return (
     <section className="border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
-      <div className="mx-auto max-w-[1200px]">
+      <SectionSpotlight index={1}>
+        <div className="mx-auto max-w-[1200px]">
         <Reveal>
           <div className="max-w-2xl">
             <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#64748B]">Proč DOMIDOMI OTZ</p>
@@ -50,7 +52,8 @@ export const Benefits = () => {
             </RevealChild>
           ))}
         </Stagger>
-      </div>
+        </div>
+      </SectionSpotlight>
     </section>
   );
 };

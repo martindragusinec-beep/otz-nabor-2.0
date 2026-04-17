@@ -1,45 +1,67 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Play } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { CTAButton } from './CTAButton';
 import { useRecruitmentModal } from './RecruitmentModalContext';
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 const heroContainer = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.06 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
   },
 };
 
 const heroItem = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.52, ease } },
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring' as const, stiffness: 100, damping: 22, mass: 0.9 },
+  },
 };
 
 export const Hero = () => {
   const { openModal } = useRecruitmentModal();
   const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const bgY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 120]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [1, 1.08]);
+  const contentY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, 48]);
+  const overlayY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [0, -36]);
 
   return (
-    <section className="relative overflow-hidden bg-[#0c111d] px-4 py-14 text-white sm:px-6 sm:py-16 md:px-12 lg:min-h-[calc(100vh-80px)] lg:px-16 lg:py-12">
-      <div className="absolute inset-0">
-        <img
-          src="/images/hero-bg.jpg"
-          alt=""
-          className="h-full w-full object-cover object-center opacity-[0.22]"
-        />
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-[#0c111d] px-4 py-14 text-white sm:px-6 sm:py-16 md:px-12 lg:min-h-[calc(100vh-80px)] lg:px-16 lg:py-12"
+    >
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div className="absolute inset-0 h-[118%] w-full" style={{ y: bgY, scale: bgScale }}>
+          <img
+            src="/images/hero-bg.jpg"
+            alt=""
+            className="h-full w-full object-cover object-center opacity-[0.24]"
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-br from-[#0c111d]/95 via-[#111928]/88 to-[#0f172a]/80" />
-        <div
-          className="absolute inset-0 opacity-[0.35]"
+        <motion.div
+          className="absolute inset-0 opacity-[0.4]"
           style={{
-            backgroundImage: `radial-gradient(ellipse 80% 50% at 20% 0%, rgba(227,10,26,0.18), transparent 55%)`,
+            backgroundImage: `radial-gradient(ellipse 80% 50% at 20% 0%, rgba(227,10,26,0.2), transparent 55%)`,
+            y: overlayY,
           }}
         />
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 lg:min-h-[calc(100vh-144px)] lg:grid-cols-[1.02fr_0.98fr] lg:gap-14">
+      <motion.div
+        style={{ y: contentY }}
+        className="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 lg:min-h-[calc(100vh-144px)] lg:grid-cols-[1.02fr_0.98fr] lg:gap-14"
+      >
         <motion.div
           className="flex max-w-[640px] flex-col items-start"
           initial={reduced ? 'show' : 'hidden'}
@@ -66,9 +88,9 @@ export const Hero = () => {
         </motion.div>
 
         <motion.div
-          initial={reduced ? false : { opacity: 0, scale: 0.98, y: 16 }}
+          initial={reduced ? false : { opacity: 0, scale: 0.94, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: reduced ? 0 : 0.15, ease }}
+          transition={{ type: 'spring', stiffness: 90, damping: 20, delay: reduced ? 0 : 0.12 }}
           className="relative flex justify-center lg:justify-end"
         >
           <button
@@ -97,7 +119,7 @@ export const Hero = () => {
             </div>
           </button>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

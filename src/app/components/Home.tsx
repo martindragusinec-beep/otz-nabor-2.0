@@ -11,16 +11,21 @@ import { Footer } from "./Footer";
 import { CTASection } from "./CTASection";
 import { InlineRecruitmentSection } from "./InlineRecruitmentSection";
 import { RecruitmentModalProvider } from "./RecruitmentModalContext";
+import { ScrollProgress } from "./ScrollProgress";
+import { SectionTransition } from "./SectionTransition";
 
 export const Home = () => {
   return (
     <RecruitmentModalProvider>
       <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden flex flex-col relative">
+        <ScrollProgress />
         <Header />
         <main className="flex-grow">
           <Hero />
+          <SectionTransition tone="light" />
           <Benefits />
           <EarningsProof />
+          <SectionTransition tone="light" />
           <CTASection
             eyebrow="Další krok"
             title="Chceš vědět, jestli je tohle pro tebe?"
