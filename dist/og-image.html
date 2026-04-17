@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG Image Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1200px;
+            height: 630px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #111928 0%, #1F2937 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Background pattern */
+        .pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 51px),
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.1) 50px, rgba(255,255,255,0.1) 51px);
+        }
+        
+        /* Red accent circle */
+        .circle {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(227, 10, 26, 0.3) 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px;
+            max-width: 900px;
+        }
+        
+        .logo-container {
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            width: 200px;
+            height: auto;
+        }
+        
+        h1 {
+            font-size: 72px;
+            font-weight: 800;
+            color: white;
+            margin: 0 0 20px 0;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+        
+        .highlight {
+            color: #E30A1A;
+            display: block;
+        }
+        
+        .subtitle {
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 30px 0;
+            font-weight: 500;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: #E30A1A;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .cta {
+            margin-top: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #E30A1A;
+            color: white;
+            padding: 20px 50px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            box-shadow: 0 8px 30px rgba(227, 10, 26, 0.4);
+        }
+        
+        .arrow {
+            font-size: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pattern"></div>
+    <div class="circle"></div>
+    
+    <div class="content">
+        <div class="logo-container">
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 48" fill="none">
+                <path d="M70.607 14.541V25.0702L64.4568 30.6991L58.3047 25.0702V14.541H70.607Z" fill="#E30A1A"/>
+                <path d="M0 0.486053H8.55858C16.5806 0.486053 22.2653 5.12605 22.2653 11.6918C22.2653 18.2576 16.5826 22.9304 8.55858 22.9304H0V0.486053ZM9.62766 17.182C13.1051 17.182 15.5786 14.8957 15.5786 11.6938C15.5786 8.49184 13.1051 6.23834 9.62766 6.23834H6.48551V17.1839H9.62766V17.182Z" fill="white"/>
+                <path d="M24.5376 11.6918C24.5376 5.3863 30.2538 0.092804 37.0411 0.092804C43.8284 0.092804 49.5447 5.3863 49.5447 11.6918C49.5447 17.9974 43.8284 23.3236 37.0411 23.3236C30.2538 23.3236 24.5376 17.9993 24.5376 11.6918ZM42.856 11.6918C42.856 8.52268 40.1813 5.84316 37.0392 5.84316C33.897 5.84316 31.2223 8.52268 31.2223 11.6918C31.2223 14.861 33.897 17.5733 37.0392 17.5733C40.1813 17.5733 42.856 14.8938 42.856 11.6918Z" fill="white"/>
+                <path d="M70.6067 0.486084L64.4546 6.11693L58.3024 0.486084H51.8169V22.9323H58.3024V14.543H70.6047V22.9323H77.0902V0.486084H70.6047H70.6067Z" fill="white"/>
+                <path d="M79.3647 0.486084H85.8503V22.9304H79.3647V0.486084Z" fill="white"/>
+                <path d="M0 25.0682H8.55858C16.5806 25.0682 22.2653 29.7082 22.2653 36.274C22.2653 42.8398 16.5826 47.5126 8.55858 47.5126H0V25.0682ZM9.62766 41.7641C13.1051 41.7641 15.5786 39.4779 15.5786 36.2759C15.5786 33.074 13.1051 30.8205 9.62766 30.8205H6.48551V41.7661H9.62766V41.7641Z" fill="white"/>
+                <path d="M24.5376 36.274C24.5376 29.9685 30.2538 24.675 37.0411 24.675C43.8284 24.675 49.5447 29.9685 49.5447 36.274C49.5447 42.5796 43.8284 47.9058 37.0411 47.9058C30.2538 47.9058 24.5376 42.5815 24.5376 36.274ZM42.856 36.274C42.856 33.1049 40.1813 30.4253 37.0392 30.4253C33.897 30.4253 31.2223 33.1049 31.2223 36.274C31.2223 39.4432 33.897 42.1555 37.0392 42.1555C40.1813 42.1555 42.856 39.476 42.856 36.274Z" fill="white"/>
+                <path d="M70.6067 25.0701L64.4546 30.701L58.3024 25.0701H51.8169V47.5125H58.3024V35.4933L64.4546 41.1241L70.6067 35.4933V47.5125H77.0922V25.0701H70.6067Z" fill="white"/>
+                <path d="M79.3647 25.0682H85.8503V47.5126H79.3647V25.0682Z" fill="white"/>
+            </svg>
+        </div>
+        
+        <h1>
+            Staň se obchodníkem
+            <span class="highlight">až 200 000 Kč / měsíc</span>
+        </h1>
+        
+        <p class="subtitle">Profesionální kariéra s férovou provizí</p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-value">200K+</span>
+                <span class="stat-label">Měsíční výdělek</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">100%</span>
+                <span class="stat-label">Férová provize</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">0 Kč</span>
+                <span class="stat-label">Vstupní náklady</span>
+            </div>
+        </div>
+        
+        <div class="cta">
+            Mám zájem
+            <span class="arrow">→</span>
+        </div>
+    </div>
+</body>
+</html>

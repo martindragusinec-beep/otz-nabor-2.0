@@ -1,66 +1,88 @@
-import React, { useState } from 'react';
-import { Logo } from './Logo';
-import svgPaths from '../../imports/svg-569q2duhdy';
+import React, { useMemo, useState } from 'react';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 
-// Types
 interface FormData {
-  hasDrivingLicense: string;
-  region: string;
-  travelWillingness: string;
-  icoWillingness: string;
-  desiredIncome: string;
+  marketShareInterest: string;
   salesExperience: string;
+  hasDrivingLicense: string;
   fullName: string;
   phone: string;
   email: string;
 }
 
-interface StepProps {
-  onNext: (data: Partial<FormData>) => void;
-  onBack: () => void;
-  formData: FormData;
-}
-
-const WEBHOOK_URL = 'https://hook.eu1.make.com/l5t9g2zh9a1emivilr30m041cgn0t4o6'; // Replace with actual webhook URL
-
-const TRAVEL_WILLINGNESS_LABELS: Record<string, string> = {
-  region_only: 'Pouze v daném regionu',
-  whole_country: 'Po celé ČR',
-  germany: 'Do Německa'
-};
+const WEBHOOK_URL = 'https://hook.eu1.make.com/l5t9g2zh9a1emivilr30m041cgn0t4o6';
+const RECAPTCHA_SITE_KEY =
+  (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env?.VITE_RECAPTCHA_SITE_KEY ??
+  '6LdEc7osAAAAAN0XQCNAGxQjerYVhMwz4U31oHBP';
+const RECAPTCHA_SCRIPT_ID = 'google-recaptcha-v3';
 
 const pushJobsFormSentEvent = () => {
   if (typeof window === 'undefined') return;
   const win = window as Window & { dataLayer?: Array<Record<string, unknown>> };
-  win.dataLayer?.push({
-    event: 'jobs_form_sent'
-  });
+  win.dataLayer?.push({ event: 'jobs_form_sent' });
 };
 
-const CZECH_REGIONS = [
-  'Hlavní město Praha',
-  'Středočeský kraj',
-  'Jihočeský kraj',
-  'Plzeňský kraj',
-  'Karlovarský kraj',
-  'Ústecký kraj',
-  'Liberecký kraj',
-  'Královéhradecký kraj',
-  'Pardubický kraj',
-  'Kraj Vysočina',
-  'Jihomoravský kraj',
-  'Olomoucký kraj',
-  'Zlínský kraj',
-  'Moravskoslezský kraj'
-];
+const loadRecaptchaScript = () =>
+  new Promise<void>((resolve, reject) => {
+    if (typeof window === 'undefined') {
+      reject(new Error('Window is not available'));
+      return;
+    }
+
+    if ((window as Window & { grecaptcha?: unknown }).grecaptcha) {
+      resolve();
+      return;
+    }
+
+    const existing = document.getElementById(RECAPTCHA_SCRIPT_ID) as HTMLScriptElement | null;
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error('Failed to load reCAPTCHA script')), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = RECAPTCHA_SCRIPT_ID;
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load reCAPTCHA script'));
+    document.head.appendChild(script);
+  });
+
+const getRecaptchaToken = async () => {
+  if (typeof window === 'undefined') return '';
+  await loadRecaptchaScript();
+
+  const win = window as Window & {
+    grecaptcha?: {
+      ready: (cb: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  };
+
+  if (!win.grecaptcha) throw new Error('reCAPTCHA is not available');
+
+  return new Promise<string>((resolve, reject) => {
+    win.grecaptcha?.ready(async () => {
+      try {
+        const token = await win.grecaptcha!.execute(RECAPTCHA_SITE_KEY, { action: 'recruitment_form_submit' });
+        resolve(token);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+};
 
 const formatPhoneInput = (value: string) => {
   const trimmed = value.trimStart();
   const hasLeadingPlus = trimmed.startsWith('+');
   const digits = value.replace(/\D/g, '');
-  const formatLocal = (localDigits: string) => [localDigits.slice(0, 3), localDigits.slice(3, 6), localDigits.slice(6, 9)].filter(Boolean).join(' ');
+  const formatLocal = (localDigits: string) =>
+    [localDigits.slice(0, 3), localDigits.slice(3, 6), localDigits.slice(6, 9)].filter(Boolean).join(' ');
 
-  // Normalize duplicated country code prefixes like +420 420 ...
   const stripRepeatedCzPrefix = (inputDigits: string) => inputDigits.replace(/^(?:420)+/, '');
 
   if (hasLeadingPlus) {
@@ -76,541 +98,91 @@ const formatPhoneInput = (value: string) => {
   return formatLocal(digits.slice(0, 9));
 };
 
-// Step Components
-const Step1: React.FC<StepProps> = ({ onNext, formData }) => {
-  const [selected, setSelected] = useState(formData.salesExperience || '');
+const steps = [
+  {
+    key: 'marketShareInterest',
+    title: 'O jaký podíl trhu máš zájem?',
+    description: 'Zajímá nás, jakou ambici do spolupráce přinášíš.',
+    options: [
+      { value: 'side_income', label: 'Chci rozumný start a vedlejší příjem' },
+      { value: 'strong_region', label: 'Chci si vybudovat silnou pozici v regionu' },
+      { value: 'top_performer', label: 'Chci patřit mezi top obchodníky' },
+    ],
+  },
+  {
+    key: 'salesExperience',
+    title: 'Máš zkušenosti s obchodem?',
+    description: 'Nejde jen o roky praxe. Zajímá nás i drive a chuť dělat dobrý obchod.',
+    options: [
+      { value: 'none', label: 'Jsem na začátku' },
+      { value: 'some', label: 'Mám první zkušenosti' },
+      { value: 'advanced', label: 'Obchodu se věnuju delší dobu' },
+    ],
+  },
+  {
+    key: 'hasDrivingLicense',
+    title: 'Máš řidičák sk. B?',
+    description: 'Práce je z velké části v terénu, proto je aktivní řízení důležité.',
+    options: [
+      { value: 'yes', label: 'Ano, mám a aktivně řídím' },
+      { value: 'no', label: 'Ne, momentálně neřídím' },
+    ],
+  },
+] as const;
 
-  const options = [
-    { value: 'less_than_year', label: 'Méně než rok' },
-    { value: '1_2_years', label: '1 - 2 roky' },
-    { value: 'more_than_3', label: 'Více než 3 roky' }
-  ];
-
-  const handleSelect = (value: string) => {
-    setSelected(value);
-    // Auto-advance after selection with longer delay for visual feedback
-    setTimeout(() => {
-      onNext({ salesExperience: value });
-    }, 600);
-  };
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col gap-6 items-center w-full">
-        <p className="font-normal text-xl text-[#111928] text-center">
-          Jak dlouho už děláš v obchodu?
-        </p>
-        <div className="flex flex-col gap-4 w-full">
-          {options.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => handleSelect(option.value)}
-              disabled={selected !== '' && selected !== option.value}
-              className={`w-full rounded-md border p-4 text-left transition-all ${
-                selected === option.value
-                  ? 'bg-[rgba(76,164,0,0.1)] border-[#4ca400]'
-                  : 'bg-white border-[#9ca3af] hover:border-gray-400'
-              } ${selected !== '' && selected !== option.value ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              <div className="flex items-center gap-4">
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                  selected === option.value ? 'bg-[#4ca400] border-[#4ca400]' : 'bg-white border-[#e5e7eb]'
-                }`}>
-                  {selected === option.value && (
-                    <div className="w-3 h-3 rounded-full bg-white" />
-                  )}
-                </div>
-                <span className="text-lg text-[#111827]">{option.label}</span>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="mt-auto pt-4">
-        <p className="text-sm text-[#4b5563] text-center">
-          Výběrem automaticky pokračujete na další krok
-        </p>
-      </div>
-    </div>
-  );
-};
-
-const Step2: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
-  const [selected, setSelected] = useState(formData.hasDrivingLicense || '');
-
-  const options = [
-    { value: 'yes', label: 'Ano, mám řídičský průkaz sk. B' },
-    { value: 'no', label: 'Ne, nemám řídičský průkaz sk. B' }
-  ];
-
-  const handleSelect = (value: string) => {
-    setSelected(value);
-    setTimeout(() => {
-      onNext({ hasDrivingLicense: value });
-    }, 600);
-  };
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center">
-        <div className="flex flex-col gap-6 items-center w-full">
-          <p className="font-normal text-xl text-[#111928] text-center">
-            Máš platný řidičský průkaz sk. B a jsi aktivní řidič/ka?
-          </p>
-          <div className="flex flex-col gap-4 w-full">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-                disabled={selected !== '' && selected !== option.value}
-                className={`w-full rounded-md border p-4 text-left transition-all ${
-                  selected === option.value
-                    ? 'bg-[rgba(76,164,0,0.1)] border-[#4ca400]'
-                    : 'bg-white border-[#9ca3af] hover:border-gray-400'
-                } ${selected !== '' && selected !== option.value ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    selected === option.value ? 'bg-[#4ca400] border-[#4ca400]' : 'bg-white border-[#e5e7eb]'
-                  }`}>
-                    {selected === option.value && (
-                      <div className="w-3 h-3 rounded-full bg-white" />
-                    )}
-                  </div>
-                  <span className="text-lg text-[#111827]">{option.label}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="mt-auto pt-8 flex gap-4 min-h-[52px]">
-        <button
-          onClick={onBack}
-          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
-        >
-          ← Zpět
-        </button>
-        <button
-          type="button"
-          className="flex-1 rounded-lg opacity-0 pointer-events-none"
-          aria-hidden="true"
-          tabIndex={-1}
-        />
-      </div>
-    </div>
-  );
-};
-
-const StepRegion: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
-  const [region, setRegion] = useState(formData.region || '');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (region) {
-      onNext({ region });
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center">
-        <div className="flex flex-col gap-6 items-center w-full">
-          <p className="font-normal text-xl text-[#111928] text-center">
-            V jakém kraji bydlíte?
-          </p>
-          <div className="relative w-full">
-            <select
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              className="w-full p-4 pr-12 border border-[#9ca3af] rounded-md text-lg outline-none focus:border-[#4ca400] bg-white appearance-none"
-              required
-            >
-              <option value="" disabled>
-                Vyberte kraj
-              </option>
-              {CZECH_REGIONS.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-            <svg
-              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]"
-              viewBox="0 0 20 20"
-              fill="none"
-            >
-              <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div className="mt-auto flex gap-4 pt-8">
-        <button
-          type="button"
-          onClick={onBack}
-          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
-        >
-          ← Zpět
-        </button>
-        <button
-          type="submit"
-          className="flex-1 bg-[#5BA318] text-white px-5 py-3 rounded-lg font-semibold hover:bg-[#4a8b13] transition-all text-[15px] flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-        >
-          <span>Pokračovat</span>
-        </button>
-      </div>
-    </form>
-  );
-};
-
-const StepTravel: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
-  const [selected, setSelected] = useState(formData.travelWillingness || '');
-
-  const options = [
-    { value: 'region_only', label: 'Pouze v daném regionu' },
-    { value: 'whole_country', label: 'Po celé ČR' },
-    { value: 'germany', label: 'Do Německa' }
-  ];
-
-  const handleSelect = (value: string) => {
-    setSelected(value);
-    setTimeout(() => {
-      onNext({ travelWillingness: value });
-    }, 600);
-  };
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center">
-        <div className="flex flex-col gap-6 items-center w-full">
-          <p className="font-normal text-xl text-[#111928] text-center">
-            Kam až jsi ochotný cestovat za klienty?
-          </p>
-          <div className="flex flex-col gap-4 w-full">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-                disabled={selected !== '' && selected !== option.value}
-                className={`w-full rounded-md border p-4 text-left transition-all ${
-                  selected === option.value
-                    ? 'bg-[rgba(76,164,0,0.1)] border-[#4ca400]'
-                    : 'bg-white border-[#9ca3af] hover:border-gray-400'
-                } ${selected !== '' && selected !== option.value ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                    selected === option.value ? 'bg-[#4ca400] border-[#4ca400]' : 'bg-white border-[#e5e7eb]'
-                  }`}>
-                    {selected === option.value && (
-                      <div className="w-3 h-3 rounded-full bg-white" />
-                    )}
-                  </div>
-                  <span className="text-lg text-[#111827]">{option.label}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="mt-auto pt-8 flex gap-4 min-h-[52px]">
-        <button
-          onClick={onBack}
-          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
-        >
-          ← Zpět
-        </button>
-        <button
-          type="button"
-          className="flex-1 rounded-lg opacity-0 pointer-events-none"
-          aria-hidden="true"
-          tabIndex={-1}
-        />
-      </div>
-    </div>
-  );
-};
-
-const Step4: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
-  const [selected, setSelected] = useState(formData.icoWillingness || '');
-
-  const options = [
-    { value: 'yes', label: 'Ano, bez problémů' },
-    { value: 'no', label: 'Ne, dělá mi to problém' }
-  ];
-
-  const handleSelect = (value: string) => {
-    setSelected(value);
-    setTimeout(() => {
-      onNext({ icoWillingness: value });
-    }, 600);
-  };
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center">
-        <div className="flex flex-col gap-6 items-center w-full">
-          <p className="font-normal text-xl text-[#111928] text-center">
-            Jsi ochoten pracovat na IČO?
-          </p>
-          <div className="flex flex-col gap-4 w-full">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-                className={`w-full rounded-md border p-4 text-left transition-all ${
-                  selected === option.value
-                    ? 'bg-[rgba(16,185,129,0.05)] border-[#4ca400]'
-                    : 'bg-white border-[#9ca3af] hover:border-gray-400'
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    selected === option.value ? 'bg-[#4ca400] border-[#4ca400]' : 'bg-white border-[#e5e7eb]'
-                  }`}>
-                    {selected === option.value && (
-                      <div className="w-3 h-3 rounded-full bg-white" />
-                    )}
-                  </div>
-                  <span className="text-lg text-[#111827]">{option.label}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="mt-auto pt-8 flex gap-4 min-h-[52px]">
-        <button
-          onClick={onBack}
-          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
-        >
-          ← Zpět
-        </button>
-        <button
-          type="button"
-          className="flex-1 rounded-lg opacity-0 pointer-events-none"
-          aria-hidden="true"
-          tabIndex={-1}
-        />
-      </div>
-    </div>
-  );
-};
-
-const Step5: React.FC<StepProps> = ({ onNext, onBack, formData }) => {
-  const [income, setIncome] = useState(formData.desiredIncome || '');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (income) {
-      onNext({ desiredIncome: income });
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center">
-        <div className="flex flex-col gap-6 items-center w-full">
-          <p className="font-normal text-xl text-[#111928] text-center">
-            Kolik si chceš průměrně měsíčně vydělat?
-          </p>
-          <div className="w-full rounded-md border border-[#9ca3af] bg-white">
-            <div className="flex items-center justify-between p-4">
-              <input
-                type="number"
-                value={income}
-                onChange={(e) => setIncome(e.target.value)}
-                placeholder="Napište částku"
-                className="flex-1 text-lg outline-none placeholder:text-[#9ca3af]"
-                required
-              />
-              <span className="text-lg text-[#111928] ml-4">Kč</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-auto flex gap-4 pt-8">
-        <button
-          type="button"
-          onClick={onBack}
-          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
-        >
-          ← Zpět
-        </button>
-        <button
-          type="submit"
-          className="flex-1 bg-[#5BA318] text-white px-5 py-3 rounded-lg font-semibold hover:bg-[#4a8b13] transition-all text-[15px] flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-        >
-          <span>Pokračovat</span>
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-            <path d="M19 12L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M12 19L19 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </div>
-    </form>
-  );
-};
-
-const Step6: React.FC<Pick<StepProps, 'onBack' | 'formData'> & { onSubmit: (data: Partial<FormData>) => void }> = ({ onSubmit, onBack, formData }) => {
-  const [fullName, setFullName] = useState(formData.fullName || '');
-  const [phone, setPhone] = useState(formData.phone || '');
-  const [email, setEmail] = useState(formData.email || '');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ fullName, phone, email });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col h-full gap-8">
-      <div className="flex flex-col gap-6">
-        <p className="font-normal text-xl text-[#111928] text-center">
-          Kde Vás můžeme kontaktovat?
-        </p>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-[#9ca3af]">
-              Jméno a příjmení<span className="text-[#ff8080]">*</span>
-            </label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="např. Jan Novák"
-              className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-[#9ca3af]">
-                Telefonní číslo<span className="text-[#ff8080]">*</span>
-              </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
-                placeholder="+420 123 456 789"
-                className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
-                maxLength={16}
-                required
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-[#9ca3af]">
-              E-mailová adresa<span className="text-[#ff8080]">*</span>
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="např. email@email.cz"
-              className="w-full p-4 border border-[#9ca3af] rounded-md text-lg placeholder:text-[#9ca3af] outline-none focus:border-[#4ca400]"
-              required
-            />
-          </div>
-        </div>
-      </div>
-      <div className="flex gap-4">
-        <button
-          type="button"
-          onClick={onBack}
-          className="px-5 py-3 border-2 border-[#e5e7eb] rounded-lg text-[#6b7280] hover:bg-gray-50 hover:border-gray-300 transition-all text-[14px] font-medium"
-        >
-          ← Zpět
-        </button>
-        <button
-          type="submit"
-          className="flex-1 bg-[#5BA318] text-white px-5 py-3 rounded-lg font-semibold hover:bg-[#4a8b13] transition-all text-[15px] flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-        >
-          <span>Odeslat</span>
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-            <path d="M19 12L5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M12 19L19 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </div>
-    </form>
-  );
-};
-
-const SuccessStep: React.FC = () => {
-  return (
-    <div className="flex flex-col items-center justify-center gap-6 flex-1">
-      <div className="w-[72px] h-[72px] bg-[#4ca400] rounded-full flex items-center justify-center">
-        <svg className="w-12 h-12" fill="none" viewBox="0 0 48 48">
-          <path d="M40 14L18 36L8 26" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </div>
-      <p className="text-4xl text-[#4ca400] text-center tracking-wide">
-        Úspěšně odesláno
-      </p>
-      <p className="text-xl text-[#111928] text-center">
-        Budeme tě kontaktovat v co nejbližší možné době.
-      </p>
-    </div>
-  );
-};
-
-// Main Form Component
 export const RecruitmentForm: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({
-    hasDrivingLicense: '',
-    region: '',
-    travelWillingness: '',
-    icoWillingness: '',
-    desiredIncome: '',
-    salesExperience: '',
-    fullName: '',
-    phone: '',
-    email: ''
-  });
+  const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    marketShareInterest: '',
+    salesExperience: '',
+    hasDrivingLicense: '',
+    fullName: '',
+    phone: '',
+    email: '',
+  });
 
-  const totalSteps = 7;
-  const progressPercentages = [12, 24, 36, 48, 60, 72, 95, 100];
+  const progress = useMemo(() => {
+    if (isSuccess) return 100;
+    return Math.round(((currentStep + 1) / (steps.length + 1)) * 100);
+  }, [currentStep, isSuccess]);
 
-  const handleNext = (data: Partial<FormData>) => {
-    setFormData(prev => ({ ...prev, ...data }));
-    setCurrentStep(prev => Math.min(prev + 1, totalSteps));
+  const currentQuizStep = steps[currentStep];
+  const isContactStep = currentStep >= steps.length;
+
+  const handleOptionSelect = (value: string) => {
+    if (!currentQuizStep) return;
+    setFormData((prev) => ({ ...prev, [currentQuizStep.key]: value }));
+    window.setTimeout(() => setCurrentStep((prev) => prev + 1), 140);
   };
 
   const handleBack = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    if (isSuccess) return;
+    setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
-  const handleSubmit = async (data: Partial<FormData>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setIsSubmitting(true);
-    const finalData = { ...formData, ...data };
-    setFormData(finalData);
 
     try {
-      // Send to webhook
+      const recaptchaToken = await getRecaptchaToken();
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...finalData,
-          travelWillingnessLabel: TRAVEL_WILLINGNESS_LABELS[finalData.travelWillingness] || finalData.travelWillingness,
+          ...formData,
+          recaptchaToken,
+          recaptchaAction: 'recruitment_form_submit',
           timestamp: new Date().toISOString(),
-          source: 'recruitment_form'
-        })
+          source: 'recruitment_form',
+        }),
       });
 
-      if (response.ok) {
-        pushJobsFormSentEvent();
-        setIsSuccess(true);
-        setCurrentStep(8);
-      } else {
-        throw new Error('Submission failed');
-      }
+      if (!response.ok) throw new Error('Submission failed');
+      pushJobsFormSentEvent();
+      setIsSuccess(true);
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Došlo k chybě při odesílání formuláře. Zkuste to prosím znovu.');
@@ -619,67 +191,114 @@ export const RecruitmentForm: React.FC = () => {
     }
   };
 
-  const progressWidth = progressPercentages[currentStep - 1];
-
   return (
-    <div className="bg-[#111928] rounded-xl p-8 flex gap-8 items-center min-h-[600px] relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute left-[114.73px] top-[-344.74px] w-[1664px] h-[1664px] rotate-[15.75deg] pointer-events-none">
-        <div className="relative w-full h-full">
-          <svg className="absolute inset-0 w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 1144.59 995.49">
-            <path d={svgPaths.p10eb1780} fill="#E30A1A" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Left side - Branding */}
-      <div className="flex-1 flex flex-col gap-14 h-full relative z-10">
-        <div className="flex flex-col gap-6">
-          <h1 className="text-5xl font-semibold text-white tracking-tight leading-[1.2]">
-            Začni vydělávat<br />už dnes
-          </h1>
-          {/* Yellow arrow */}
-          <div className="absolute left-[296px] top-[164px]">
-            <svg className="w-[100px] h-[123px] -scale-y-100 rotate-[-178deg]" fill="none" viewBox="0 0 104.695 126.548">
-              <path d={svgPaths.p3ebfe600} stroke="#F7D52C" strokeWidth="4" strokeLinecap="round" />
-            </svg>
+    <div className="w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0F1728] shadow-[0_30px_80px_rgba(0,0,0,0.34)] sm:rounded-[28px] lg:max-h-[min(720px,calc(100vh-56px))]">
+      {isSuccess ? (
+        <div className="flex min-h-[420px] flex-col items-center justify-center gap-5 bg-white px-5 text-center sm:min-h-[520px] sm:px-6 lg:min-h-[560px]">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#5BA318] text-white shadow-lg">
+            <CheckCircle2 className="h-10 w-10" />
+          </div>
+          <div className="space-y-3">
+            <h2 className="text-3xl font-bold text-[#111928]">Děkujeme, máme to.</h2>
+            <p className="mx-auto max-w-md text-base leading-7 text-[#4B5563] sm:text-lg">
+              Ozveme se ti co nejdřív a domluvíme další krok pohovoru.
+            </p>
           </div>
         </div>
-        <div className="flex-1 flex flex-col justify-end">
-          <Logo variant="light" />
-        </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[350px_minmax(0,1fr)]">
+          <div className="border-b border-white/10 bg-[#111928] px-4 py-4 text-white sm:px-6 sm:py-6 lg:border-b-0 lg:border-r lg:px-6 lg:py-6">
+            <div className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#E30A1A] sm:text-sm sm:tracking-[0.18em]">Náborový formulář DOMIDOMI</div>
+            <h2 className="mt-2 text-[22px] font-bold leading-tight sm:mt-4 sm:text-3xl lg:text-[30px]">
+              Máš na to u nás pracovat?
+              <br />
+              Ověř si to!
+            </h2>
+            <p className="mt-2 text-[12px] leading-5 text-white/72 sm:mt-4 sm:text-[14px] sm:leading-6">
+              Krátký formulář na 2 minuty, díky kterému rychle zjistíme, jestli si budeme sedět.
+            </p>
 
-      {/* Right side - Form */}
-      <div className="bg-white rounded-lg shadow-lg p-8 w-[646px] h-[459px] flex flex-col gap-6 relative z-10">
-        {/* Progress bar */}
-        <div className="flex items-center gap-6">
-          <div className="flex-1 h-4 bg-[#e5e7eb] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#4ca400] rounded-full transition-all duration-300"
-              style={{ width: `${progressWidth}%` }}
-            />
+            <div className="mt-5 sm:mt-8">
+              <div className="mb-2.5 flex items-center justify-between text-[13px] font-semibold text-white/75 sm:mb-3 sm:text-sm">
+                <span>Průběh</span>
+                <span>{progress} %</span>
+              </div>
+              <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full rounded-full bg-[#5BA318] transition-all duration-300" style={{ width: `${progress}%` }} />
+              </div>
+            </div>
           </div>
-          <span className="text-sm text-[#111827]">{progressWidth} %</span>
-        </div>
 
-        {/* Form content */}
-        <div className="flex-1 bg-white rounded border-2 border-[#4ca400] shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)] p-6 overflow-auto">
-          {!isSuccess ? (
-            <>
-              {currentStep === 1 && <Step1 onNext={handleNext} onBack={handleBack} formData={formData} />}
-              {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} formData={formData} />}
-              {currentStep === 3 && <StepRegion onNext={handleNext} onBack={handleBack} formData={formData} />}
-              {currentStep === 4 && <StepTravel onNext={handleNext} onBack={handleBack} formData={formData} />}
-              {currentStep === 5 && <Step4 onNext={handleNext} onBack={handleBack} formData={formData} />}
-              {currentStep === 6 && <Step5 onNext={handleNext} onBack={handleBack} formData={formData} />}
-              {currentStep === 7 && <Step6 onSubmit={handleSubmit} onBack={handleBack} formData={formData} />}
-            </>
-          ) : (
-            <SuccessStep />
-          )}
+          <div className="bg-[#F4F7FB] p-4 sm:p-6 lg:p-8 xl:p-9">
+            {isContactStep ? (
+              <form onSubmit={handleSubmit} className="flex min-h-0 flex-col rounded-[22px] bg-white px-4 py-5 sm:rounded-[24px] sm:px-6 sm:py-6 lg:min-h-[472px] lg:px-8">
+                <div>
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[#E30A1A]">Poslední krok</div>
+                  <h3 className="mt-2.5 max-w-[620px] text-[22px] font-bold leading-tight text-[#111928] sm:mt-3 sm:text-[32px]">Nech nám na sebe kontakt.</h3>
+                  <p className="mt-2 text-[14px] leading-5.5 text-[#4B5563] sm:mt-3 sm:text-base sm:leading-7">Pokud si budeme sedět, ozveme se ti a domluvíme termín rozhovoru.</p>
+                </div>
+
+                <div className="mt-6 grid gap-3.5 sm:mt-8 sm:gap-4">
+                  <input value={formData.fullName} onChange={(e) => setFormData((prev) => ({ ...prev, fullName: e.target.value }))} placeholder="Jméno a příjmení" className="w-full rounded-2xl border border-[#D7DFEA] bg-[#F8FAFC] px-4 py-3.5 text-[15px] text-[#111928] outline-none transition-all focus:border-[#111928]/30 focus:ring-4 focus:ring-[#111928]/5 sm:py-4 sm:text-base" required />
+                  <input value={formData.phone} onChange={(e) => setFormData((prev) => ({ ...prev, phone: formatPhoneInput(e.target.value) }))} placeholder="Telefon" className="w-full rounded-2xl border border-[#D7DFEA] bg-[#F8FAFC] px-4 py-3.5 text-[15px] text-[#111928] outline-none transition-all focus:border-[#111928]/30 focus:ring-4 focus:ring-[#111928]/5 sm:py-4 sm:text-base" inputMode="tel" required />
+                  <input value={formData.email} onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))} placeholder="E-mail" type="email" className="w-full rounded-2xl border border-[#D7DFEA] bg-[#F8FAFC] px-4 py-3.5 text-[15px] text-[#111928] outline-none transition-all focus:border-[#111928]/30 focus:ring-4 focus:ring-[#111928]/5 sm:py-4 sm:text-base" required />
+                </div>
+
+                <div className="mt-6 flex flex-col gap-2.5 pt-4 sm:mt-auto sm:gap-3 sm:pt-8 sm:flex-row sm:items-center sm:justify-between">
+                  <button type="button" onClick={handleBack} className="order-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#D7DFEA] bg-white px-5 py-3.5 text-sm font-semibold text-[#4B5563] transition-all hover:border-[#B6C2D2] hover:bg-[#F8FAFC] sm:order-1 sm:w-auto sm:py-4">
+                    <ArrowLeft className="h-4 w-4" />
+                    Zpět
+                  </button>
+                  <button type="submit" disabled={isSubmitting} className="order-1 w-full rounded-2xl bg-[#E30A1A] px-6 py-3.5 text-sm font-bold uppercase tracking-[0.04em] text-white transition-all hover:bg-[#C90816] disabled:cursor-not-allowed disabled:opacity-60 sm:order-2 sm:w-auto sm:py-4">
+                    {isSubmitting ? 'Odesílám...' : 'Odeslat a rezervovat termín pohovoru'}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="flex min-h-0 flex-col rounded-[22px] bg-white px-4 py-5 sm:rounded-[24px] sm:px-6 sm:py-6 lg:min-h-[472px] lg:px-9">
+                <div>
+                  <div className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#E30A1A] sm:text-sm sm:tracking-[0.18em]">Krok {currentStep + 1} ze 4</div>
+                  <h3 className="mt-2 max-w-[760px] text-[22px] font-bold leading-[1.14] tracking-tight text-[#111928] sm:mt-3 sm:text-[32px] lg:text-[36px]">
+                    {currentQuizStep.title}
+                  </h3>
+                  <p className="mt-2 max-w-[720px] min-h-[38px] text-[14px] leading-5.5 text-[#4B5563] sm:mt-3 sm:min-h-[56px] sm:text-base sm:leading-7">{currentQuizStep.description}</p>
+                </div>
+
+                <div className="mt-6 grid max-w-[760px] gap-2.5 sm:mt-8 sm:gap-3">
+                  {currentQuizStep.options.map((option) => {
+                    const isSelected = formData[currentQuizStep.key] === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => handleOptionSelect(option.value)}
+                        className={`flex min-h-[62px] w-full items-center gap-3 rounded-2xl border-2 px-3.5 py-3.5 text-left transition-all duration-200 sm:min-h-[72px] sm:gap-4 sm:px-5 sm:py-4 ${
+                          isSelected
+                            ? 'border-[#111928] bg-[#EEF3F9] shadow-sm'
+                            : 'border-[#E5E7EB] bg-[#F8FAFC] hover:border-[#111928]/30 hover:bg-white'
+                        }`}
+                      >
+                        <div className={`flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border-2 bg-white sm:h-6 sm:w-6 ${isSelected ? 'border-[#111928] border-[6px] sm:border-[7px]' : 'border-[#D1D5DB]'}`} />
+                        <span className="text-[15px] font-semibold leading-5.5 text-[#111928] sm:text-[18px] sm:leading-7">{option.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6 flex flex-col gap-2.5 pt-4 sm:mt-auto sm:gap-3 sm:pt-8 sm:flex-row sm:items-center sm:justify-between">
+                  {currentStep > 0 ? (
+                    <button type="button" onClick={handleBack} className="order-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#D7DFEA] bg-white px-5 py-3.5 text-sm font-semibold text-[#4B5563] transition-all hover:border-[#B6C2D2] hover:bg-[#F8FAFC] sm:order-1 sm:w-auto sm:py-4">
+                      <ArrowLeft className="h-4 w-4" />
+                      Zpět
+                    </button>
+                  ) : null}
+                  <div className="order-1 text-center text-[13px] text-[#6B7280] sm:order-2 sm:text-left sm:text-sm">Výběrem automaticky pokračuješ dál</div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,21 @@
+<!-- Apple Touch Icon 180x180 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" rx="40" fill="#E30A1A"/>
+  
+  <!-- Arrow -->
+  <path d="M90 45L120 75H105V105H120L90 135L60 105H75V75H60L90 45Z" fill="white"/>
+  
+  <!-- DOMI text simplified -->
+  <g fill="white" opacity="0.95">
+    <!-- D -->
+    <path d="M55 55H65C72 55 77 60 77 67C77 74 72 79 65 79H55V55ZM65 75C69 75 72 72 72 67C72 62 69 59 65 59H60V75H65Z"/>
+    <!-- D bottom -->
+    <path d="M100 100H110C117 100 122 105 122 112C122 119 117 124 110 124H100V100ZM110 120C114 120 117 117 117 112C117 107 114 104 110 104H105V120H110Z"/>
+  </g>
+  
+  <!-- Stats badges -->
+  <g>
+    <rect x="20" y="145" width="140" height="20" rx="10" fill="white" opacity="0.2"/>
+    <text x="90" y="159" text-anchor="middle" fill="white" font-size="12" font-weight="700" font-family="Arial, sans-serif">200K+ / měsíc</text>
+  </g>
+</svg>
