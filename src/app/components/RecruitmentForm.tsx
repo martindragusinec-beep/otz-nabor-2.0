@@ -121,7 +121,7 @@ const steps = [
   },
   {
     key: 'hasDrivingLicense',
-    title: 'Máš řidičák sk. B?',
+    title: 'Máš řidičák?',
     description: 'Práce je z velké části v terénu, proto je aktivní řízení důležité.',
     options: [
       { value: 'yes', label: 'Ano, mám a aktivně řídím' },
@@ -130,7 +130,13 @@ const steps = [
   },
 ] as const;
 
-export const RecruitmentForm: React.FC = () => {
+export type RecruitmentFormVariant = 'modal' | 'inline';
+
+interface RecruitmentFormProps {
+  variant?: RecruitmentFormVariant;
+}
+
+export const RecruitmentForm: React.FC<RecruitmentFormProps> = ({ variant = 'modal' }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -191,8 +197,40 @@ export const RecruitmentForm: React.FC = () => {
     }
   };
 
+  const inlineShell = variant === 'inline';
+
+  const headerBlock = (
+    <>
+      <div className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#E30A1A] sm:text-sm sm:tracking-[0.18em]">Náborový formulář DOMIDOMI</div>
+      <h2 className="mt-2 text-[22px] font-bold leading-tight sm:mt-4 sm:text-3xl lg:text-[30px]">
+        Máš na to u nás pracovat?
+        <br />
+        Ověř si to!
+      </h2>
+      <p className="mt-2 text-[12px] leading-5 text-white/72 sm:mt-4 sm:text-[14px] sm:leading-6">
+        Krátký formulář na 2 minuty, díky kterému rychle zjistíme, jestli si budeme sedět.
+      </p>
+
+      <div className="mt-5 sm:mt-8">
+        <div className="mb-2.5 flex items-center justify-between text-[13px] font-semibold text-white/75 sm:mb-3 sm:text-sm">
+          <span>Průběh</span>
+          <span>{progress} %</span>
+        </div>
+        <div className="h-3 overflow-hidden rounded-full bg-white/10">
+          <div className="h-full rounded-full bg-[#5BA318] transition-all duration-300" style={{ width: `${progress}%` }} />
+        </div>
+      </div>
+    </>
+  );
+
   return (
-    <div className="w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0F1728] shadow-[0_30px_80px_rgba(0,0,0,0.34)] sm:rounded-[28px] lg:max-h-[min(720px,calc(100vh-56px))]">
+    <div
+      className={
+        inlineShell
+          ? 'w-full overflow-hidden rounded-[28px] border border-[#E2E8F0] bg-white shadow-[0_28px_70px_rgba(17,25,40,0.09)]'
+          : 'w-full overflow-hidden rounded-[24px] border border-white/10 bg-[#0F1728] shadow-[0_30px_80px_rgba(0,0,0,0.34)] sm:rounded-[28px] lg:max-h-[min(720px,calc(100vh-56px))]'
+      }
+    >
       {isSuccess ? (
         <div className="flex min-h-[420px] flex-col items-center justify-center gap-5 bg-white px-5 text-center sm:min-h-[520px] sm:px-6 lg:min-h-[560px]">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#5BA318] text-white shadow-lg">
@@ -206,28 +244,18 @@ export const RecruitmentForm: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[350px_minmax(0,1fr)]">
-          <div className="border-b border-white/10 bg-[#111928] px-4 py-4 text-white sm:px-6 sm:py-6 lg:border-b-0 lg:border-r lg:px-6 lg:py-6">
-            <div className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#E30A1A] sm:text-sm sm:tracking-[0.18em]">Náborový formulář DOMIDOMI</div>
-            <h2 className="mt-2 text-[22px] font-bold leading-tight sm:mt-4 sm:text-3xl lg:text-[30px]">
-              Máš na to u nás pracovat?
-              <br />
-              Ověř si to!
-            </h2>
-            <p className="mt-2 text-[12px] leading-5 text-white/72 sm:mt-4 sm:text-[14px] sm:leading-6">
-              Krátký formulář na 2 minuty, díky kterému rychle zjistíme, jestli si budeme sedět.
-            </p>
-
-            <div className="mt-5 sm:mt-8">
-              <div className="mb-2.5 flex items-center justify-between text-[13px] font-semibold text-white/75 sm:mb-3 sm:text-sm">
-                <span>Průběh</span>
-                <span>{progress} %</span>
-              </div>
-              <div className="h-3 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-[#5BA318] transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div className={inlineShell ? 'flex flex-col' : 'grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[350px_minmax(0,1fr)]'}>
+          {inlineShell ? (
+            <div className="border-b border-white/10 bg-[#111928] px-4 py-5 text-white sm:px-8 sm:py-7">
+              <div className="mx-auto flex max-w-[980px] flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div className="min-w-0 flex-1">{headerBlock}</div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="border-b border-white/10 bg-[#111928] px-4 py-4 text-white sm:px-6 sm:py-6 lg:border-b-0 lg:border-r lg:px-6 lg:py-6">
+              {headerBlock}
+            </div>
+          )}
 
           <div className="bg-[#F4F7FB] p-4 sm:p-6 lg:p-8 xl:p-9">
             {isContactStep ? (

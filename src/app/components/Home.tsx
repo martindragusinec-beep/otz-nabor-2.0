@@ -3,11 +3,13 @@ import { Header } from "./Header";
 import { Hero } from "./Hero";
 import { WhyUs } from "./WhyUs";
 import { Benefits } from "./Benefits";
+import { EarningsProof } from "./EarningsProof";
 import { PeopleStories } from "./PeopleStories";
 import { Stats } from "./Stats";
 import { FAQ } from "./FAQ";
 import { Footer } from "./Footer";
 import { CTASection } from "./CTASection";
+import { InlineRecruitmentSection } from "./InlineRecruitmentSection";
 import { RecruitmentModalProvider } from "./RecruitmentModalContext";
 
 export const Home = () => {
@@ -18,22 +20,24 @@ export const Home = () => {
         <main className="flex-grow">
           <Hero />
           <Benefits />
-          <PeopleStories />
+          <EarningsProof />
           <CTASection
-            eyebrow="Reálná příležitost"
-            title="Zajímají tě podmínky a jestli si budeme sedět?"
-            description="Vyplň krátký formulář. Když to bude dávat smysl oběma stranám, navážeme dalším hovorem."
-            buttonLabel="Zkusit si to"
+            eyebrow="Další krok"
+            title="Chceš vědět, jestli je tohle pro tebe?"
+            description="Vyplň krátký formulář — bez závazku. Když to dává smysl oběma stranám, navážeme dalším hovorem."
+            buttonLabel="Chci se přidat k týmu"
           />
           <WhyUs />
+          <PeopleStories />
           <Stats />
           <CTASection
             dark
-            eyebrow="Další krok"
-            title="Chceš vědět víc o tom, jak vypadá práce obchodníka u DOMIDOMI?"
-            description="Stačí pár odpovědí a můžeme se pobavit konkrétně o tvojí situaci, motivaci i možnostech spolupráce."
-            buttonLabel="Přidat se k týmu"
+            eyebrow="Jsi na správné adrese?"
+            title="Ověř si to ve formuláři — a uvidíme se u pohovoru."
+            description="Projdi krátký formulář — zájem o trh, zkušenosti, řidičák a kontakt. Bez závazku, jen jasný další krok."
+            buttonLabel="Otevřít formulář"
           />
+          <InlineRecruitmentSection />
           <FAQ />
         </main>
         <Footer />
