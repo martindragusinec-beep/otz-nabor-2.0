@@ -28,8 +28,11 @@ export const PeopleStories = () => {
   const reduced = useReducedMotion();
 
   return (
-    <section className="border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
-      <SectionSpotlight index={4}>
+    <section
+      id="pribehy"
+      className="scroll-mt-20 border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:scroll-mt-24 lg:px-16"
+    >
+      <SectionSpotlight index={3}>
         <div className="mx-auto max-w-[1200px]">
         <Reveal>
           <div className="max-w-2xl">

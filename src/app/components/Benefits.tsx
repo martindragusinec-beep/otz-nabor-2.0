@@ -27,7 +27,10 @@ const usps = [
 
 export const Benefits = () => {
   return (
-    <section className="border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:px-16">
+    <section
+      id="benefity"
+      className="scroll-mt-20 border-t border-[#EEF2F6] bg-[#FAFBFC] px-4 py-16 sm:px-6 sm:py-20 md:px-12 lg:scroll-mt-24 lg:px-16"
+    >
       <SectionSpotlight index={1}>
         <div className="mx-auto max-w-[1200px]">
         <Reveal>

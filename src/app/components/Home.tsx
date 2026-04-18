@@ -14,6 +14,7 @@ import { RecruitmentModalProvider } from "./RecruitmentModalContext";
 import { ScrollProgress } from "./ScrollProgress";
 import { SectionTransition } from "./SectionTransition";
 
+/** Pořadí sekcí sjednocené s reference/otz/landing.html (#benefity → #ekosystem → #pribehy → #vydelky → #faq). */
 export const Home = () => {
   return (
     <RecruitmentModalProvider>
@@ -24,16 +25,15 @@ export const Home = () => {
           <Hero />
           <SectionTransition tone="light" />
           <Benefits />
+          <WhyUs />
+          <PeopleStories />
           <EarningsProof />
-          <SectionTransition tone="light" />
           <CTASection
             eyebrow="Další krok"
             title="Chceš vědět, jestli je tohle pro tebe?"
             description="Vyplň krátký formulář — bez závazku. Když to dává smysl oběma stranám, navážeme dalším hovorem."
             buttonLabel="Chci se přidat k týmu"
           />
-          <WhyUs />
-          <PeopleStories />
           <Stats />
           <CTASection
             dark

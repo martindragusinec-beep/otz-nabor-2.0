@@ -11,10 +11,13 @@ export const WhyUs = () => {
   const reduced = useReducedMotion();
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#0c111d] px-4 py-16 text-white sm:px-6 sm:py-20 md:px-12 lg:flex lg:items-center lg:px-16 lg:py-[4.5rem]">
+    <section
+      id="ekosystem"
+      className="relative w-full scroll-mt-20 overflow-hidden bg-[#0c111d] px-4 py-16 text-white sm:px-6 sm:py-20 md:px-12 lg:flex lg:scroll-mt-24 lg:items-center lg:px-16 lg:py-[4.5rem]"
+    >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_40%_at_80%_20%,rgba(227,10,26,0.09),transparent_55%)]" aria-hidden />
 
-      <SectionSpotlight index={3} dark>
+      <SectionSpotlight index={2} dark>
         <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col gap-14 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
         <Reveal className="flex w-full flex-col items-start lg:max-w-[min(100%,480px)] lg:shrink-0">
           <p className="text-[13px] font-semibold uppercase tracking-[0.2em] text-[#f87171]/90">Ekosystém DOMIDOMI</p>
