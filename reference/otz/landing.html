@@ -1,0 +1,2606 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DOMIDOMI OTZ — Nábor obchodníků</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: { 900: '#0c111d', 800: '#111928', 850: '#0a0f18', 700: '#1a2234' },
+          paper: '#FAFBFC',
+          line: { DEFAULT: '#E8EDF3', soft: '#EEF2F6' },
+          brand: { DEFAULT: '#E30A1A', dark: '#B80815', deep: '#7a050d' },
+          slate2: { 900: '#0f172a', 600: '#475569', 500: '#64748B' },
+          lime2: { 50: '#f3fbe4', 200: '#d9f5a8', 300: '#c8f28d', 400: '#a3e635', 500: '#84cc16' },
+          sun: { 200: '#fde68a', 300: '#fcd34d', 400: '#facc15' },
+        },
+        fontFamily: {
+          sans: ['Manrope','ui-sans-serif','system-ui','sans-serif'],
+          hand: ['Caveat','cursive'],
+          mono: ['JetBrains Mono','ui-monospace','monospace'],
+        },
+        boxShadow: {
+          card: '0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -12px rgba(15,23,42,0.10)',
+          cardHover: '0 2px 4px rgba(15,23,42,0.06), 0 18px 40px -16px rgba(15,23,42,0.18)',
+          ring: '0 0 0 1px rgba(15,23,42,0.06), 0 24px 60px -24px rgba(15,23,42,0.35)',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html, body { background: #FAFBFC; color: #0f172a; }
+  body { font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif; font-feature-settings: 'ss01','cv11'; }
+  .h-tight { letter-spacing: -0.025em; line-height: 1.04; }
+  .h-tight-sub { letter-spacing: -0.02em; line-height: 1.1; }
+  .eyebrow { text-transform: uppercase; letter-spacing: 0.2em; font-size: 11px; font-weight: 600; }
+  .grain { background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 3px 3px; }
+  .noise-dark { background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px); background-size: 4px 4px; }
+  /* underline swoosh */
+  .swoosh { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 18'><path d='M2 12 C 40 2, 120 2, 218 10' stroke='%23a3e635' stroke-width='5' fill='none' stroke-linecap='round'/></svg>"); background-repeat: no-repeat; background-position: 0 95%; background-size: 100% 0.5em; padding-bottom: 0.15em;}
+  /* progress bar */
+  .progressbar { background: linear-gradient(90deg, #E30A1A 0%, #f59e0b 55%, #a3e635 100%); height: 100%; transform-origin: 0 50%; }
+  .card-lift { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+  .card-lift:hover { transform: translateY(-3px); }
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .stagger > * { transition-delay: calc(var(--i, 0) * 70ms); }
+
+  /* ---- scan scene ---- */
+  .scan-paper { transform: rotate(-2deg); }
+  [data-scan-scene].playing .scan-paper { animation: paper-settle 1s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes paper-settle {
+    0% { transform: translateY(12px) rotate(-6deg); opacity: .25; filter: blur(2px); }
+    60% { transform: translateY(0) rotate(-2deg); opacity: 1; filter: blur(0); }
+    100% { transform: translateY(0) rotate(-2deg); opacity: 1; filter: blur(0); }
+  }
+  [data-scan-scene].swapping .scan-paper { animation: paper-swap .35s cubic-bezier(.4,0,.6,1) both; }
+  @keyframes paper-swap {
+    0% { transform: rotate(-2deg) translateY(0); opacity: 1; }
+    100% { transform: rotate(-8deg) translateY(-10px); opacity: 0; filter: blur(2px); }
+  }
+  .scan-laser {
+    position: absolute; left: -4%; right: -4%; top: 0; height: 3px;
+    background: linear-gradient(90deg, transparent 0%, #E30A1A 30%, #ff4d5e 50%, #E30A1A 70%, transparent 100%);
+    box-shadow: 0 0 12px rgba(227,10,26,.8), 0 0 24px rgba(227,10,26,.4);
+    opacity: 0; pointer-events: none;
+  }
+  [data-scan-scene].playing .scan-laser { animation: scan-sweep 1s cubic-bezier(.4,0,.6,1) .45s both; }
+  @keyframes scan-sweep {
+    0% { opacity: 0; transform: translateY(0); }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(100px); }
+  }
+  .scan-glow {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: linear-gradient(180deg, rgba(163,230,53,0) 0%, rgba(163,230,53,.3) 50%, rgba(163,230,53,0) 100%);
+    mix-blend-mode: screen;
+  }
+  [data-scan-scene].playing .scan-glow { animation: scan-glow 1s cubic-bezier(.4,0,.6,1) .45s both; }
+  @keyframes scan-glow {
+    0%,100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  .scan-corners { opacity: 0; }
+  [data-scan-scene].playing .scan-corners { animation: scan-corners .3s ease-out .25s both; }
+  @keyframes scan-corners {
+    0% { opacity: 0; transform: scale(1.6); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .scan-pulse { opacity: 0; }
+  [data-scan-scene].playing .scan-pulse { animation: scan-ping 1.1s ease-out 1.3s infinite; }
+  @keyframes scan-ping {
+    0% { opacity: .5; transform: scale(.8); }
+    100% { opacity: 0; transform: scale(2); }
+  }
+  /* ---- leads chart ---- */
+  [data-leads-chart] .lead-bar { width: 100%; height: 0; align-self: end; transition: height 1s cubic-bezier(.2,.7,.2,1); }
+  [data-leads-chart].playing .lead-bar:nth-child(1) { height: 22%; transition-delay: 0s; }
+  [data-leads-chart].playing .lead-bar:nth-child(2) { height: 38%; transition-delay: .1s; }
+  [data-leads-chart].playing .lead-bar:nth-child(3) { height: 62%; transition-delay: .2s; }
+  [data-leads-chart].playing .lead-bar:nth-child(4) { height: 100%; transition-delay: .3s; }
+  .leads-badge { opacity: 0; transform: translateY(-100%) scale(.85); transition: opacity .4s, transform .4s cubic-bezier(.2,.7,.2,1); }
+  [data-leads-chart].playing .leads-badge { opacity: 1; transform: translateY(-100%) scale(1); transition-delay: 1.3s; }
+
+  /* fitko slot pulse */
+  .fitko-slot { animation: fitkoBob 3s ease-in-out infinite; }
+  @keyframes fitkoBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+  .fitko-icon { animation: fitkoLift 1.8s ease-in-out infinite; }
+  @keyframes fitkoLift { 0%,100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-1px) rotate(-4deg); } 75% { transform: translateY(-1px) rotate(4deg); } }
+  .fitko-pulse { position: absolute; inset: -4px; border-radius: 10px; border: 2px solid #84cc16; opacity: 0; animation: fitkoPulse 2.2s ease-out infinite; pointer-events: none; }
+  @keyframes fitkoPulse { 0% { opacity: .7; transform: scale(.95); } 100% { opacity: 0; transform: scale(1.25); } }
+  .dumbbell { animation: fitkoLift 1.8s ease-in-out infinite; }
+
+  .scan-result { opacity: .35; filter: grayscale(.4); transition: opacity .45s, filter .45s; }
+  [data-scan-scene].playing .scan-result { opacity: 1; filter: none; transition-delay: 1.15s; }
+  .scan-result > * { transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+  [data-scan-scene].swapping .scan-result > * { transform: translateY(-4px); opacity: .4; }
+  .spotlight-num { font-variant-numeric: tabular-nums; font-weight: 800; letter-spacing: -0.04em; color: rgba(15,23,42,.05); line-height: .8; }
+  .spotlight-num-dark { color: rgba(255,255,255,.04); }
+  .glow-red { box-shadow: 0 12px 40px -16px rgba(227,10,26,.55); }
+  .btn-primary {
+    background: #E30A1A; color: #fff;
+    transition: background .25s ease, transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease, letter-spacing .3s ease;
+    position: relative; overflow: hidden; isolation: isolate;
+  }
+  .btn-primary::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.22) 45%, rgba(255,255,255,.22) 55%, transparent 80%);
+    transform: translateX(-110%); transition: transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .btn-primary:hover { background: #B80815; transform: translateY(-2px); box-shadow: 0 18px 50px -14px rgba(227,10,26,.75), 0 2px 6px rgba(227,10,26,.2); }
+  .btn-primary:hover::before { transform: translateX(110%); }
+  .btn-primary:active { transform: translateY(0); transition-duration: .1s; }
+  .btn-primary .w-7, .btn-primary .w-9, .btn-primary .w-10, .btn-primary .w-11, .btn-primary .w-12 {
+    transition: background .25s ease, color .25s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .btn-primary:hover .w-7, .btn-primary:hover .w-9, .btn-primary:hover .w-10, .btn-primary:hover .w-11, .btn-primary:hover .w-12 {
+    background: #fff !important; color: #E30A1A;
+  }
+  .btn-primary:hover .w-7 svg, .btn-primary:hover .w-9 svg, .btn-primary:hover .w-10 svg, .btn-primary:hover .w-11 svg, .btn-primary:hover .w-12 svg { stroke: #E30A1A; }
+  .btn-primary .w-7 svg path, .btn-primary .w-9 svg path, .btn-primary .w-10 svg path, .btn-primary .w-11 svg path, .btn-primary .w-12 svg path { transition: stroke .25s ease; }
+  .btn-primary:hover .w-7 svg path, .btn-primary:hover .w-9 svg path, .btn-primary:hover .w-10 svg path, .btn-primary:hover .w-11 svg path, .btn-primary:hover .w-12 svg path { stroke: #E30A1A; }
+
+  /* FAQ details animations */
+  #faq details {
+    transition: border-color .3s ease, box-shadow .3s ease, background .3s ease, transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  #faq details:hover {
+    border-color: rgba(227,10,26,.35);
+    box-shadow: 0 2px 4px rgba(15,23,42,.06), 0 18px 40px -16px rgba(15,23,42,.18);
+    transform: translateY(-1px);
+  }
+  #faq details summary { transition: color .2s ease; }
+  #faq details:hover summary > span:first-child { color: #E30A1A; }
+  #faq details .plus {
+    transition: background .25s ease, color .25s ease, transform .45s cubic-bezier(.3,.8,.3,1);
+  }
+  #faq details:hover .plus { background: #E30A1A; color: #fff; }
+  #faq details[open] .plus { background: #E30A1A; color: #fff; transform: rotate(135deg); }
+  #faq details > p {
+    transform-origin: top;
+    animation: faqExpand .38s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes faqExpand {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-bg {
+    position: relative;
+    background: #0a0f18;
+  }
+  .hero-photo {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1529336953128-a85760f58cb5?auto=format&fit=crop&w=2000&q=80');
+    background-size: cover;
+    background-position: center 30%;
+    filter: saturate(.85) contrast(1.05);
+  }
+  .hero-tint {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(10,15,24,.95) 0%, rgba(10,15,24,.78) 45%, rgba(10,15,24,.35) 75%, rgba(10,15,24,.65) 100%),
+      radial-gradient(900px 500px at 85% -10%, rgba(227,10,26,.35), transparent 60%),
+      radial-gradient(700px 400px at -10% 30%, rgba(163,230,53,.08), transparent 55%);
+  }
+  .section-dark {
+    background:
+      radial-gradient(700px 360px at 85% 0%, rgba(227,10,26,.14), transparent 60%),
+      linear-gradient(180deg, #0c111d 0%, #0a0f18 100%);
+  }
+  .photo-ph {
+    background:
+      repeating-linear-gradient(135deg, rgba(15,23,42,.06) 0 1px, transparent 1px 10px),
+      linear-gradient(180deg, #e2e8f0, #cbd5e1);
+  }
+  .photo-ph-dark {
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 1px, transparent 1px 10px),
+      linear-gradient(180deg, #1f2937, #0b1220);
+  }
+  .chip { display:inline-flex; align-items:center; gap:.4rem; padding: .35rem .7rem; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .dot { width: 6px; height: 6px; border-radius: 999px; display: inline-block; }
+  /* marquee */
+  @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  .marquee { display: flex; gap: 2.5rem; width: max-content; animation: marquee 40s linear infinite; }
+  /* data-marquee (realizace mosaic) — two-row editorial strip */
+  @keyframes datamarq { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  @keyframes datamarq2 { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+  .data-row { display: flex; gap: 14px; width: max-content; }
+  .data-row-a { animation: datamarq 55s linear infinite; }
+  .data-row-b { animation: datamarq2 70s linear infinite; }
+  .data-mosaic:hover .data-row { animation-play-state: running; }
+
+  /* USP mobile carousel */
+  @media (max-width: 767px) {
+    .usp-scroll {
+      display: flex !important;
+      flex-wrap: nowrap;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-left: 16px;
+      padding: 4px 16px 20px;
+      margin: 0 -16px;
+      scrollbar-width: none;
+    }
+    .usp-scroll::-webkit-scrollbar { display: none; }
+    .usp-scroll > article {
+      flex: 0 0 85%;
+      max-width: 340px;
+      scroll-snap-align: center;
+    }
+    .usp-scroll > article > div {
+      min-height: 420px;
+      height: 100%;
+    }
+  }
+  .usp-dots {
+    display: flex; gap: 8px; justify-content: center;
+    padding: 4px 0;
+  }
+  .usp-dots span {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: #cbd5e1;
+    transition: width .25s ease, background .25s ease;
+  }
+  .usp-dots span.on {
+    width: 22px; background: #E30A1A;
+  }
+
+  /* Stories mobile carousel */
+  @media (max-width: 767px) {
+    .stories-scroll {
+      display: flex !important;
+      flex-wrap: nowrap;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-left: 16px;
+      padding: 4px 16px 20px;
+      margin: 0 -16px;
+      scrollbar-width: none;
+    }
+    .stories-scroll::-webkit-scrollbar { display: none; }
+    .stories-scroll > article {
+      flex: 0 0 80%;
+      max-width: 320px;
+      scroll-snap-align: center;
+      transform: none !important;
+    }
+  }
+
+  /* Earnings card animations */
+  .earnings-card .er-bar { width: 0; transition: width 1.1s cubic-bezier(.2,.7,.2,1); }
+  .earnings-card.in .er-bar { width: var(--w); }
+  .earnings-card .er-bar-top { position: relative; }
+  .earnings-card.in .er-bar-top::after {
+    content: ''; position: absolute; inset: 0; border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: translateX(-100%);
+    animation: erShine 2.4s ease-in-out 1s infinite;
+  }
+  @keyframes erShine { to { transform: translateX(100%); } }
+  .earnings-card .er-shine { display: none; }
+  .earnings-card .hand-note { opacity: 0; transform: translateY(4px); transition: opacity .5s ease 1.1s, transform .5s ease 1.1s; }
+  .earnings-card.in .hand-note { opacity: 1; transform: translateY(0); }
+
+  .dm-tile {
+    height: 240px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    background: #e2e8f0;
+  }
+  .dm-w-sq { width: 240px; }
+  .dm-w-md { width: 320px; }
+  .dm-w-lg { width: 420px; }
+  .dm-w-xs { width: 180px; }
+
+  /* Mosaic responsive sizing on mobile */
+  @media (max-width: 640px) {
+    .dm-tile { height: 180px; border-radius: 16px; }
+    .dm-w-sq { width: 170px; }
+    .dm-w-md { width: 220px; }
+    .dm-w-lg { width: 280px; }
+    .dm-w-xs { width: 140px; }
+    .dm-stat { padding: 16px; }
+    .dm-stat .big { font-size: 40px; }
+    .dm-stat .big-md { font-size: 32px; }
+    .dm-stat .lbl { font-size: 11px; }
+    .dm-quote { padding: 16px; }
+    .dm-quote .qmark { font-size: 40px; }
+    .dm-quote p { font-size: 14px; }
+  }
+
+  /* Photo tile with caption */
+  .dm-photo { background-size: cover; background-position: center; }
+  .dm-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(10,15,25,.85) 100%);
+  }
+  .dm-photo .cap {
+    position: absolute; left: 18px; right: 18px; bottom: 16px;
+    color: #fff; z-index: 2;
+    display: flex; align-items: end; justify-content: space-between; gap: 10px;
+  }
+  .dm-photo .cap .place { font-size: 13px; font-weight: 600; letter-spacing: .01em; }
+  .dm-photo .cap .meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: .75; text-transform: uppercase; letter-spacing: .08em; }
+  .dm-photo .tag {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    background: rgba(255,255,255,.92); color: #0f172a;
+    font-size: 11px; font-weight: 600;
+    padding: 5px 10px; border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+  .dm-photo .tag.red { background: #E30A1A; color: #fff; }
+
+  /* Stat tile */
+  .dm-stat {
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 22px;
+  }
+  .dm-stat .eye {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    opacity: .7;
+  }
+  .dm-stat .big {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 56px; line-height: .95;
+    letter-spacing: -0.03em;
+  }
+  .dm-stat .big-md { font-size: 44px; }
+  .dm-stat .lbl {
+    font-size: 13px; line-height: 1.35; opacity: .85;
+    max-width: 95%;
+  }
+  .dm-red { background: #E30A1A; color: #fff; }
+  .dm-ink { background: #0b1220; color: #fff; }
+  .dm-ink .big { color: #c8f28d; }
+  .dm-amber { background: #fde68a; color: #0f172a; }
+  .dm-lime { background: #c8f28d; color: #0b1220; }
+  .dm-paper { background: #ffffff; color: #0f172a; border: 1px solid #e5e7eb; }
+
+  /* Quote tile */
+  .dm-quote {
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    display: flex; flex-direction: column; justify-content: space-between;
+    color: #0f172a;
+  }
+  .dm-quote .qmark {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 56px; line-height: .6;
+    color: #E30A1A;
+  }
+  .dm-quote p {
+    font-family: 'Fraunces', serif;
+    font-size: 17px; line-height: 1.3;
+    font-weight: 500;
+  }
+  .dm-quote .who {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px;
+  }
+  .dm-quote .who .av {
+    width: 32px; height: 32px; border-radius: 999px; background: #cbd5e1;
+    background-size: cover; background-position: center;
+  }
+  .dm-quote .who .nm { font-weight: 600; }
+  .dm-quote .who .rl { font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: .6; }
+
+  /* Progress / gauge tile */
+  .dm-gauge {
+    padding: 22px;
+    background: #0b1220; color: #fff;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .dm-gauge .bar-row { display: flex; flex-direction: column; gap: 12px; }
+  .dm-gauge .bar { height: 6px; border-radius: 999px; background: rgba(255,255,255,.12); overflow: hidden; }
+  .dm-gauge .bar > span { display: block; height: 100%; background: #c8f28d; border-radius: 999px; }
+  .dm-gauge .row { display: flex; justify-content: space-between; font-size: 11px; font-family: 'JetBrains Mono', monospace; opacity: .7; text-transform: uppercase; letter-spacing: .08em; }
+
+  /* Badge tile — logo-grid vibe */
+  .dm-badge {
+    background: #fff; color: #0f172a; border: 1px solid #e5e7eb;
+    padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .dm-badge .stamp {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: #E30A1A; color: #fff;
+    display: grid; place-items: center;
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px;
+  }
+  .dm-badge h5 { font-size: 15px; font-weight: 700; line-height: 1.25; }
+  .dm-badge .sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: .6; text-transform: uppercase; letter-spacing: .08em; }
+  @media (max-width: 640px) {
+    .dm-gauge { padding: 16px; }
+    .dm-gauge .bar-row { gap: 8px; }
+    .dm-gauge .row { font-size: 9px; }
+    .dm-badge { padding: 16px; }
+    .dm-badge .stamp { width: 36px; height: 36px; font-size: 14px; border-radius: 9px; }
+    .dm-badge h5 { font-size: 13px; }
+    .dm-badge .sub { font-size: 9px; }
+  }
+  /* orb */
+  .orb { filter: blur(60px); opacity: .6; }
+  /* float */
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+  .float-slow { animation: float 6s ease-in-out infinite; }
+  .float-med  { animation: float 4.5s ease-in-out infinite; }
+  /* form step transition */
+  .step-enter { opacity: 0; transform: translateX(12px); }
+  .step-in { opacity: 1; transform: none; transition: opacity .35s, transform .35s; }
+  /* faq */
+  details[open] summary .plus { transform: rotate(45deg); }
+  .plus { transition: transform .3s; }
+  /* ecosystem orbit */
+  @keyframes spin-slow { from { transform: rotate(0) } to { transform: rotate(360deg) } }
+  .spin-slow { animation: spin-slow 80s linear infinite; }
+  .counter-rot { animation: spin-slow 80s linear infinite reverse; }
+  /* tweaks panel */
+  .tw-field { display:flex; align-items:center; justify-content:space-between; gap: .75rem; padding: .5rem 0; }
+  .tw-field + .tw-field { border-top: 1px dashed rgba(255,255,255,.08); }
+  .switch { width: 34px; height: 20px; border-radius: 999px; background: #2a3345; position: relative; cursor: pointer; transition: background .2s; }
+  .switch::after { content:''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 999px; background: #fff; transition: transform .2s; }
+  .switch.on { background: #E30A1A; }
+  .switch.on::after { transform: translateX(14px); }
+  /* hero form (inline preview) radio */
+  .radio-row { display:flex; align-items:center; gap: .6rem; padding: .85rem 1rem; border: 1px solid #E8EDF3; border-radius: 14px; cursor: pointer; transition: all .15s; }
+  .radio-row:hover { border-color: #cbd5e1; background: #f8fafc; }
+  .radio-row .circle { width: 18px; height: 18px; border-radius: 999px; border: 2px solid #cbd5e1; display: inline-block; }
+  .radio-row.on { border-color: #E30A1A; background: #fff5f6; }
+  .radio-row.on .circle { border-color: #E30A1A; box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 10px #E30A1A; }
+  /* checkmark stroke */
+  @keyframes drawMark { from { stroke-dashoffset: 28 } to { stroke-dashoffset: 0 } }
+  .drawMark { stroke-dasharray: 28; animation: drawMark .6s ease-out forwards; }
+  /* footer grid lines */
+  .hair { background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); height: 1px; }
+  .hair-light { background: linear-gradient(90deg, transparent, rgba(15,23,42,.12), transparent); height: 1px; }
+  /* misc */
+  .tabular { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body class="antialiased">
+<!-- Top scroll progress -->
+<div id="scroll-progress" class="fixed top-0 left-0 z-[60] w-full h-[3px] bg-transparent">
+  <div class="progressbar w-full" style="transform: scaleX(0)"></div>
+</div>
+
+<!-- Header -->
+<header class="sticky top-0 z-50 backdrop-blur bg-paper/80 border-b border-line">
+  <div class="max-w-[1360px] mx-auto px-4 lg:px-16 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5">
+      <span class="relative grid place-items-center w-8 h-8 rounded-lg bg-brand text-white font-extrabold text-sm tracking-tight">D<span class="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/20"></span></span>
+      <span class="font-extrabold tracking-tight text-[15px]">DOMIDOMI <span class="text-slate2-500 font-semibold">· OTZ</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-sm text-slate2-600">
+      <a href="#benefity" class="hover:text-slate2-900">Benefity</a>
+      <a href="#ekosystem" class="hover:text-slate2-900">Ekosystém</a>
+      <a href="#pribehy" class="hover:text-slate2-900">Lidé</a>
+      <a href="#vydelky" class="hover:text-slate2-900">Výdělky</a>
+      <a href="#faq" class="hover:text-slate2-900">FAQ</a>
+    </nav>
+    <button data-open-modal class="btn-primary rounded-full pl-4 pr-1.5 py-1.5 text-sm font-semibold flex items-center gap-2 glow-red">
+      Chci se přidat
+      <span class="grid place-items-center w-7 h-7 rounded-full bg-white/15"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="relative overflow-hidden hero-bg text-white">
+  <!-- background photo + tint -->
+  <div class="hero-photo" aria-hidden="true"></div>
+  <div class="hero-tint" aria-hidden="true"></div>
+  <!-- spotlight number -->
+  <div aria-hidden="true" class="pointer-events-none absolute -right-10 top-10 spotlight-num spotlight-num-dark text-[200px] md:text-[300px] select-none z-[1]">01</div>
+
+  <div class="relative z-[2] max-w-[1360px] mx-auto px-4 lg:px-16 pt-12 pb-20 md:pt-16 md:pb-24">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <div class="lg:col-span-7">
+        <div class="flex items-center gap-3 mb-6 reveal">
+          <span class="chip bg-white/10 backdrop-blur text-white/90"><span class="dot bg-lime2-400"></span> Nábor otevřen · ČR</span>
+          <span class="chip bg-white/5 backdrop-blur text-white/70 border border-white/10">Tým 100+ lidí</span>
+        </div>
+        <h1 class="h-tight text-[34px] sm:text-[42px] lg:text-[54px] font-extrabold reveal" style="--i:1">
+          Získej svobodu, pasivní&nbsp;příjem
+          <span class="inline-block"><span class="swoosh">a&nbsp;práci,</span></span><br/>která dává <span class="text-lime2-300">smysl</span>.
+        </h1>
+        <p class="mt-5 text-white/80 text-[15px] md:text-base max-w-[520px] reveal" style="--i:2">
+          Neprodáváme produkt, ale <span class="text-white font-semibold">kompletní řešení pro dům</span>. S námi neřešíš cold maily — dodáme ti <span class="text-white font-semibold">horké leady</span>.
+        </p>
+
+        <!-- trust box -->
+        <div class="mt-6 inline-flex items-center gap-4 rounded-2xl bg-white/[.08] backdrop-blur border border-white/10 pl-2 pr-5 py-2 reveal" style="--i:3">
+          <div class="flex -space-x-2">
+            <span class="w-8 h-8 rounded-full photo-ph ring-2 ring-ink-900"></span>
+            <span class="w-8 h-8 rounded-full photo-ph ring-2 ring-ink-900"></span>
+            <span class="w-8 h-8 rounded-full photo-ph ring-2 ring-ink-900"></span>
+            <span class="w-8 h-8 rounded-full bg-lime2-400 text-ink-900 text-[10px] font-bold grid place-items-center ring-2 ring-ink-900">+100</span>
+          </div>
+          <div class="text-[13px] leading-tight">
+            <div class="text-white/60">Průměrný výdělek OZ</div>
+            <div class="font-semibold tabular"><span class="text-lime2-300">80 000</span> – <span class="text-lime2-300">150 000 Kč</span> měsíčně</div>
+          </div>
+        </div>
+
+        <div class="mt-7 flex flex-wrap items-center gap-4 reveal" style="--i:4">
+          <button data-open-modal class="btn-primary rounded-full pl-5 pr-1.5 py-1.5 text-sm font-semibold flex items-center gap-3 glow-red">
+            Chci se přidat k týmu
+            <span class="grid place-items-center w-9 h-9 rounded-full bg-white/15"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+          <a href="#vydelky" class="text-white/80 hover:text-white text-sm font-medium inline-flex items-center gap-2">
+            Podívat se na čísla
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+
+        <!-- micro-trust line -->
+        <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/60 reveal" style="--i:5">
+          <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#a3e635" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> horké leady, žádný cold call</span>
+          <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#a3e635" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> provize bez stropu</span>
+          <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#a3e635" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> vlastní čas, vlastní pravidla</span>
+        </div>
+      </div>
+
+      <!-- Right: step 1 quiz card (click an option → opens modal on step 2) -->
+      <div class="lg:col-span-5 relative reveal" style="--i:2">
+        <div class="rounded-[24px] bg-white text-ink-900 p-5 md:p-6 shadow-ring border border-white/10">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-brand"></span>
+              <span class="font-mono text-[11px] uppercase tracking-[.2em] text-slate2-500">1/4</span>
+            </div>
+          </div>
+          <div class="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+            <div class="h-full progressbar" style="transform: scaleX(0.08); transform-origin: 0 50%"></div>
+          </div>
+          <h3 class="mt-5 h-tight text-[22px] md:text-[26px] font-extrabold text-slate2-900">Máš na to u nás pracovat?<br/><span class="text-brand">Ověř si to.</span></h3>
+          <p class="mt-1.5 text-slate2-600 text-[13.5px]">O jaký podíl trhu máš zájem?</p>
+          <div id="hero-quiz-options" class="mt-4 grid gap-2"></div>
+          <div class="mt-4 text-[11px] text-slate2-500 flex items-center justify-between">
+            <span>Potrvá to 60 sekund.</span>
+            <span class="text-brand font-semibold">→ pokračovat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- marquee -->
+  <div class="relative border-y border-white/10 bg-white/[0.02] py-4 overflow-hidden">
+    <div class="marquee text-white/40 text-sm font-medium">
+      <span>Fotovoltaika</span><span>·</span><span>Tepelná čerpadla</span><span>·</span><span>Energie</span><span>·</span><span>Finance</span><span>·</span><span>Stavby</span><span>·</span><span>Servis</span><span>·</span>
+      <span>Fotovoltaika</span><span>·</span><span>Tepelná čerpadla</span><span>·</span><span>Energie</span><span>·</span><span>Finance</span><span>·</span><span>Stavby</span><span>·</span><span>Servis</span><span>·</span>
+      <span>Fotovoltaika</span><span>·</span><span>Tepelná čerpadla</span><span>·</span><span>Energie</span><span>·</span><span>Finance</span><span>·</span><span>Stavby</span><span>·</span><span>Servis</span><span>·</span>
+      <span>Fotovoltaika</span><span>·</span><span>Tepelná čerpadla</span><span>·</span><span>Energie</span><span>·</span><span>Finance</span><span>·</span><span>Stavby</span><span>·</span><span>Servis</span><span>·</span>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITY (5 USP) -->
+<section id="benefity" class="relative overflow-hidden">
+  <div aria-hidden class="pointer-events-none absolute -left-12 top-8 spotlight-num text-[220px] md:text-[300px] select-none">02</div>
+  <div class="relative max-w-[1360px] mx-auto px-4 lg:px-16 py-16 md:py-20">
+    <div class="max-w-2xl reveal">
+      <div class="eyebrow text-slate2-500 mb-3">· Proč DOMIDOMI</div>
+      <h2 class="h-tight text-[34px] md:text-[44px] font-extrabold text-slate2-900">Pět důvodů, proč tě tahle<br/>práce chytne za srdce.</h2>
+    </div>
+
+    <!-- USP carousel / grid -->
+    <div class="usp-wrap mt-8">
+    <div class="usp-scroll grid grid-cols-1 md:grid-cols-6 gap-3 stagger">
+      <!-- USP 1 -->
+      <article class="card-lift md:col-span-3 reveal" style="--i:1">
+        <div class="h-full rounded-3xl bg-white border border-line p-6 shadow-card hover:shadow-cardHover flex flex-col">
+          <div class="flex items-start justify-between">
+            <span class="chip bg-brand/10 text-brand"><span class="dot bg-brand"></span> 01 · Leady</span>
+            <span class="font-mono text-[11px] text-slate2-500">/01</span>
+          </div>
+          <h3 class="mt-5 h-tight-sub text-2xl md:text-[26px] font-bold text-slate2-900">Žádné cold leady.<br/>Jen ověřený obchod.</h3>
+          <p class="mt-2 text-slate2-600 text-[14px] leading-relaxed">Jen ověřené leady a ryzí obchod.</p>
+          <!-- animated bar chart -->
+          <div class="mt-auto pt-5 grid grid-cols-4 gap-2 items-end h-24" data-leads-chart>
+            <div class="rounded-lg bg-slate-200 lead-bar" data-tgt="18"></div>
+            <div class="rounded-lg bg-slate-300 lead-bar" data-tgt="32"></div>
+            <div class="rounded-lg bg-lime2-300 lead-bar" data-tgt="58"></div>
+            <div class="rounded-lg bg-brand lead-bar relative" data-tgt="100">
+              <span class="absolute -top-1 right-0 -translate-y-full chip bg-brand text-white text-[10px] shadow-md leads-badge whitespace-nowrap">✓ 120/měs</span>
+            </div>
+          </div>
+          <div class="mt-3 flex justify-between text-[11px] font-mono text-slate2-500">
+            <span>cold call</span><span>email</span><span>doporučení</span><span>náš lead</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- USP 2 -->
+      <article class="card-lift md:col-span-3 reveal" style="--i:2">
+        <div class="h-full rounded-3xl bg-ink-900 text-white p-6 shadow-card flex flex-col overflow-hidden relative">
+          <span class="chip bg-white/10 text-white/80 self-start"><span class="dot bg-lime2-400"></span> 02 · Pasivní příjem</span>
+          <h3 class="mt-5 h-tight-sub text-2xl md:text-[26px] font-bold">Provize, co ti chodí<br/>každý měsíc.</h3>
+          <p class="mt-2 text-white/70 text-[14px] leading-relaxed">Provize z energií, které ti chodí každý měsíc. Žádný strop.</p>
+
+          <!-- residuál counter -->
+          <div class="mt-auto pt-6 relative">
+            <div class="text-[10px] uppercase tracking-[.2em] text-white/50 font-mono">Měsíční reziduál</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <span class="tabular font-extrabold text-[44px] md:text-[52px] leading-none text-lime2-300" data-residual-counter data-target="24800">0 Kč</span>
+            </div>
+            <div class="mt-3 flex items-end gap-1 h-10">
+              <span class="flex-1 rounded bg-white/10" style="height:18%"></span>
+              <span class="flex-1 rounded bg-white/15" style="height:28%"></span>
+              <span class="flex-1 rounded bg-white/20" style="height:38%"></span>
+              <span class="flex-1 rounded bg-lime2-300/30" style="height:50%"></span>
+              <span class="flex-1 rounded bg-lime2-300/50" style="height:62%"></span>
+              <span class="flex-1 rounded bg-lime2-300/70" style="height:75%"></span>
+              <span class="flex-1 rounded bg-lime2-300/85" style="height:88%"></span>
+              <span class="flex-1 rounded bg-lime2-300" style="height:100%"></span>
+            </div>
+            <div class="mt-2 flex justify-between text-[10px] font-mono text-white/40">
+              <span>měsíc 1</span>
+              <span>měsíc 12</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- USP 3 — horizontal -->
+      <article class="card-lift md:col-span-4 reveal" style="--i:3">
+        <div class="h-full rounded-3xl bg-white border border-line p-6 shadow-card hover:shadow-cardHover flex flex-col md:flex-row gap-5 md:items-center">
+          <div class="md:flex-1">
+            <span class="chip bg-slate-100 text-slate2-600"><span class="dot bg-slate2-600"></span> 03 · Špičková technologie</span>
+            <h3 class="mt-5 h-tight-sub text-2xl md:text-[26px] font-bold text-slate2-900">Appka, co fotkou faktury spočítá úsporu.</h3>
+            <p class="mt-2 text-slate2-600 text-[14px] leading-relaxed">Špičkový nástroj, co ti na schůzce ušetří hodinu a klientovi pomůže rozhodnout se.</p>
+          </div>
+          <!-- scan → savings animation -->
+          <div class="relative h-44 md:w-[320px] md:shrink-0 rounded-2xl bg-slate-50 border border-line overflow-hidden mt-auto md:mt-0" data-scan-scene>
+            <div class="absolute inset-4 grid grid-cols-5 gap-3 items-stretch">
+              <!-- invoice paper -->
+              <div class="col-span-2 relative rounded-xl bg-white border border-line p-2.5 overflow-hidden scan-paper">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <div class="h-1.5 w-8 rounded bg-slate-300"></div>
+                    <div class="mt-1 h-1 w-12 rounded bg-slate-200"></div>
+                  </div>
+                  <div class="text-[6px] font-mono text-slate-400 leading-tight text-right">FAKTURA<br/><span data-scan-invnum>24/0138</span></div>
+                </div>
+                <div class="mt-2 space-y-1">
+                  <div class="flex justify-between"><span class="h-1 w-10 rounded bg-slate-200"></span><span class="h-1 w-5 rounded bg-slate-300"></span></div>
+                  <div class="flex justify-between"><span class="h-1 w-12 rounded bg-slate-200"></span><span class="h-1 w-4 rounded bg-slate-300"></span></div>
+                  <div class="flex justify-between"><span class="h-1 w-9 rounded bg-slate-200"></span><span class="h-1 w-6 rounded bg-slate-300"></span></div>
+                  <div class="flex justify-between"><span class="h-1 w-11 rounded bg-slate-200"></span><span class="h-1 w-5 rounded bg-slate-300"></span></div>
+                </div>
+                <div class="mt-2 pt-1.5 border-t border-dashed border-slate-200 flex justify-between items-baseline">
+                  <span class="text-[7px] font-mono text-slate-400">CELKEM</span>
+                  <span class="tabular text-[10px] font-bold text-slate2-900" data-scan-invtotal>9 842 Kč</span>
+                </div>
+                <!-- corner markers -->
+                <span class="absolute top-1 left-1 w-2 h-2 border-t-2 border-l-2 border-brand/80 scan-corners"></span>
+                <span class="absolute top-1 right-1 w-2 h-2 border-t-2 border-r-2 border-brand/80 scan-corners"></span>
+                <span class="absolute bottom-1 left-1 w-2 h-2 border-b-2 border-l-2 border-brand/80 scan-corners"></span>
+                <span class="absolute bottom-1 right-1 w-2 h-2 border-b-2 border-r-2 border-brand/80 scan-corners"></span>
+                <!-- scan laser -->
+                <span class="scan-laser"></span>
+                <!-- scan glow overlay -->
+                <span class="scan-glow"></span>
+              </div>
+
+              <!-- arrow -->
+              <div class="col-span-1 grid place-items-center">
+                <div class="relative">
+                  <span class="scan-pulse absolute inset-0 rounded-full bg-brand/20"></span>
+                  <span class="relative grid place-items-center w-8 h-8 rounded-full bg-white border border-line shadow-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#E30A1A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- savings result -->
+              <div class="col-span-2 relative rounded-xl bg-ink-900 text-white p-3 flex flex-col overflow-hidden scan-result">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1 h-1 rounded-full bg-lime2-400 animate-pulse"></span>
+                  <span class="text-[8px] uppercase tracking-[.15em] text-white/50 font-mono">Roční úspora</span>
+                </div>
+                <div class="mt-1 font-extrabold tabular text-[22px] leading-none text-lime2-300" data-scan-counter data-target="42180">0 Kč</div>
+                <div class="mt-auto space-y-1.5">
+                  <div class="flex justify-between text-[8px] font-mono text-white/50">
+                    <span data-scan-label>FVE + TČ + tarif</span>
+                    <span data-scan-pct>0%</span>
+                  </div>
+                  <div class="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div class="h-full rounded-full bg-lime2-400" style="width:0%" data-scan-bar></div>
+                  </div>
+                  <div class="flex items-center gap-1 text-[8px] font-mono text-lime2-300/80">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>návrh na míru</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- USP 4 -->
+      <article class="card-lift md:col-span-2 reveal" style="--i:4">
+        <div class="h-full rounded-3xl bg-sun-200 p-6 shadow-card flex flex-col">
+          <span class="chip bg-black/10 text-ink-900"><span class="dot bg-ink-900"></span> 04 · Ekosystém</span>
+          <h3 class="mt-5 h-tight-sub text-2xl md:text-[26px] font-bold text-ink-900">Ne řešení.<br/>Celý ekosystém.</h3>
+          <p class="mt-2 text-ink-900/80 text-[14px] leading-relaxed">Neprodáváš jen jedno řešení, ale celý ekosystém.</p>
+          <div class="mt-auto pt-5 flex flex-wrap gap-1.5">
+            <span class="chip bg-white/70 text-ink-900">Fotovoltaika</span>
+            <span class="chip bg-white/70 text-ink-900">Tepelná čerpadla</span>
+            <span class="chip bg-white/70 text-ink-900">Energie</span>
+            <span class="chip bg-white/70 text-ink-900">Finance</span>
+            <span class="chip bg-white/70 text-ink-900">Stavby</span>
+            <span class="chip bg-white/70 text-ink-900">Servis</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- USP 5 -->
+      <article class="card-lift md:col-span-6 reveal" style="--i:5">
+        <div class="h-full rounded-3xl bg-white border border-line p-6 md:p-7 shadow-card hover:shadow-cardHover flex flex-col md:flex-row gap-6 md:items-center">
+          <div class="md:w-[260px] md:shrink-0">
+            <span class="chip bg-lime2-50 text-lime2-500"><span class="dot bg-lime2-500"></span> 05 · Svoboda</span>
+            <h3 class="mt-5 h-tight-sub text-2xl md:text-[26px] font-bold text-slate2-900 leading-[1.1]">Jsi pánem svého času.<br/>Fitko dopoledne? Žádný problém.</h3>
+            <p class="mt-3 text-slate2-600 text-[13.5px] leading-relaxed">Žádné stand-upy, žádná docházka. Dohodneme se na výsledcích — zbytek je na tobě.</p>
+          </div>
+
+          <!-- week schedule + floating fitko tag, bigger -->
+          <div class="relative md:flex-1 md:min-w-0">
+            <div class="grid grid-cols-7 gap-2 text-[11px] font-mono text-slate2-500">
+              <div class="text-center">PO</div><div class="text-center">ÚT</div><div class="text-center">ST</div><div class="text-center">ČT</div><div class="text-center">PÁ</div><div class="text-center">SO</div><div class="text-center">NE</div>
+              <div class="h-24 rounded-lg bg-slate-100 relative"><span class="absolute inset-x-1.5 top-1.5 bottom-12 rounded bg-brand/10 border border-brand/30"></span><span class="absolute inset-x-1.5 bottom-1.5 h-9 rounded bg-lime2-200"></span></div>
+              <div class="h-24 rounded-lg bg-slate-100 relative"><span class="absolute inset-x-1.5 top-1.5 bottom-6 rounded bg-brand/10 border border-brand/30"></span></div>
+              <!-- ST: fitko cell target -->
+              <div class="h-24 rounded-lg bg-slate-100 relative" id="fitko-cell"><span class="absolute inset-x-1.5 top-6 bottom-1.5 rounded bg-sun-200 border border-sun-400/50"></span></div>
+              <div class="h-24 rounded-lg bg-slate-100 relative"><span class="absolute inset-x-1.5 top-1.5 bottom-14 rounded bg-brand/10 border border-brand/30"></span><span class="absolute inset-x-1.5 bottom-1.5 h-12 rounded bg-lime2-200"></span></div>
+              <div class="h-24 rounded-lg bg-slate-100 relative"><span class="absolute inset-x-1.5 top-3 bottom-9 rounded bg-brand/10 border border-brand/30"></span></div>
+              <div class="h-24 rounded-lg bg-slate-50 relative"><span class="absolute inset-x-1.5 top-9 bottom-1.5 rounded bg-slate-200"></span></div>
+              <div class="h-24 rounded-lg bg-slate-50"></div>
+            </div>
+
+            <!-- floating fitko tag pointing at ST/10 -->
+            <div class="absolute -top-3 left-[32%] rotate-[-4deg] fitko-float pointer-events-none">
+              <div class="flex items-center gap-2 rounded-full bg-ink-900 text-white pl-2 pr-3 py-1.5 shadow-lg">
+                <span class="grid place-items-center w-6 h-6 rounded-full bg-lime2-300">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <rect x="1.5" y="9" width="3" height="6" rx="1" fill="#0f172a"/>
+                    <rect x="19.5" y="9" width="3" height="6" rx="1" fill="#0f172a"/>
+                    <rect x="4.5" y="7.5" width="2.5" height="9" rx="1" fill="#0f172a"/>
+                    <rect x="17" y="7.5" width="2.5" height="9" rx="1" fill="#0f172a"/>
+                    <rect x="7" y="10.5" width="10" height="3" rx="1" fill="#0f172a"/>
+                  </svg>
+                </span>
+                <span class="font-hand text-lg leading-none">Fitko v&nbsp;10</span>
+              </div>
+              <svg class="absolute -bottom-5 left-8" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                <path d="M4 2 C 10 10, 14 18, 20 22" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 3" fill="none"/>
+                <path d="M15 20 L20 22 L19 17" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+      <!-- dots (mobile only, below cards) -->
+      <div class="usp-dots md:hidden mt-2" aria-hidden="true">
+        <span data-usp-dot="0" class="on"></span>
+        <span data-usp-dot="1"></span>
+        <span data-usp-dot="2"></span>
+        <span data-usp-dot="3"></span>
+        <span data-usp-dot="4"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EKOSYSTÉM -->
+<section id="ekosystem" class="relative overflow-hidden section-dark text-white">
+  <div aria-hidden class="pointer-events-none absolute -left-8 top-12 spotlight-num spotlight-num-dark text-[220px] md:text-[300px] select-none">03</div>
+  <div class="relative max-w-[1360px] mx-auto px-4 lg:px-16 py-24 md:py-32">
+    <div class="grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-5 reveal">
+        <span class="chip bg-brand/15 text-brand border border-brand/30"><span class="dot bg-brand"></span> Ekosystém DOMIDOMI</span>
+        <h2 class="mt-6 h-tight text-[42px] md:text-[60px] font-extrabold">Neprodáváš jeden produkt.<br/>Prodáváš <span class="text-lime2-300">funkční celek</span>.</h2>
+        <p class="mt-5 text-white/70 text-[17px] max-w-[520px] leading-relaxed">U nás neprodáváš jen jeden produkt. Dáme ti do ruky <span class="font-semibold text-white">kompletní řešení pro moderní dům</span>. Pro klienta už nejsi jen další prodejce v řadě, ale partner, co mu vyřeší bezstarostné a smysluplné bydlení.</p>
+
+        <ul class="mt-8 space-y-3 text-[15px]">
+          <li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-lime2-400/20 grid place-items-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Na jedné schůzce otevřeš víc příležitostí.</li>
+          <li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-lime2-400/20 grid place-items-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Klient v tobě vidí partnera, ne jen prodejce.</li>
+          <li class="flex items-start gap-3"><span class="mt-0.5 w-5 h-5 rounded-full bg-lime2-400/20 grid place-items-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Cross-sell funguje — víc uzávěrek bez víc schůzek.</li>
+        </ul>
+
+        <button data-open-modal class="mt-10 btn-primary rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold inline-flex items-center gap-3 glow-red">
+          Chci vědět víc
+          <span class="grid place-items-center w-10 h-10 rounded-full bg-white/15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+      </div>
+
+      <!-- Circle diagram -->
+      <div class="lg:col-span-7 relative reveal" style="--i:2">
+        <div class="relative aspect-square max-w-[580px] mx-auto">
+          <!-- outer dashed -->
+          <div class="absolute inset-0 rounded-full border border-dashed border-white/15"></div>
+          <div class="absolute inset-8 rounded-full border border-dashed border-white/10"></div>
+          <!-- center photo placeholder -->
+          <div class="absolute inset-[18%] rounded-full overflow-hidden photo-ph-dark grid place-items-center border border-white/10">
+            <div class="text-center text-white/40 font-mono text-[11px] leading-snug px-8">
+              [ dům z fotky ]<br/>FVE + čerpadlo + baterie
+            </div>
+          </div>
+          <!-- ecosystem items positioned around -->
+          <!-- top -->
+          <div class="absolute left-1/2 -translate-x-1/2 -top-2 flex items-center gap-2 bg-ink-800 border border-white/10 rounded-2xl px-3 py-2 shadow-ring float-slow">
+            <span class="w-8 h-8 rounded-lg bg-white/10 grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 10h16M6 10v8h12v-8M8 14h2M14 14h2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="font-semibold text-sm">Tepelná čerpadla</span>
+          </div>
+          <!-- top-right -->
+          <div class="absolute right-0 top-[20%] flex items-center gap-2 bg-ink-800 border border-white/10 rounded-2xl px-3 py-2 shadow-ring float-med">
+            <span class="w-8 h-8 rounded-lg bg-white/10 grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="1" stroke="#fff" stroke-width="1.6"/><path d="M3 9h18M3 13h18M9 4v14M15 4v14" stroke="#fff" stroke-width="1.2"/></svg></span>
+            <span class="font-semibold text-sm">Fotovoltaika</span>
+          </div>
+          <!-- right -->
+          <div class="absolute -right-2 bottom-[30%] flex items-center gap-2 bg-ink-800 border border-white/10 rounded-2xl px-3 py-2 shadow-ring float-slow">
+            <span class="w-8 h-8 rounded-lg bg-white/10 grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#fff" stroke-width="1.6"/><path d="M12 8v4l3 2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+            <span class="font-semibold text-sm">Finance</span>
+          </div>
+          <!-- bottom -->
+          <div class="absolute left-1/2 -translate-x-1/2 -bottom-2 flex items-center gap-2 bg-ink-800 border border-white/10 rounded-2xl px-3 py-2 shadow-ring float-med">
+            <span class="w-8 h-8 rounded-lg bg-lime2-400/15 grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" fill="#a3e635"/></svg></span>
+            <span class="font-semibold text-sm">Energie</span>
+          </div>
+          <!-- bottom-left -->
+          <div class="absolute left-0 bottom-[26%] flex items-center gap-2 bg-ink-800 border border-white/10 rounded-2xl px-3 py-2 shadow-ring float-slow">
+            <span class="w-8 h-8 rounded-lg bg-white/10 grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-7 9 7v10H3V10z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke="#fff" stroke-width="1.6"/></svg></span>
+            <span class="font-semibold text-sm">Stavby</span>
+          </div>
+          <!-- top-left -->
+          <div class="absolute left-[6%] top-[18%] flex items-center gap-2 bg-ink-800 border border-white/10 rounded-2xl px-3 py-2 shadow-ring float-med">
+            <span class="w-8 h-8 rounded-lg bg-brand/15 grid place-items-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 3h4v4l5 5-7 10-7-10 5-5V3z" stroke="#E30A1A" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+            <span class="font-semibold text-sm">Servis</span>
+          </div>
+
+          <!-- orbital dot -->
+          <div class="absolute inset-0 spin-slow">
+            <span class="absolute left-1/2 -top-1 w-2 h-2 rounded-full bg-lime2-400 -translate-x-1/2"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PŘÍBĚHY -->
+<section id="pribehy" class="relative overflow-hidden bg-paper">
+  <div aria-hidden class="pointer-events-none absolute -right-8 top-12 spotlight-num text-[220px] md:text-[300px] select-none">04</div>
+  <div class="relative max-w-[1360px] mx-auto px-4 lg:px-16 py-24 md:py-32">
+    <div class="flex items-end justify-between gap-8 reveal">
+      <div>
+        <div class="eyebrow text-slate2-500 mb-4">· Lidé, ne čísla</div>
+        <h2 class="h-tight text-[40px] md:text-[56px] font-extrabold text-slate2-900">Reální kolegové.<br/>Reálné příběhy.</h2>
+      </div>
+      <p class="hidden md:block max-w-[380px] text-slate2-600 leading-relaxed">Žádné stockové úsměvy. Lidi z terénu, kteří u nás dělají denně a rádi si o své práci povídají.</p>
+    </div>
+
+    <div class="mt-12 stories-wrap">
+      <div class="stories-scroll grid md:grid-cols-3 gap-5 stagger">
+      <!-- Story 1 -->
+      <article class="group reveal" style="--i:1">
+        <div class="relative rounded-3xl overflow-hidden shadow-card card-lift">
+          <div class="aspect-[4/5] photo-ph grid place-items-center">
+            <span class="text-slate2-500 font-mono text-xs">[ portrét OZ ]</span>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-900/90 via-ink-900/50 to-transparent text-white">
+            <div class="font-hand text-2xl text-sun-300">„Přestal jsem počítat hodiny.“</div>
+            <div class="mt-3 flex items-end justify-between">
+              <div>
+                <div class="font-bold">Tomáš, 34</div>
+                <div class="text-[12px] text-white/70">OZ · Brno · 3. rok</div>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] uppercase tracking-[.2em] text-white/60">Po 18 měs.</div>
+                <div class="tabular font-extrabold text-lime2-300">128k / měs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- Story 2 -->
+      <article class="group reveal md:translate-y-8" style="--i:2">
+        <div class="relative rounded-3xl overflow-hidden shadow-card card-lift">
+          <div class="aspect-[4/5] photo-ph grid place-items-center">
+            <span class="text-slate2-500 font-mono text-xs">[ portrét OZ ]</span>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-900/90 via-ink-900/50 to-transparent text-white">
+            <div class="font-hand text-2xl text-sun-300">„První klient z doporučení.“</div>
+            <div class="mt-3 flex items-end justify-between">
+              <div>
+                <div class="font-bold">Lenka, 29</div>
+                <div class="text-[12px] text-white/70">OZ · Plzeň · 1. rok</div>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] uppercase tracking-[.2em] text-white/60">Za 6 měs.</div>
+                <div class="tabular font-extrabold text-lime2-300">92k / měs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <!-- Story 3 -->
+      <article class="group reveal" style="--i:3">
+        <div class="relative rounded-3xl overflow-hidden shadow-card card-lift">
+          <div class="aspect-[4/5] photo-ph grid place-items-center">
+            <span class="text-slate2-500 font-mono text-xs">[ portrét OZ ]</span>
+          </div>
+          <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-ink-900/90 via-ink-900/50 to-transparent text-white">
+            <div class="font-hand text-2xl text-sun-300">„Konečně pasivní reziduál.“</div>
+            <div class="mt-3 flex items-end justify-between">
+              <div>
+                <div class="font-bold">Martin, 41</div>
+                <div class="text-[12px] text-white/70">OZ · BA · 4. rok</div>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] uppercase tracking-[.2em] text-white/60">Reziduál</div>
+                <div class="tabular font-extrabold text-lime2-300">34k / měs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      </div>
+      <div class="usp-dots md:hidden mt-2" aria-hidden="true">
+        <span data-stories-dot="0" class="on"></span>
+        <span data-stories-dot="1"></span>
+        <span data-stories-dot="2"></span>
+      </div>
+    </div>
+
+    <!-- mini filmstrip -->
+    <div class="mt-10 sm:mt-16 grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 opacity-90">
+      <div class="aspect-square rounded-xl photo-ph"></div>
+      <div class="aspect-square rounded-xl photo-ph"></div>
+      <div class="aspect-square rounded-xl bg-brand text-white grid place-items-center p-2 sm:p-3 text-center order-first sm:order-last">
+        <div>
+          <div class="text-[10px] sm:text-xs uppercase tracking-[.2em] opacity-80">Tým</div>
+          <div class="font-extrabold text-2xl sm:text-3xl tabular">+100</div>
+          <div class="text-[10px] opacity-80">lidí v ČR</div>
+        </div>
+      </div>
+      <div class="aspect-square rounded-xl photo-ph hidden sm:block"></div>
+      <div class="aspect-square rounded-xl photo-ph hidden sm:block"></div>
+      <div class="aspect-square rounded-xl photo-ph hidden sm:block"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STABILITA / MAPA -->
+<section class="relative overflow-hidden bg-paper border-t border-line">
+  <div aria-hidden class="pointer-events-none absolute -left-8 top-12 spotlight-num text-[220px] md:text-[300px] select-none">05</div>
+  <div class="relative max-w-[1360px] mx-auto px-4 lg:px-16 py-24 md:py-32">
+    <div class="grid lg:grid-cols-12 gap-12 items-start">
+      <div class="lg:col-span-5 reveal">
+        <div class="eyebrow text-slate2-500 mb-4">· Stabilita</div>
+        <h2 class="h-tight text-[40px] md:text-[56px] font-extrabold text-slate2-900">Stabilní skupina.<br/>Lokální zázemí.</h2>
+        <p class="mt-5 text-slate2-600 text-[17px] leading-relaxed max-w-[480px]">Pobočky po celé ČR i SR. Nepřicházíš do startupu — přicházíš do rozjeté mašiny, která má servis tam, kde ho klient potřebuje.</p>
+        <div class="mt-8 grid grid-cols-3 gap-4">
+          <div>
+            <div class="tabular text-4xl font-extrabold text-slate2-900">15</div>
+            <div class="text-xs text-slate2-500 mt-1">let na trhu</div>
+          </div>
+          <div>
+            <div class="tabular text-4xl font-extrabold text-slate2-900">23k+</div>
+            <div class="text-xs text-slate2-500 mt-1">realizací</div>
+          </div>
+          <div>
+            <div class="tabular text-4xl font-extrabold text-slate2-900">12</div>
+            <div class="text-xs text-slate2-500 mt-1">poboček</div>
+          </div>
+        </div>
+        <button data-open-modal class="mt-10 btn-primary rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold inline-flex items-center gap-3 glow-red">
+          Přidat se k týmu
+          <span class="grid place-items-center w-10 h-10 rounded-full bg-white/15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+      </div>
+
+      <!-- map -->
+      <div class="lg:col-span-7 reveal" style="--i:2">
+        <div class="relative rounded-3xl bg-white border border-line shadow-card p-6 md:p-8">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="chip bg-slate-100 text-slate2-600"><span class="dot bg-brand"></span> ČR · 9 poboček</span>
+              <span class="chip bg-slate-100 text-slate2-600"><span class="dot bg-lime2-500"></span> SR · 3 pobočky</span>
+            </div>
+          </div>
+          <svg viewBox="0 0 340 170" class="w-full" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+            <defs>
+              <filter id="mapShadowV2" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#0f172a" flood-opacity="0.10"/>
+              </filter>
+              <linearGradient id="czFill" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#fff3f3"/>
+                <stop offset="100%" stop-color="#ffe0e2"/>
+              </linearGradient>
+              <linearGradient id="skFill" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#fefce8"/>
+                <stop offset="100%" stop-color="#fef08a" stop-opacity="0.7"/>
+              </linearGradient>
+            </defs>
+
+            <!-- country outlines (user-supplied paths) -->
+            <g filter="url(#mapShadowV2)" transform="translate(15, 8)">
+              <!-- Czech Republic -->
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M196.283 68.4156L195.878 66.5341L195.753 66.1336L195.419 65.3589L195.289 64.932L195.097 63.4088L194.977 63.0612L194.55 62.7395L194.108 62.8187L193.666 63.0136L193.249 63.0505L192.89 62.8343L192.333 62.165L191.964 61.8593L191.558 61.7382L190.684 61.6591L190.304 61.3903L190.127 61.0583L189.841 59.7672L189.169 58.3757L188.675 57.0268L188.664 55.8356L189.445 54.9187L188.69 54.5076L188.565 53.9647L188.633 53.2794L188.456 52.4734L188.035 52.2149L186.916 52.9371H186.255L184.147 51.7618L183.049 51.3666L181.904 51.5087H181.967L182.019 51.5353L182.055 51.5879L182.086 51.667L181.29 52.3679L180.879 52.4521L180.317 51.9831L180.156 51.6827L179.958 50.9924L179.838 50.7499L179.5 50.4971L178.834 50.3547L178.501 50.2017L177.606 49.4219L177.174 49.1794L175.363 48.8315L174.993 48.3994L175.181 47.5773L173.526 46.4809L173.125 46.3808L172.651 46.2597L172.776 47.2716L172.927 47.3348L173.151 47.2663H173.395L173.593 47.5827L173.645 48.0251L173.5 48.2201L172.573 48.4995L171.434 48.5364L170.918 48.6735L170.08 49.427L169.05 49.7433L168.015 49.522L166.177 47.6722L165.86 47.2241L165.636 46.6918L165.475 46.1386L165.282 45.643L164.97 45.2637L164.704 44.9949L164.616 44.7365L164.71 44.4943L164.975 44.2674L164.986 44.2358V44.1989V44.157L164.975 44.1147L164.575 44.0305L163.804 43.6404L163.43 43.5402L163.128 43.6141L162.888 43.7511L162.602 43.8037L162.16 43.5981L160.781 41.8327L160.723 41.506L160.932 41.0527L161.244 40.8946L162.612 40.842L163.367 40.5417L164.575 39.8089L165.147 39.3032L165.412 38.6232L164.975 37.7959L164.678 37.4955L164.611 37.0421L164.668 36.631L164.975 35.793L165.043 35.6509L165.064 35.5192L165.048 35.3978L164.975 35.2977L164.455 34.5861L164.299 34.4334L163.815 34.2541L163.627 34.3755L163.554 34.6812L163.398 35.0448L162.555 36.2251L162.066 36.631L161.41 36.8049L158.871 36.3465L157.518 36.4729L156.685 37.4955L156.539 37.5956L156.388 37.6272L156.237 37.5903L156.092 37.4955L155.826 36.6626L155.207 36.1566L154.577 36.2042L154.27 37.0265L153.89 36.7364L153.693 36.2727L153.635 35.7035L153.672 35.1184L153.542 35.0026L153.422 34.8709L153.323 34.7179L153.245 34.5492L153.766 34.3386L153.177 34.0855L151.845 34.1224L151.169 33.9275L150.169 33.2898L149.889 32.9841L149.717 32.5942L149.54 32.0144L149.441 31.5243L149.503 31.3976L149.17 31.2975L148.306 31.4768H147.916L147.552 31.2765L146.891 30.7127L146.578 30.523L143.664 29.6954L143.009 29.7746L142.587 29.5214L141.786 29.0367L141.14 28.9523L140.37 29.4266V30.054L141.281 31.4136L141.603 32.2356L141.817 33.1949L142.098 34.0645L142.629 34.6177L143.321 35.0289L143.836 35.6034L144.138 36.4097L144.18 37.5005L144.549 37.9962L144.606 38.5863L144.424 38.9659L144.081 38.8341L143.779 38.3754L143.648 38.1066L143.477 37.9908H143.06L142.983 38.1066V38.6495L142.92 38.8129L142.665 38.8341L142.139 38.6442L141.89 38.6548L141.551 38.892L141.078 39.556L140.812 39.7985L140.495 39.8827L140.152 39.9725L139.584 39.9356L139.022 40.0197L138.382 40.5733L137.872 41.353L137.565 41.9591L137.222 42.4548L136.592 42.9185L135.717 44.1254L134.567 44.2096L133.375 43.5825L132.397 42.6707L131.898 42.0067L131.632 41.4481L131.31 39.9196L131.003 39.071L130.144 38.1648L129.785 37.5059L129.373 36.942L128.65 35.614L128.244 35.0342L127.615 34.5861L126.35 34.1171L125.845 33.4374L125.772 33.0473L125.793 32.6364L125.772 32.2199L125.575 31.8035L125.304 31.7193H124.013L123.68 31.83L123.477 32.009L123.269 32.0566L122.905 31.7615L122.769 31.5031L122.405 30.3437L121.484 30.1804L121.219 29.374L121.442 28.6625L122.01 28.7943L121.958 28.6573L121.822 28.1566L121.994 28.1408L122.254 27.9721L122.411 27.9089L122.848 27.54L123.347 27.2396L123.774 26.8707L123.993 26.291L124.44 26.1434L125.351 26.4016L125.835 26.291L126.1 25.9115L126.683 25.3265L126.928 24.984L126.85 25.0103V24.7468L126.886 24.399L126.933 24.1671L127.058 23.9036L127.136 23.7771V23.6243L127.027 23.2817L127.922 22.9128L127.662 22.0537L125.247 19.4608L124.378 18.9601L123.451 18.7177L122.421 18.6966L122.056 18.7757L121.848 19.2289L121.64 19.8086L121.297 20.2513L120.818 20.362L120.386 20.1565L119.491 19.4608L118.294 19.3396L116.535 21.0682L115.328 21.2895L115.27 21.1525L115.249 21.0102L115.275 20.8679L115.328 20.7204L115.739 20.3831L115.801 19.8455L115.645 19.2236L115.4 18.6123L115.031 17.9008L114.651 17.5266L114.183 17.4581L112.502 18.1011L111.716 18.1222L111.534 18.0589L110.097 15.5872L110.009 15.3132L109.947 15.0022L109.244 14.9337L106.886 15.5134L106.59 15.4185L106.382 15.213L106.007 14.6333L105.684 14.412L100.007 12.3988L98.8252 12.4989L98.5598 12.8309L98.2892 13.3158L97.9771 13.6478L97.9301 13.632L97.5762 13.516L97.3941 13.1418L97.42 12.7097L97.4983 12.2564L97.4878 11.8137L97.1494 10.96L96.7176 10.5964L96.2023 10.3645L95.6351 9.90596L95.3332 9.41582L95.0001 8.66219L94.7347 7.86112L94.6515 7.21288L94.8492 6.37491L95.0938 5.90061L95.1251 5.46317L94.6723 4.72008L93.9179 4.34062L92.3046 4.31427L92.0389 3.64497L91.909 2.95457L91.5759 2.78593L91.2115 3.04943L90.9566 3.64497L90.8629 4.11401L90.5403 4.18254L90.1395 3.98225L89.8064 3.65024L89.567 3.197L88.1306 2.87552L87.5894 2.37485L87.5114 2.74904L87.3812 2.95984L86.9701 3.26551L86.809 3.3024L86.6475 3.38146L86.5019 3.50267L86.3717 3.65551L86.4913 4.17199L86.9547 4.54091L87.3864 5.17858L87.4177 6.50142L87.3292 6.73329L87.0484 7.04951L86.9701 7.20762L86.9441 7.46057L86.9599 7.63449L86.9909 7.76625L87.0274 9.34204L86.9701 9.73202L83.7281 9.48961L82.7028 9.77946L82.099 9.75839L81.6515 10.9758L81.3808 11.5028L81.1052 11.8243L80.6472 11.9508L80.0329 11.9297L78.9819 11.6925L77.8941 10.8599L77.4883 10.6332L76.4995 10.3539L76.364 10.0166L76.463 9.20502L76.9418 8.06138L77.1082 7.45531L76.9573 6.93883H76.6139L75.0424 7.59234L74.7145 7.32884L74.8704 6.77546L75.2088 6.12196L75.4275 5.57384L75.4794 4.88874L75.391 4.44604L75.1723 4.08238L74.829 3.66078L74.4801 3.38146L73.7152 3.18646L73.3666 2.93349L73.1012 2.55931L73.0023 2.28526L72.9398 2.01121L72.7784 1.62649L72.534 2.25891L72.2111 2.42755L71.1808 2.36958L70.3847 2.72795L70.0723 2.71741L69.7652 2.54877L69.578 2.30107L69.4271 2.0481L69.2137 1.84783L68.1572 1.5L67.2515 1.64757L66.5698 2.3485L66.1693 3.66078L65.8517 4.12456L66.1848 4.34591L67.1424 4.47238L67.7096 4.70428L67.6679 4.79386L67.4287 4.96252L67.4025 5.44211L68.1259 6.1694L69.172 6.48033L69.9266 6.92303L69.755 8.05612L68.9221 8.77287L66.6948 8.59367L65.6747 8.80976L65.3679 9.11541L64.8474 9.91122L64.5037 10.238L60.0805 12.2933L59.534 12.3302L58.4984 12.1932L57.9414 12.3144L57.6343 12.5358L57.2025 13.105L56.9111 13.3263L56.552 13.379L56.2761 13.2947L56.0367 13.3052L55.7766 13.632L55.6569 14.0694L55.6931 14.4541L55.7609 14.7703L55.7454 15.0075L55.5527 15.2868L55.3863 15.3448H55.2143L54.3922 15.8718L53.8822 15.9772L52.5813 15.8296L51.967 15.8929L50.8897 16.2987L50.3435 16.4094L47.7934 16.3936L46.5079 16.6413L45.3474 17.3527L45.6753 18.0484L45.5661 18.6597L45.186 19.1551L44.7177 19.5188L44.8792 19.8824L44.8529 20.1565L44.6812 20.3673L44.4004 20.5254L43.9058 21.1473L43.427 21.5952L42.9015 21.727L42.2665 21.4108L42.0791 21.1736L41.6786 20.4938L41.5276 20.3198L41.184 20.1934L41.1061 20.2513L41.0903 20.4147L40.9186 20.5992L39.8519 21.3633L39.6957 21.6479L39.3938 22.5649L38.8006 22.8706L38.327 22.6598L37.8637 22.333L37.3122 22.2804L36.3651 24.8364L35.9591 25.5848L35.2619 26.1118L33.7683 26.0222L32.9666 26.3015H32.9616L32.7012 26.3753L32.4358 26.3964L32.1705 26.3753L31.9206 26.3015L31.7022 26.1329L31.4679 26.0802L31.2285 26.1381L30.9943 26.3015L30.8122 28.1355L30.6301 28.9523L30.2294 29.4319L29.61 30.0487L29.3811 30.2805L28.4079 30.2226L25.7798 28.6046L25.5404 28.5308L25.2854 28.5835L24.8847 28.8523L24.7077 28.9207L24.2029 28.847L23.7502 28.8786L23.287 29.0474L22.9227 29.411L22.2982 30.3963L21.9807 30.7073L21.6113 30.7496L20.0969 30.4702L17.9736 30.6335L16.8287 30.9761L16.0428 31.6614L15.8295 31.8457L15.7306 32.0672L15.6733 32.2938L15.5953 32.494V32.5888L15.6421 32.7416L15.6577 32.9155L15.5953 33.0789L15.4808 33.1421L15.2258 33.1317L15.1217 33.1896L14.7834 33.4953L13.9508 33.9697L13.6489 34.2754L12.7694 35.8931L12.4468 36.2358L12.1293 36.4623L11.8951 36.8103L11.8171 37.5218L11.255 38.249L11.1041 38.6705L11.0156 39.4665L11.0989 40.0197L11.2654 40.4994V40.8999L10.8699 41.1897L10.3859 41.1265L10.0997 40.6734L9.76142 39.4399L9.73018 39.2081L9.67816 38.9446L9.55846 38.6548L9.43357 38.4862L8.93916 37.9802L8.86632 37.8748L8.83508 37.7746L8.86109 37.6851L8.93916 37.6007L8.97559 37.5691L9.01203 37.5428L9.04846 37.5322H9.09009L9.21499 37.274L9.2306 37.0684L9.13692 36.9051L8.93396 36.7893L8.11692 36.768L7.70577 36.6363L7.38834 36.3572L7.27904 36.0039L7.28946 35.2345L7.1229 34.818L6.57648 34.4281L5.21299 34.328L4.50002 34.2754L5.15575 34.9657L5.38473 35.3662L5.48881 36.0039L5.43677 36.5784L5.24422 36.784L4.95278 36.9789L4.5937 37.5218L4.88513 38.0541L6.28505 38.9393L6.97719 39.714L7.29985 40.2147L7.51843 40.7469L7.60169 41.4216L7.40393 42.4388L7.41955 43.1081L7.66934 43.7827L8.07006 44.157L8.52284 44.4204L8.93396 44.7787L9.18375 45.2215L9.241 45.6799V46.0857L9.33988 46.3705L13.6333 48.6997H13.6645L14.0965 49.1319L15.1425 49.2426L15.6213 49.7011L15.6941 50.3547L15.4964 50.9555L15.4652 51.4402L16.6257 52.1308L17.0316 52.2888L17.2085 52.6101L17.1201 53.4747L16.8911 54.1543L16.2354 55.3771L16.0272 56.0621L15.4548 55.8884L15.283 56.5155L15.2674 57.443L15.1789 58.1704L14.7262 58.6342L13.55 59.1401L13.2118 59.8095L13.3523 60.2785L13.6437 60.8477L14.2318 61.7013L14.6377 62.0755L15.0697 62.3759L16.0168 62.8343L16.4071 63.0452L16.6413 63.5143L16.6621 64.1044L16.4227 64.6473L16.4956 64.7055L16.7194 64.816L16.5841 65.1639L16.5632 65.2694L16.8547 65.6276L17.5312 66.0072L17.8279 66.3392L18.0256 66.8186L18.1557 67.7989L18.2702 68.3155L18.4524 68.8424L18.6293 69.2376L18.8531 69.5696L19.1601 69.8966L19.4828 69.9914L19.7794 69.9492L19.9928 70.1232L20.0292 70.8663L20.1125 72.3154L20.253 73.0322L20.5756 73.6699L21.1273 74.1337L22.4335 74.7607L23.006 75.3618L23.9375 77.4699L24.3851 77.9389L24.9471 78.1442L26.6177 78.392L27.1485 78.3182L27.0236 77.7543L27.4139 77.6279L28.5016 77.9283L28.9803 78.1917L29.3915 78.5291L30.1877 79.383L30.6821 79.5883L30.8382 79.9468L30.8747 80.3736L31.0048 80.7848L31.9103 81.8756L31.9156 81.8809L32.2642 82.0812L34.9235 85.7387L35.2931 86.5977L35.7456 87.3355L36.5473 87.8098L38.2645 87.889L38.8318 88.1102L39.1754 88.4159L40.0393 89.5859L41.2465 90.8297L41.5641 91.5938L41.5796 92.8217L41.9854 93.491L42.8025 94.2657L43.6977 94.9194L44.3586 95.2407L44.65 94.4819L44.9206 94.0023L45.3162 93.8232L45.4984 93.8599L45.9667 93.96L46.4662 94.271L46.9502 94.6612L47.4343 94.93L47.9495 94.8718L48.0223 95.6941L48.3241 96.4898L48.7664 97.1698L49.2505 97.6598L49.7865 97.918L50.843 98.0866L51.2436 98.3135L51.9045 99.3567L53.2732 102.124L53.825 102.704L54.9647 103.014L55.506 103.315L56.021 103.726L56.6405 104.247L58.5504 105.312L58.8 105.586L59.2738 106.319L59.4557 106.677L59.6017 106.814L59.7993 106.893L59.971 107.014L60.044 107.278L59.992 107.547L59.8618 107.589L59.7264 107.563L59.6379 107.626L59.4455 108.032L59.284 108.09L59.2321 108.216L59.3623 108.806L59.487 109.043L59.9762 109.66L60.2156 109.876L61.1785 110.287L65.2012 110.746L68.0167 111.752L68.2874 111.721L68.511 111.631L69.0835 111.167L70.5564 110.524L71.0039 110.055L71.6389 108.342L72.0499 108.053L72.7317 108.864L73.8609 109.465L74.194 109.549L74.6208 109.454L75.4742 109.038L75.9112 109.001L76.0934 109.165L76.1299 109.439V109.729L76.2236 109.913L76.4423 109.939L76.8741 109.786L77.0615 109.829L77.3686 110.24L77.535 110.646L77.7589 110.93L78.2272 110.962L78.6695 110.514L78.7997 110.382L78.9402 109.254L78.9247 107.932L79.0286 106.762L79.5646 105.881L81.0582 104.553L81.1987 103.72L81.4851 103.209L81.5995 102.682L81.7659 102.271L82.1927 102.102L83.6758 102.308L85.1434 102.919L85.7212 102.867L86.049 102.102L85.9866 102.024L85.8616 101.744L85.7367 101.397L85.6794 101.122L85.7264 100.817L85.9293 100.269L86.5331 97.5387V96.3371L86.4186 95.0036L86.4289 93.7598L86.8139 92.8376L86.788 92.6004V92.3949L86.8297 92.2475L86.9182 92.1736L87.5426 92.0945L89.1194 92.6427L91.326 92.827L91.5341 93.4437L91.6538 94.0392L91.6436 94.6346L91.4562 95.2567L92.0182 95.267L94.1832 94.6769L94.3342 94.5821L94.7245 94.1024L94.8179 93.8705L94.8909 93.2857L95.0054 93.1064H95.224L95.3697 93.2857L95.4841 93.5016L95.6246 93.6017L96.9518 93.6177L97.5867 93.802L98.9501 94.5029L100.21 94.935L100.819 95.2883L102.218 96.5215L102.869 96.7796L104.56 97.4439L106.761 98.7033L107.396 98.8561H108.052L108.531 98.7033L109.54 98.1605L109.785 98.1026H110.654L110.816 98.2237L110.93 98.7559L111.071 98.9774L111.263 99.0616L111.804 99.1039L112.117 99.3357L112.33 99.4359L112.569 99.4202L112.278 99.8101L112.637 99.7256L112.954 99.7363L113.168 99.9312L113.199 100.39L113.678 100.263L113.829 100.448V100.748L113.87 100.964L116.722 103.067L118.226 103.731L120.849 103.573L124.82 104.169L124.851 104.137L125.439 104.047L125.814 104.358L125.97 104.411L126.418 104.279L126.73 103.984L128.172 101.486L128.666 101.154L129.483 101.275L129.774 101.259L130.29 101.038L130.55 101.001L130.81 101.091L131.294 101.407L132.99 101.908L133.516 101.971L134.057 102.192L134.281 102.714L134.385 103.336L134.593 103.852L134.968 104.116L135.421 104.195L136.498 104.153L136.93 104.306L137.955 104.996L138.476 105.191L139.022 105.122L140.115 104.732L140.578 104.769L141.25 105.723L141.645 108.596L142.623 109.75L142.696 108.928L143.144 108.374L143.467 107.768L144.903 103.583L145.6 102.382L146.578 101.528L146.985 101.006L147.151 100.184L147.411 99.7785L148.936 98.6508L150.206 98.3767L151.569 98.7403L154.806 100.4L155.301 100.305L155.852 99.9365L156.373 99.5889L157.049 99.3886L157.466 99.5889L158.335 100.516L159.37 100.68L164.824 98.5084L165.324 98.0866L166.302 96.3791L166.76 95.9945L167.458 95.8731L168.056 95.9786L168.597 95.947L169.118 95.4306L169.352 94.8349L169.57 93.4859L169.748 92.8376L170.122 92.0735L170.715 91.6833L171.402 91.5728L172.927 91.6939L173.869 91.2565L174.707 90.4714L175.295 89.4595L175.483 88.5001L175.446 86.5451V86.2816L175.545 85.1063L175.904 83.6676L176.435 82.329L177.117 81.201L177.954 80.3999L181.774 78.8927L182.826 78.06L183.497 77.5277L183.57 75.4354L184.397 75.6253L185.032 75.2035L186.239 73.7069L187.171 73.2009L187.405 72.9584L187.551 72.5685L187.618 71.7462L187.769 71.3826L188.352 71.0084L189.607 71.193L190.418 70.7608L190.616 70.7186L190.814 70.7608L191.745 71.2352L192.567 71.4881L193.364 71.4408L194.53 70.355L195.06 70.1494L196.221 70.1178L196.341 69.38L196.263 68.4579L196.283 68.4156Z" fill="url(#czFill)" stroke="#E30A1A" stroke-width="1.2" stroke-linejoin="round"/>
+              <!-- Slovakia -->
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M300.455 88.8271L298.233 88.7269L297.191 88.4053L295.756 86.9402L295.15 86.6977L293.586 86.7556L292.253 86.3448L292.046 86.1602L291.977 85.8861L292.054 85.6016V85.2959L291.742 84.9429L291.51 84.9007L290.827 84.9849L290.54 84.9692L290.213 84.8216L289.287 84.2208L287.278 83.8309L286.476 83.2354L286.288 81.8386L285.929 80.2891L285.113 78.9558L284.087 77.9808L282.559 77.2061L281.517 76.2364L280.997 75.936L280.425 76.0414L279.935 76.4948L279.534 76.9795L279.237 77.1798L278.8 76.8215L277.848 75.3352L277.369 74.8399L277.088 74.7557L276.646 74.8558L276.432 74.8242L276.146 74.6239L275.615 74.102L275.329 73.9071L274.798 73.77L272.768 74.0019L272.337 74.1759L271.821 74.3918L271.405 74.2654L270.354 74.4972H269.885L267.117 73.7121L265.53 72.8529L265.139 72.7581L264.624 73.1217L263.739 74.45L263.25 74.9137L262.641 75.0138L262.209 74.7134L261.804 74.255L261.288 73.8965L260.846 73.8545L259.696 74.0914L259.264 74.3023L258.686 74.9506L259.035 75.3511L259.69 75.757L260.039 76.421L259.81 76.8215L259.285 76.9269H258.686L258.239 77.0271L257.656 77.6016L256.729 78.9771L256.115 79.5147L255.449 79.7569L254.929 79.6567L254.465 79.3194L254.002 78.8294L253.471 78.4289L253.024 78.3604L252.54 78.392L251.905 78.2918L251.458 77.9598L248.939 74.9084L248.496 74.8292L247.424 75.0032L246.81 74.9084L246.55 74.9243L246.259 75.0877L245.806 75.6568L245.478 75.9676L244.807 76.2101L244.182 76.0574L241.783 74.8189L241.341 74.919V75.6778L239.878 75.7357L238.718 75.2932H238.38L238.088 75.5198L237.984 75.7939L237.927 76.1997L237.781 76.8268L237.578 77.4382L237.437 77.6332L235.247 77.8281L234.815 78.0706L234.195 78.8188L233.914 79.0823L233.29 79.0087L233.217 78.9402L233.056 79.1561L232.514 80.3893L232.353 80.9112L232.155 81.3959L231.801 81.8283L231.64 83.3618L231.349 84.458L230.792 84.8901L229.85 84.421L228.387 83.0298L227.597 82.6134L226.686 82.7135L226.171 83.0984L225.619 83.6779L225.218 84.0944L224.589 84.3315L223.282 84.2314L222.569 83.9679L222.205 83.4567L222.32 82.8769L223.392 81.1061L223.517 81.0007L223.699 80.9481L223.865 80.848L223.933 80.6002L223.881 80.4105L223.87 80.3999L223.652 80.168V80.1524L223.6 80.0522L223.209 79.7569L223.111 79.6095L223.126 79.4249L223.345 79.0982L223.392 78.9189L223.225 76.7899L223.079 76.0574L222.814 75.2247H222.809L222.554 75.0245L221.601 75.409L221.029 75.4669L220.41 75.3984L218.781 74.8345V74.8189L218.838 74.3023L218.822 73.612L218.864 73.3748L218.994 73.0954L217.86 73.0848L217.266 72.9214L216.782 72.5422L216.631 72.2258L216.173 70.824L215.658 68.5946L215.315 67.7094L214.648 67.2613L214.435 67.0294L213.957 66.1758L213.717 66.0757L213.561 66.0125L213.4 66.086L213.29 66.3075L210.829 69.0533L210.615 69.2429L210.215 69.4063L209.923 69.4538L209.049 69.4432L208.502 69.5646L208.039 69.7964L207.628 70.1969L207.238 70.824L206.785 72.2574L206.837 72.305L206.926 72.4367L206.983 72.6476L206.915 72.9427L206.79 73.0375L206.442 73.0481L206.358 73.0691L206.161 73.9281L206.088 74.4763L205.88 74.8292L205.005 75.1825L204.292 75.3248L204.001 75.3036L203.73 75.1612L203.168 74.745L202.908 74.6555L202.289 74.8029L201.191 75.4513L200.472 75.5092L199.921 75.4037L199.765 74.9084L199.879 73.459L199.806 72.8056L199.671 72.2102L199.64 71.5828L199.89 70.8397L199.067 70.334L196.257 70.0702L195.097 70.1019L194.566 70.3074L193.4 71.3932L192.604 71.4407L191.782 71.1876L190.85 70.7133L190.652 70.671L190.455 70.7133L189.643 71.1454L188.389 70.9611L187.806 71.3353L187.655 71.6989L187.587 72.5209L187.441 72.9111L187.207 73.1533L186.275 73.6593L185.068 75.1562L184.433 75.5777L183.606 75.3881L183.533 77.4802L182.862 78.0124L181.81 78.8453L177.991 80.3526L177.153 81.1537L176.471 82.2814L175.94 83.62L175.581 85.0587L175.477 86.234V86.4975L175.519 88.4528L175.331 89.4119L174.743 90.4238L173.905 91.2092L172.963 91.6466L171.438 91.5252L170.752 91.636L170.158 92.0259L169.784 92.79L169.607 93.4384L169.388 94.7876L169.154 95.3831L168.633 95.8997L168.092 95.9313L167.494 95.8258L166.797 95.9469L166.338 96.3318L165.36 98.0393L164.86 98.4608L159.407 100.632L158.371 100.469L157.502 99.5413L157.086 99.341L156.409 99.5413L155.889 99.8892L155.337 100.258L154.843 100.353L151.605 98.6927L150.242 98.3291L148.972 98.6032L147.448 99.7309L147.187 100.137L147.021 100.959L146.615 101.481L145.636 102.335L144.939 103.536L143.503 107.721L143.18 108.327L142.732 108.88L142.66 109.702L142.925 111.726L142.774 112.269L142.712 112.49L142.249 112.991L141.78 113.375L141.567 113.781L141.416 114.356L140.671 115.441L140.385 116.021L140.266 116.638L140.016 118.941L139.943 119.21L139.875 119.336L139.823 119.531L139.808 120.005L139.896 120.264L140.115 120.401L140.687 120.459L140.848 120.554L141.15 120.806L141.442 121.133L141.572 121.476L141.504 121.666L141.395 121.913L141.343 122.129L141.468 122.219L141.546 122.309L141.645 122.525L141.739 122.772L141.775 122.967L141.868 123.22L142.087 123.362L142.342 123.484L142.66 123.774L142.837 123.832L142.94 123.985L142.967 124.169L142.93 124.664L142.94 124.87L143.383 126.414L143.518 127.189V128.121L143.721 128.791L144.434 129.586L144.824 129.829L145.277 129.898L145.574 130.092L146.001 130.873L146.136 131.12L146.505 131.521L146.214 131.884L146.068 132.322L145.907 133.118L146.016 133.191L146.354 133.476L146.204 134.177L146.854 134.54L147.77 134.873L148.431 135.473L149.467 134.836L150.492 135.057L151.668 135.389L151.959 135.473L153.812 135.758L154.707 136.506L157.622 140.459L157.902 140.717L158.194 140.844L158.907 140.997L159.172 141.171L160.13 142.63L160.473 142.994L160.765 142.984L161.051 142.841L161.368 142.794L161.79 143.01L162.378 143.437L162.904 143.943L163.127 144.38L163.424 144.717L164.631 145.381L165.277 145.734L167.655 146.388L169.294 146.283L175.794 145.856L179.292 146.225L180.343 146.124L182.466 145.25L188.279 144.564L189.549 144.659L190.579 145.123L191.428 145.292L192.255 145.202L192.947 144.77L193.884 143.679L194.378 143.31L195.024 143.136L195.721 142.883L195.763 142.867L194.67 142.061L193.842 141.239L193.655 140.438L193.723 139.537L194.009 137.771L193.915 137.276L193.717 137.102L193.681 136.944L194.051 136.485L194.306 136.332L194.857 136.238L195.128 136L195.888 134.404L196.382 133.993L199.083 133.376L200.452 133.065L200.868 132.87L201.508 132.901L202.065 132.928L203.762 132.675L207.279 133.112L207.592 133.049L209.283 131.948L213.113 132.032L214.633 130.941L214.675 130.72L214.69 130.493L214.675 130.261L214.633 130.024L214.622 129.992V129.966V129.945L214.633 129.924L214.971 129.244L215.237 127.579L215.549 126.952L216.038 126.662L218.645 125.961L218.947 125.971L219.233 126.056L219.556 126.335L220.17 127.104L220.456 127.257L221.763 126.999L222.429 127.11L222.934 127.732L222.949 128.153L222.788 128.522L222.715 128.886L222.98 129.291L223.251 129.328L224.276 128.933L224.974 129.16L226.051 130.15L226.639 130.383L227.305 130.135L228.591 128.923L229.246 128.511L230.329 128.169L230.422 128.111L231.552 127.41L232.088 127.199L232.322 127.009L232.53 126.625L232.686 125.85L232.796 125.544L233.149 125.118L233.394 125.07L233.685 125.181L234.185 125.233L234.658 125.017L235.517 124.216L235.835 124.074L236.402 124.364L236.719 124.722L237.063 124.87L237.708 124.527L238.53 123.684L239.243 122.582L239.837 121.339L240.94 117.913L241.268 117.244L241.695 116.675L242.558 115.752L242.626 115.684L243.006 115.104L243.032 114.951L243.043 114.799V114.646L243.021 114.493L242.964 113.744L242.975 113.386L243.006 113.059L243.823 112.727L245.582 112.606L251.588 111.199H252.051L252.488 111.425L253.331 112.206L253.742 112.316L254.632 112.411L256.178 113.37L257.187 113.46L257.895 113.402L258.733 113.555L259.524 113.918L260.097 114.488L260.815 114.656L263.016 113.592L263.958 113.375L264.473 113.602L264.827 113.902L265.15 114.045L265.571 113.802L265.904 113.318L266.066 112.859L266.305 112.453L266.862 112.121L267.335 112.021L268.303 112L269.776 111.526L270.193 111.652L271.145 112.232L271.66 112.437L271.905 112.664L272.092 113.038L272.352 113.876L272.545 114.182L272.998 114.393L274.044 114.377L274.527 114.488L274.772 114.978L275.142 116.764L275.376 117.228L276.963 119.7L277.634 120.49L278.384 121.054L279.274 121.36L280.138 121.286L281.605 120.527L282.827 120.343L283.692 119.842L284.104 119.679L285.586 119.599L286.105 119.415L286.622 119.378L288.32 119.547L288.845 119.389L289.34 118.988L289.873 118.292L289.901 115.183L290.213 114.477L290.313 113.797L289.978 112.042L290.036 111.167L290.462 110.461L292.314 108.943L292.491 108.627L292.79 107.937L293.003 107.631L293.351 107.389L294.106 107.146L294.448 106.92L294.902 106.308L295.25 105.497L295.432 104.574L295.397 103.642L295.485 103.062L295.703 102.777L295.969 102.566L296.218 102.208L296.417 101.707L296.477 101.412L296.422 99.9365L296.364 99.5782L296.386 99.2409L296.571 98.7086L296.624 98.6295L296.842 98.3134L297.525 97.7283L297.79 97.3384L297.849 97.0749V96.5108L297.879 96.2949L298.233 95.5201L298.852 93.6915L299.352 93.296L300.444 93.1327L300.881 92.7534L300.87 92.0156L301 91.0089L301.21 90.0074L301.428 89.2855L300.45 88.8005L300.455 88.8271Z" fill="url(#skFill)" stroke="#F4C21F" stroke-width="1.2" stroke-linejoin="round"/>
+            </g>
+
+            <!-- CZ country label -->
+            <text x="75" y="148" font-family="Manrope" font-size="7" font-weight="800" fill="#E30A1A" letter-spacing="3" opacity="0.7">ČESKO</text>
+            <!-- SK country label -->
+            <text x="225" y="148" font-family="Manrope" font-size="7" font-weight="800" fill="#C89A10" letter-spacing="3" opacity="0.75">SLOVENSKO</text>
+
+            <!-- CZ pins - positioned roughly on CZ path (translated by +15,+8) -->
+            <g font-family="Manrope" font-weight="700" fill="#0f172a">
+              <!-- Praha (HQ) -->
+              <g>
+                <circle cx="60" cy="42" r="9" fill="#E30A1A" fill-opacity="0.18">
+                  <animate attributeName="r" values="7;12;7" dur="3s" repeatCount="indefinite"/>
+                  <animate attributeName="fill-opacity" values="0.25;0.04;0.25" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="60" cy="42" r="4" fill="#E30A1A" stroke="#fff" stroke-width="1.8"/>
+                <text x="67" y="40" font-size="8">Praha</text>
+                <text x="67" y="48" font-size="5.5" font-weight="500" fill="#64748b">HQ · Central</text>
+              </g>
+              <!-- Liberec (NW-top) -->
+              <circle cx="70" cy="24" r="2.8" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="74" y="22" font-size="6.5" fill="#475569">Liberec</text>
+              <!-- Ústí n. L. -->
+              <circle cx="43" cy="22" r="2.8" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="18" y="20" font-size="6.5" fill="#475569">Ústí n.L.</text>
+              <!-- Karlovy Vary -->
+              <circle cx="22" cy="32" r="2.8" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="2" y="35" font-size="6" fill="#475569">K. Vary</text>
+              <!-- Plzeň -->
+              <circle cx="32" cy="50" r="3" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="12" y="54" font-size="6.5" fill="#475569">Plzeň</text>
+              <!-- České Budějovice -->
+              <circle cx="54" cy="72" r="2.8" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="22" y="78" font-size="6" fill="#475569">Č. Budějovice</text>
+              <!-- Hradec Králové -->
+              <circle cx="92" cy="38" r="2.8" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="97" y="36" font-size="6.5" fill="#475569">Hradec Kr.</text>
+              <!-- Pardubice -->
+              <circle cx="88" cy="47" r="2.5" fill="#E30A1A" stroke="#fff" stroke-width="1.4"/>
+              <text x="93" y="52" font-size="6" fill="#475569">Pardubice</text>
+              <!-- Jihlava -->
+              <circle cx="88" cy="63" r="2.5" fill="#E30A1A" stroke="#fff" stroke-width="1.4"/>
+              <text x="72" y="68" font-size="6" fill="#475569">Jihlava</text>
+              <!-- Brno -->
+              <g>
+                <circle cx="120" cy="68" r="7" fill="#E30A1A" fill-opacity="0.15">
+                  <animate attributeName="r" values="5.5;10;5.5" dur="3.2s" repeatCount="indefinite"/>
+                  <animate attributeName="fill-opacity" values="0.22;0.03;0.22" dur="3.2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="120" cy="68" r="3.6" fill="#E30A1A" stroke="#fff" stroke-width="1.6"/>
+                <text x="126" y="66" font-size="8">Brno</text>
+              </g>
+              <!-- Olomouc -->
+              <circle cx="140" cy="55" r="2.8" fill="#E30A1A" stroke="#fff" stroke-width="1.5"/>
+              <text x="145" y="53" font-size="6.5" fill="#475569">Olomouc</text>
+              <!-- Zlín -->
+              <circle cx="152" cy="68" r="2.6" fill="#E30A1A" stroke="#fff" stroke-width="1.4"/>
+              <text x="157" y="72" font-size="6" fill="#475569">Zlín</text>
+              <!-- Ostrava -->
+              <g>
+                <circle cx="160" cy="45" r="7" fill="#E30A1A" fill-opacity="0.15">
+                  <animate attributeName="r" values="5.5;10;5.5" dur="2.8s" repeatCount="indefinite"/>
+                  <animate attributeName="fill-opacity" values="0.22;0.03;0.22" dur="2.8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="160" cy="45" r="3.6" fill="#E30A1A" stroke="#fff" stroke-width="1.6"/>
+                <text x="166" y="43" font-size="8">Ostrava</text>
+              </g>
+            </g>
+
+            <!-- SK pins -->
+            <g font-family="Manrope" font-weight="700" fill="#0f172a">
+              <!-- Bratislava -->
+              <g>
+                <circle cx="177" cy="94" r="7" fill="#F4C21F" fill-opacity="0.25">
+                  <animate attributeName="r" values="5.5;10;5.5" dur="3.4s" repeatCount="indefinite"/>
+                  <animate attributeName="fill-opacity" values="0.35;0.05;0.35" dur="3.4s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="177" cy="94" r="3.6" fill="#F4C21F" stroke="#fff" stroke-width="1.6"/>
+                <text x="154" y="110" font-size="8">Bratislava</text>
+              </g>
+              <!-- Trnava -->
+              <circle cx="188" cy="92" r="2.5" fill="#F4C21F" stroke="#fff" stroke-width="1.4"/>
+              <text x="192" y="91" font-size="6" fill="#475569">Trnava</text>
+              <!-- Nitra -->
+              <circle cx="200" cy="100" r="2.6" fill="#F4C21F" stroke="#fff" stroke-width="1.4"/>
+              <text x="204" y="104" font-size="6" fill="#475569">Nitra</text>
+              <!-- Trenčín -->
+              <circle cx="200" cy="86" r="2.5" fill="#F4C21F" stroke="#fff" stroke-width="1.4"/>
+              <text x="204" y="85" font-size="6" fill="#475569">Trenčín</text>
+              <!-- Žilina -->
+              <circle cx="220" cy="78" r="3" fill="#F4C21F" stroke="#fff" stroke-width="1.5"/>
+              <text x="224" y="77" font-size="6.5" fill="#475569">Žilina</text>
+              <!-- Banská Bystrica -->
+              <circle cx="235" cy="96" r="2.8" fill="#F4C21F" stroke="#fff" stroke-width="1.5"/>
+              <text x="208" y="118" font-size="6.5" fill="#475569">B. Bystrica</text>
+              <!-- Poprad -->
+              <circle cx="255" cy="82" r="2.5" fill="#F4C21F" stroke="#fff" stroke-width="1.4"/>
+              <text x="259" y="81" font-size="6" fill="#475569">Poprad</text>
+              <!-- Prešov -->
+              <circle cx="278" cy="85" r="2.8" fill="#F4C21F" stroke="#fff" stroke-width="1.5"/>
+              <text x="282" y="84" font-size="6.5" fill="#475569">Prešov</text>
+              <!-- Košice -->
+              <g>
+                <circle cx="282" cy="95" r="7" fill="#F4C21F" fill-opacity="0.25">
+                  <animate attributeName="r" values="5.5;10;5.5" dur="3.1s" repeatCount="indefinite"/>
+                  <animate attributeName="fill-opacity" values="0.35;0.05;0.35" dur="3.1s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="282" cy="95" r="3.6" fill="#F4C21F" stroke="#fff" stroke-width="1.6"/>
+                <text x="288" y="100" font-size="8">Košice</text>
+              </g>
+            </g>
+
+            <!-- connector line CZ-SK -->
+            <path d="M 120,68 C 140,80 160,90 177,94" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2 3" fill="none" opacity="0.7"/>
+          </svg</svg>
+          <div class="mt-2 flex items-center justify-between text-[11px] font-mono text-slate2-500">
+            <span>mezinárodní skupina DOMIDOMI</span>
+            <span class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-brand"></span>ČR</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-lime2-500"></span>SR</span>
+            </span>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOMIDOMI editorial mosaic — header in-grid, carousel full-bleed -->
+  <div class="relative mt-16 pb-4 reveal" style="--i:3">
+    <div class="max-w-[1360px] mx-auto px-4 lg:px-16 mb-8">
+      <div class="max-w-2xl">
+        <div class="eyebrow text-slate2-500">· DOMIDOMI v číslech</div>
+        <h3 class="mt-2 text-[28px] md:text-[40px] font-extrabold text-slate2-900 leading-[1.05]">Realizace, které mluví.</h3>
+        <p class="mt-3 text-slate2-600 text-[15px] md:text-[16px] max-w-[560px]">Každý den instalujeme fotovoltaiky, tepelná čerpadla a&nbsp;baterie po&nbsp;celé ČR a&nbsp;SR. Tady je malý výřez z&nbsp;toho, co za&nbsp;sebou jako tým máme.</p>
+      </div>
+    </div>
+
+        <div class="data-mosaic space-y-3 select-none">
+          <!-- ROW A -->
+          <div class="relative overflow-hidden">
+            <div class="data-row data-row-a">
+              <!-- SET A1 -->
+              <div class="flex gap-[14px] shrink-0">
+                <!-- big stat -->
+                <div class="dm-tile dm-w-lg dm-stat dm-red">
+                  <div class="eye text-white/70">/ 01 · realizace</div>
+                  <div>
+                    <div class="big tabular">23&nbsp;000<span class="text-[32px] align-top">+</span></div>
+                    <div class="lbl mt-2">dokončených instalací FVE, tepelných čerpadel a&nbsp;baterií.</div>
+                  </div>
+                </div>
+                <!-- photo 1 — rodinný dům s FVE -->
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=80')">
+                  <span class="tag">FVE 9,8 kWp</span>
+                  <div class="cap">
+                    <div><div class="meta">České Budějovice</div><div class="place">Rodina Novákova</div></div>
+                    <div class="meta">04/26</div>
+                  </div>
+                </div>
+                <!-- quote -->
+                <div class="dm-tile dm-w-md dm-quote">
+                  <div class="qmark">"</div>
+                  <p>V DOMIDOMI jsem si za&nbsp;rok vydělal víc než za&nbsp;tři roky v&nbsp;bance. A&nbsp;baví mě to.</p>
+                  <div class="who">
+                    <div class="av" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80')"></div>
+                    <div><div class="nm">Tomáš H.</div><div class="rl">obchodník · Brno</div></div>
+                  </div>
+                </div>
+                <!-- year stat -->
+                <div class="dm-tile dm-w-sq dm-stat dm-ink">
+                  <div class="eye">/ 02 · na&nbsp;trhu</div>
+                  <div>
+                    <div class="big tabular">15</div>
+                    <div class="lbl mt-1">let stavíme značku DOMIDOMI.</div>
+                  </div>
+                </div>
+                <!-- photo 2 — technik na střeše -->
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1605980776566-0486c3ac7617?auto=format&fit=crop&w=900&q=80')">
+                  <span class="tag">FVE 36 kWp</span>
+                  <div class="cap">
+                    <div><div class="meta">Plzeň</div><div class="place">Průmyslový objekt</div></div>
+                    <div class="meta">2026</div>
+                  </div>
+                </div>
+                <!-- earnings stat -->
+                <div class="dm-tile dm-w-md dm-stat dm-ink">
+                  <div class="eye">/ 03 · výdělek</div>
+                  <div>
+                    <div class="big tabular">118k</div>
+                    <div class="lbl mt-1">Kč měsíčně — průměrný výdělek obchodníka.</div>
+                  </div>
+                </div>
+                <!-- photo 3 — tým -->
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80')">
+                  <span class="tag">Tým · Praha</span>
+                  <div class="cap">
+                    <div><div class="meta">HQ</div><div class="place">Morning stand-up</div></div>
+                    <div class="meta">09:00</div>
+                  </div>
+                </div>
+              </div>
+              <!-- SET A2 duplicate for seamless loop -->
+              <div class="flex gap-[14px] shrink-0" aria-hidden="true">
+                <div class="dm-tile dm-w-lg dm-stat dm-red"><div class="eye text-white/70">/ 01 · realizace</div><div><div class="big tabular">23&nbsp;000<span class="text-[32px] align-top">+</span></div><div class="lbl mt-2">dokončených instalací FVE, tepelných čerpadel a&nbsp;baterií.</div></div></div>
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=80')"><span class="tag">FVE 9,8 kWp</span><div class="cap"><div><div class="meta">České Budějovice</div><div class="place">Rodina Novákova</div></div><div class="meta">04/26</div></div></div>
+                <div class="dm-tile dm-w-md dm-quote"><div class="qmark">"</div><p>V DOMIDOMI jsem si za&nbsp;rok vydělal víc než za&nbsp;tři roky v&nbsp;bance. A&nbsp;baví mě to.</p><div class="who"><div class="av" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80')"></div><div><div class="nm">Tomáš H.</div><div class="rl">obchodník · Brno</div></div></div></div>
+                <div class="dm-tile dm-w-sq dm-stat dm-ink"><div class="eye">/ 02 · na&nbsp;trhu</div><div><div class="big tabular">15</div><div class="lbl mt-1">let stavíme značku DOMIDOMI.</div></div></div>
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1605980776566-0486c3ac7617?auto=format&fit=crop&w=900&q=80')"><span class="tag">FVE 36 kWp</span><div class="cap"><div><div class="meta">Plzeň</div><div class="place">Průmyslový objekt</div></div><div class="meta">2026</div></div></div>
+                <div class="dm-tile dm-w-md dm-stat dm-ink"><div class="eye">/ 03 · výdělek</div><div><div class="big tabular">118k</div><div class="lbl mt-1">Kč měsíčně — průměrný výdělek obchodníka.</div></div></div>
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80')"><span class="tag">Tým · Praha</span><div class="cap"><div><div class="meta">HQ</div><div class="place">Morning stand-up</div></div><div class="meta">09:00</div></div></div>
+              </div>
+            </div>
+            <span class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-paper to-transparent z-[2]"></span>
+            <span class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-paper to-transparent z-[2]"></span>
+          </div>
+
+          <!-- ROW B (opposite direction) -->
+          <div class="relative overflow-hidden">
+            <div class="data-row data-row-b">
+              <!-- SET B1 -->
+              <div class="flex gap-[14px] shrink-0">
+                <!-- photo — tepelné čerpadlo -->
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1627906812210-d04d5c61d0b1?auto=format&fit=crop&w=900&q=80')">
+                  <span class="tag">Tepelné čerpadlo</span>
+                  <div class="cap">
+                    <div><div class="meta">Olomouc</div><div class="place">Rodinný dům</div></div>
+                    <div class="meta">14 kW</div>
+                  </div>
+                </div>
+                <!-- leads stat -->
+                <div class="dm-tile dm-w-md dm-stat dm-lime">
+                  <div class="eye">/ 04 · leady</div>
+                  <div>
+                    <div class="big tabular">100<span class="text-[32px] align-top">+</span></div>
+                    <div class="lbl mt-1">kvalitních leadů měsíčně — každý obchodník dostává od&nbsp;nás.</div>
+                  </div>
+                </div>
+                <!-- gauge -->
+                <div class="dm-tile dm-w-md dm-gauge">
+                  <div class="eye font-mono text-[10px] uppercase opacity-70 tracking-widest">/ 05 · konverze</div>
+                  <div class="bar-row">
+                    <div>
+                      <div class="row mb-1"><span>schůzka → nabídka</span><span>74%</span></div>
+                      <div class="bar"><span style="width:74%"></span></div>
+                    </div>
+                    <div>
+                      <div class="row mb-1"><span>nabídka → smlouva</span><span>38%</span></div>
+                      <div class="bar"><span style="width:38%;background:#fde68a"></span></div>
+                    </div>
+                    <div>
+                      <div class="row mb-1"><span>smlouva → realizace</span><span>96%</span></div>
+                      <div class="bar"><span style="width:96%;background:#E30A1A"></span></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- photo — instalace panelu -->
+                <div class="dm-tile dm-w-sq dm-photo" style="background-image:url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=900&q=80')">
+                  <span class="tag">8,4 kWp</span>
+                  <div class="cap">
+                    <div><div class="meta">Liberec</div><div class="place">p.&nbsp;Svoboda</div></div>
+                  </div>
+                </div>
+                <!-- big realiz tile -->
+                <div class="dm-tile dm-w-md dm-stat dm-paper">
+                  <div class="eye">/ 06 · instalovaný výkon</div>
+                  <div>
+                    <div class="big tabular">124 <span class="text-[24px]">MW</span></div>
+                    <div class="lbl mt-1">celkový výkon FVE, které pro&nbsp;klienty točí proud.</div>
+                  </div>
+                </div>
+                <!-- badge — pobočky -->
+                <div class="dm-tile dm-w-sq dm-badge">
+                  <div class="stamp">CZ<br>SK</div>
+                  <div>
+                    <h5>12 poboček</h5>
+                    <div class="sub mt-1">ČR + SK · 180&nbsp;lidí</div>
+                  </div>
+                </div>
+                <!-- photo — baterie / rozvaděč -->
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1581091870622-1c6a4e4a1ac8?auto=format&fit=crop&w=900&q=80')">
+                  <span class="tag">Baterie 10 kWh</span>
+                  <div class="cap">
+                    <div><div class="meta">Ostrava</div><div class="place">Rodinný dům</div></div>
+                    <div class="meta">2025</div>
+                  </div>
+                </div>
+                <!-- time-to-install stat -->
+                <div class="dm-tile dm-w-sq dm-stat dm-amber">
+                  <div class="eye">/ 07 · rychlost</div>
+                  <div>
+                    <div class="big tabular">30<span class="text-[24px] align-top">&nbsp;dní</span></div>
+                    <div class="lbl mt-1">průměrná doba dokončení zakázky.</div>
+                  </div>
+                </div>
+              </div>
+              <!-- SET B2 duplicate -->
+              <div class="flex gap-[14px] shrink-0" aria-hidden="true">
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1627906812210-d04d5c61d0b1?auto=format&fit=crop&w=900&q=80')"><span class="tag">Tepelné čerpadlo</span><div class="cap"><div><div class="meta">Olomouc</div><div class="place">Rodinný dům</div></div><div class="meta">14 kW</div></div></div>
+                <div class="dm-tile dm-w-md dm-stat dm-lime"><div class="eye">/ 04 · leady</div><div><div class="big tabular">100<span class="text-[32px] align-top">+</span></div><div class="lbl mt-1">kvalitních leadů měsíčně — každý obchodník dostává od&nbsp;nás.</div></div></div>
+                <div class="dm-tile dm-w-md dm-gauge"><div class="eye font-mono text-[10px] uppercase opacity-70 tracking-widest">/ 05 · konverze</div><div class="bar-row"><div><div class="row mb-1"><span>schůzka → nabídka</span><span>74%</span></div><div class="bar"><span style="width:74%"></span></div></div><div><div class="row mb-1"><span>nabídka → smlouva</span><span>38%</span></div><div class="bar"><span style="width:38%;background:#fde68a"></span></div></div><div><div class="row mb-1"><span>smlouva → realizace</span><span>96%</span></div><div class="bar"><span style="width:96%;background:#E30A1A"></span></div></div></div></div>
+                <div class="dm-tile dm-w-sq dm-photo" style="background-image:url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=900&q=80')"><span class="tag">8,4 kWp</span><div class="cap"><div><div class="meta">Liberec</div><div class="place">p.&nbsp;Svoboda</div></div></div></div>
+                <div class="dm-tile dm-w-md dm-stat dm-paper"><div class="eye">/ 06 · instalovaný výkon</div><div><div class="big tabular">124 <span class="text-[24px]">MW</span></div><div class="lbl mt-1">celkový výkon FVE, které pro&nbsp;klienty točí proud.</div></div></div>
+                <div class="dm-tile dm-w-sq dm-badge"><div class="stamp">CZ<br>SK</div><div><h5>12 poboček</h5><div class="sub mt-1">ČR + SK · 180&nbsp;lidí</div></div></div>
+                <div class="dm-tile dm-w-md dm-photo" style="background-image:url('https://images.unsplash.com/photo-1581091870622-1c6a4e4a1ac8?auto=format&fit=crop&w=900&q=80')"><span class="tag">Baterie 10 kWh</span><div class="cap"><div><div class="meta">Ostrava</div><div class="place">Rodinný dům</div></div><div class="meta">2025</div></div></div>
+                <div class="dm-tile dm-w-sq dm-stat dm-amber"><div class="eye">/ 07 · rychlost</div><div><div class="big tabular">30<span class="text-[24px] align-top">&nbsp;dní</span></div><div class="lbl mt-1">průměrná doba dokončení zakázky.</div></div></div>
+              </div>
+            </div>
+            <span class="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-paper to-transparent z-[2]"></span>
+            <span class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-paper to-transparent z-[2]"></span>
+          </div>
+        </div>
+  </div>
+</section>
+
+<!-- VÝDĚLKY / PROOF -->
+<section id="vydelky" class="relative overflow-hidden bg-paper border-t border-line">
+  <div aria-hidden class="pointer-events-none absolute -right-8 top-12 spotlight-num text-[220px] md:text-[300px] select-none">06</div>
+  <div class="relative max-w-[1360px] mx-auto px-4 lg:px-16 py-24 md:py-32">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+      <div class="lg:col-span-5 lg:sticky lg:top-24 reveal">
+        <div class="eyebrow text-slate2-500 mb-4">· Proč do toho jít s námi</div>
+        <h2 class="h-tight text-[40px] md:text-[56px] font-extrabold text-slate2-900">Co znamená práce obchodníka pro DOMIDOMI v&nbsp;<span class="swoosh">číslech</span>?</h2>
+        <p class="mt-5 text-slate2-600 text-[17px] max-w-[460px] leading-relaxed">Nenabízíme jistotu fixního platu, nabízíme ti vstupenku na cestu neomezených příjmů a absolutní svobody.</p>
+        <ul class="mt-8 space-y-3 text-slate2-900">
+          <li class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand/10 text-brand grid place-items-center">🚀</span> <span class="font-semibold">Žádný limit výdělku</span></li>
+          <li class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-slate-100 text-slate2-900 grid place-items-center">⏱</span> <span class="font-semibold">Flexibilní pracovní doba</span></li>
+          <li class="flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-slate-100 text-slate2-900 grid place-items-center">💼</span> <span class="font-semibold">Pracuješ odkud chceš</span></li>
+        </ul>
+        <button data-open-modal class="mt-10 btn-primary rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold inline-flex items-center gap-3 glow-red">
+          Chci těchhle 150k
+          <span class="grid place-items-center w-10 h-10 rounded-full bg-white/15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+      </div>
+
+      <!-- Right cards -->
+      <div class="lg:col-span-7 space-y-5">
+        <!-- Earnings card -->
+        <div class="earnings-card rounded-3xl bg-ink-900 text-white p-7 md:p-9 shadow-card relative reveal overflow-hidden" style="--i:1">
+          <div class="relative flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] font-mono uppercase tracking-[.18em] text-white/50">/ výdělek obchodníka</div>
+              <div class="mt-1 font-semibold text-xl">Měsíční odměna</div>
+            </div>
+            <div class="text-right">
+              <div class="text-[11px] font-mono uppercase tracking-[.14em] text-white/40">průměr týmu</div>
+              <div class="tabular font-extrabold text-xl text-sun-300">~ 118 000 Kč</div>
+            </div>
+          </div>
+
+          <div class="relative mt-8 space-y-6 text-[15px]">
+            <div class="er-row" data-pct="53">
+              <div class="flex justify-between items-end mb-2">
+                <div class="flex items-baseline gap-2 flex-wrap">
+                  <span class="text-white/85 font-medium">Průměrný obchodník</span>
+                  <span class="text-[11px] font-mono text-white/40 uppercase tracking-widest">start</span>
+                </div>
+                <span class="er-num tabular font-bold" data-to="80000">0&nbsp;Kč</span>
+              </div>
+              <div class="er-track h-2.5 rounded-full bg-white/10 overflow-hidden">
+                <div class="er-bar h-full bg-white/55 rounded-full" style="--w:53%"></div>
+              </div>
+            </div>
+            <div class="er-row" data-pct="67">
+              <div class="flex justify-between items-end mb-2">
+                <div class="flex items-baseline gap-2 flex-wrap">
+                  <span class="text-white/85 font-medium">Dobrý obchodník</span>
+                  <span class="text-[11px] font-mono text-white/40 uppercase tracking-widest">3.–6.&nbsp;měsíc</span>
+                </div>
+                <span class="er-num tabular font-bold" data-to="100000">0&nbsp;Kč</span>
+              </div>
+              <div class="er-track h-2.5 rounded-full bg-white/10 overflow-hidden">
+                <div class="er-bar h-full bg-white/85 rounded-full" style="--w:67%"></div>
+              </div>
+            </div>
+            <div class="er-row is-top" data-pct="100">
+              <div class="flex justify-between items-end mb-2">
+                <div class="flex items-baseline gap-2 flex-wrap">
+                  <span class="text-white font-semibold">Skvělý obchodník</span>
+                  <span class="text-[11px] font-mono text-sun-300/80 uppercase tracking-widest">top 20&nbsp;%</span>
+                  <!-- inline handwritten callout -->
+                  <span class="hand-note text-sun-300 font-hand text-[16px] rotate-[-2deg] inline-flex items-center gap-1 ml-1 whitespace-nowrap">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" class="-translate-y-[2px]"><path d="M2 11 C 6 4, 10 2, 16 3" stroke="#fcd34d" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M12 1 L16 3 L14 7" stroke="#fcd34d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                    průměr po&nbsp;3&nbsp;měsících
+                  </span>
+                </div>
+                <span class="er-num tabular font-bold text-sun-300" data-to="150000" data-suffix="+">0&nbsp;Kč</span>
+              </div>
+              <div class="er-track h-2.5 rounded-full bg-white/10 overflow-hidden relative">
+                <div class="er-bar er-bar-top h-full rounded-full" style="--w:100%;background:linear-gradient(90deg,#fde68a 0%,#fcd34d 50%,#f59e0b 100%);box-shadow:0 0 20px rgba(252,211,77,.35)"></div>
+                <span class="er-shine"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- footnote -->
+          <div class="relative mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-white/55 font-mono">
+            <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-lime2-400"></span>bez stropu</span>
+            <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-lime2-400"></span>výplata měsíčně</span>
+            <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-lime2-400"></span>100+ leadů od&nbsp;firmy</span>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <!-- Provisions -->
+          <div class="rounded-3xl bg-sun-200 p-6 shadow-card reveal" style="--i:2">
+            <div class="font-semibold">Provizní systém</div>
+            <dl class="mt-5 space-y-3 text-[15px]">
+              <div class="flex justify-between pb-2 border-b border-ink-900/10"><dt class="text-ink-900/70">Sazba</dt><dd class="font-bold">4 %</dd></div>
+              <div class="flex justify-between pb-2 border-b border-ink-900/10"><dt class="text-ink-900/70">Výplata</dt><dd class="font-bold">Měsíčně</dd></div>
+              <div class="flex justify-between"><dt class="text-ink-900/70">Limit</dt><dd class="font-bold">Bez omezení</dd></div>
+            </dl>
+            <div class="mt-5 text-[11px] font-mono text-ink-900/60">+ nárazový bonus za prodej křížových produktů</div>
+          </div>
+          <!-- Quote -->
+          <div class="rounded-3xl bg-white border border-line p-6 shadow-card reveal" style="--i:3">
+            <svg width="28" height="20" viewBox="0 0 28 20" fill="none" class="text-brand"><path d="M10 0 C 4 2, 0 8, 0 16 V20 H10 V10 H5 C6 6, 8 3, 11 2zM24 0 C 18 2, 14 8, 14 16 V20 H24 V10 H19 C20 6, 22 3, 25 2z" fill="currentColor"/></svg>
+            <p class="mt-4 text-[15px] text-slate2-900 leading-relaxed">Za 2 roky jsem se dostal na <span class="font-bold">120 000 Kč měsíčně</span>. Férový systém a skvělý tým.</p>
+            <div class="mt-6 flex items-center gap-3">
+              <span class="w-10 h-10 rounded-full photo-ph"></span>
+              <div class="text-[13px]">
+                <div class="font-bold">Karel Vystrčil</div>
+                <div class="text-slate2-500">B2B obchodník · 2 roky</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA LIGHT -->
+<section class="relative bg-paper">
+  <div class="max-w-[1360px] mx-auto px-4 lg:px-16 pb-24">
+    <div class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-lime2-200 via-lime2-50 to-sun-200 p-10 md:p-14 border border-lime2-200">
+      <div class="absolute -right-16 -bottom-16 w-72 h-72 rounded-full bg-white/50 blur-2xl"></div>
+      <div class="relative grid md:grid-cols-5 gap-8 items-center">
+        <div class="md:col-span-3">
+          <div class="eyebrow text-ink-900/70">· 4 kroky, 60 sekund</div>
+          <h3 class="mt-3 h-tight text-4xl md:text-5xl font-extrabold text-ink-900">Máš na to u nás pracovat?<br/>Ověř si to.</h3>
+          <p class="mt-4 text-ink-900/70 max-w-[480px]">Řekni nám, o jaký trh máš zájem a jaké máš zkušenosti. Ozveme se ti do 24 hodin s konkrétním termínem.</p>
+        </div>
+        <div class="md:col-span-2 flex md:justify-end">
+          <button data-open-modal class="btn-primary rounded-full pl-7 pr-2 py-2 text-base font-semibold inline-flex items-center gap-3 glow-red">
+            Chci se přidat k týmu
+            <span class="grid place-items-center w-11 h-11 rounded-full bg-white/15"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA DARK -->
+<section class="relative overflow-hidden section-dark text-white">
+  <div class="max-w-[1360px] mx-auto px-4 lg:px-16 py-20 md:py-28 text-center relative">
+    <div class="max-w-3xl mx-auto reveal">
+      <div class="eyebrow text-white/60 mb-5">· Teď, nebo nikdy</div>
+      <h2 class="h-tight text-[44px] md:text-[72px] font-extrabold">Máš na to u nás pracovat?<br/><span class="text-lime2-300">Ověř si to.</span></h2>
+      <p class="mt-6 text-white/70 text-lg">60 sekund. 4 kroky. Žádný životopis, žádný cover letter.</p>
+      <button data-open-modal class="mt-10 btn-primary rounded-full pl-8 pr-2 py-2.5 text-lg font-semibold inline-flex items-center gap-3 glow-red">
+        Chci se přidat k týmu
+        <span class="grid place-items-center w-12 h-12 rounded-full bg-white/15"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+      <div class="mt-6 text-xs text-white/50">Odpovíme ti do 24 hodin · termín pohovoru do týdne</div>
+    </div>
+  </div>
+</section>
+
+<!-- INLINE FORMULÁŘ -->
+<section id="prihlaska" class="relative bg-paper border-t border-line">
+  <div class="max-w-[1360px] mx-auto px-4 lg:px-16 py-24 md:py-32">
+    <div class="grid lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-5 reveal">
+        <div class="eyebrow text-slate2-500 mb-4">· Přihláška</div>
+        <h2 class="h-tight text-[40px] md:text-[52px] font-extrabold text-slate2-900">Nebo vyplň rovnou tady.</h2>
+        <p class="mt-5 text-slate2-600 text-[17px] leading-relaxed max-w-[420px]">Stejné 4 kroky jako v modálu — jen pohodlně vedle obsahu. Žádná registrace.</p>
+        <div class="mt-10 rounded-2xl bg-white border border-line p-5 shadow-card max-w-[420px]">
+          <div class="text-[11px] font-mono text-slate2-500 uppercase tracking-[.2em]">Co bude dál</div>
+          <ol class="mt-3 space-y-3 text-sm text-slate2-900">
+            <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 text-slate2-900 grid place-items-center text-xs font-bold">1</span>Do 24 h ti zavolá náš teamleader.</li>
+            <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-slate-100 text-slate2-900 grid place-items-center text-xs font-bold">2</span>Domluvíte termín osobního pohovoru.</li>
+            <li class="flex gap-3"><span class="w-6 h-6 rounded-full bg-brand text-white grid place-items-center text-xs font-bold">3</span>Pokud si plácnete — školení, appka, první leady.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 reveal" style="--i:2">
+        <div id="inline-form-host" class="rounded-3xl bg-white border border-line p-6 md:p-8 shadow-card">
+          <!-- mounted by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="relative bg-paper border-t border-line">
+  <div class="max-w-[1360px] mx-auto px-4 lg:px-16 py-24 md:py-32">
+    <div class="grid lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-4 reveal">
+        <div class="eyebrow text-slate2-500 mb-4">· FAQ</div>
+        <h2 class="h-tight text-[40px] md:text-[52px] font-extrabold text-slate2-900">Otázky, které<br/>dostáváme nejčastěji.</h2>
+        <p class="mt-5 text-slate2-600 leading-relaxed max-w-[380px]">Něco chybí? Napiš nám do formuláře — odpovíme ti osobně, ne šablonou.</p>
+      </div>
+      <div class="lg:col-span-8 space-y-3">
+        <!-- faq items -->
+        <details class="group rounded-2xl bg-white border border-line p-5 shadow-card open:shadow-cardHover">
+          <summary class="flex items-center justify-between cursor-pointer list-none">
+            <span class="font-semibold text-[17px] text-slate2-900">Musím mít zkušenosti s obchodem?</span>
+            <span class="plus w-8 h-8 rounded-full bg-slate-100 grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          </summary>
+          <p class="mt-4 text-slate2-600 leading-relaxed">Ne. Zaškolíme tě od nuly — skripty, apka, doprovod na prvních schůzkách. Musíš ale umět s lidmi a chtít se učit.</p>
+        </details>
+        <details class="group rounded-2xl bg-white border border-line p-5 shadow-card open:shadow-cardHover">
+          <summary class="flex items-center justify-between cursor-pointer list-none">
+            <span class="font-semibold text-[17px] text-slate2-900">Jak to funguje s leady — vážně žádný cold call?</span>
+            <span class="plus w-8 h-8 rounded-full bg-slate-100 grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          </summary>
+          <p class="mt-4 text-slate2-600 leading-relaxed">Marketing + servisní tým ti dodá ~120 horkých leadů měsíčně. Tvoje role: schůzka, nabídka, podpis. Žádné vytáčení ze seznamu.</p>
+        </details>
+        <details class="group rounded-2xl bg-white border border-line p-5 shadow-card open:shadow-cardHover">
+          <summary class="flex items-center justify-between cursor-pointer list-none">
+            <span class="font-semibold text-[17px] text-slate2-900">Jak rychle se dostanu na slíbené výdělky?</span>
+            <span class="plus w-8 h-8 rounded-full bg-slate-100 grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          </summary>
+          <p class="mt-4 text-slate2-600 leading-relaxed">Průměr 80 000 Kč vidíme u našich OZ po cca 3 měsících. Není to garance — je to realita z interních dat.</p>
+        </details>
+        <details class="group rounded-2xl bg-white border border-line p-5 shadow-card open:shadow-cardHover">
+          <summary class="flex items-center justify-between cursor-pointer list-none">
+            <span class="font-semibold text-[17px] text-slate2-900">Potřebuju řidičák a auto?</span>
+            <span class="plus w-8 h-8 rounded-full bg-slate-100 grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          </summary>
+          <p class="mt-4 text-slate2-600 leading-relaxed">Řidičák ano (jezdí se ke klientům). Auto pomůžeme zařídit přes firemní leasing po zaškolení.</p>
+        </details>
+        <details class="group rounded-2xl bg-white border border-line p-5 shadow-card open:shadow-cardHover">
+          <summary class="flex items-center justify-between cursor-pointer list-none">
+            <span class="font-semibold text-[17px] text-slate2-900">Je to živnost, nebo zaměstnanecký poměr?</span>
+            <span class="plus w-8 h-8 rounded-full bg-slate-100 grid place-items-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          </summary>
+          <p class="mt-4 text-slate2-600 leading-relaxed">Spolupracujeme na IČO — odpovídá to logice „pán svého času“ a provizí bez stropu. S účetnictvím pomůžeme.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative bg-ink-900 text-white overflow-hidden">
+  <!-- ambient brand wash -->
+  <div aria-hidden class="pointer-events-none absolute -top-20 -right-20 w-[460px] h-[460px] rounded-full bg-brand/10 blur-[120px]"></div>
+  <div aria-hidden class="pointer-events-none absolute -bottom-24 -left-16 w-[420px] h-[420px] rounded-full bg-sun-400/5 blur-[120px]"></div>
+  <div class="relative max-w-[1360px] mx-auto px-4 lg:px-16 pt-24 pb-10">
+
+    <!-- Top CTA block -->
+    <div class="grid lg:grid-cols-12 gap-10 items-end reveal">
+      <div class="lg:col-span-7">
+        <div class="eyebrow text-white/50 mb-5">· Poslední krok</div>
+        <h2 class="h-tight text-[42px] md:text-[64px] font-extrabold leading-[.95] tracking-tight">
+          Ozvi&nbsp;se.<br/>
+          Zbytek už <span class="swoosh">zařídíme</span>.
+        </h2>
+        <p class="mt-6 text-white/60 text-[17px] max-w-[520px] leading-relaxed">Stačí krátký telefon nebo e-mail. Ozveme se do 24 hodin, domluvíme se na kávě nebo callu — bez tlaku, bez scénáře.</p>
+      </div>
+
+      <div class="lg:col-span-5 flex lg:justify-end">
+        <button data-open-modal class="btn-primary rounded-full pl-7 pr-2 py-2.5 text-[15px] font-semibold inline-flex items-center gap-3 glow-red">
+          Přidat se k týmu
+          <span class="grid place-items-center w-11 h-11 rounded-full bg-white/15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Two big contact cards -->
+    <div class="mt-12 grid md:grid-cols-2 gap-5">
+      <!-- Call -->
+      <a href="tel:+420226223800" class="group relative rounded-3xl border border-white/10 bg-white/[0.03] p-7 md:p-8 hover:bg-white/[0.06] hover:border-white/20 transition reveal overflow-hidden" style="--i:1">
+        <div aria-hidden class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-brand/10 blur-3xl group-hover:bg-brand/20 transition"></div>
+        <div class="relative flex items-start justify-between gap-6">
+          <div>
+            <div class="text-[11px] font-mono uppercase tracking-[.2em] text-white/40">/ 01</div>
+            <div class="mt-4 flex items-center gap-3">
+              <span class="grid place-items-center w-10 h-10 rounded-full bg-white/5 text-white/70">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div>
+                <div class="text-[13px] text-white/50">Zavolej nám</div>
+                <div class="mt-0.5 tabular font-extrabold text-[28px] md:text-[34px] leading-none">226 223 800</div>
+              </div>
+            </div>
+            <div class="mt-5 text-[13px] text-white/50 flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-lime2-400 animate-pulse"></span>
+              Po–Pá · 9:00–17:00
+            </div>
+          </div>
+          <span class="shrink-0 grid place-items-center w-10 h-10 rounded-full bg-white/5 border border-white/10 group-hover:bg-white group-hover:text-ink-900 transition">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M8 7h9v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:info@domidomi.cz" class="group relative rounded-3xl border border-white/10 bg-white/[0.03] p-7 md:p-8 hover:bg-white/[0.06] hover:border-white/20 transition reveal overflow-hidden" style="--i:2">
+        <div aria-hidden class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-sun-400/10 blur-3xl group-hover:bg-sun-400/20 transition"></div>
+        <div class="relative flex items-start justify-between gap-6">
+          <div>
+            <div class="text-[11px] font-mono uppercase tracking-[.2em] text-white/40">/ 02</div>
+            <div class="mt-4 flex items-center gap-3">
+              <span class="grid place-items-center w-10 h-10 rounded-full bg-white/5 text-white/70">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 7.5V17a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7.5M3 7.5A2 2 0 0 1 5 5.5h14a2 2 0 0 1 2 2M3 7.5l9 6 9-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div>
+                <div class="text-[13px] text-white/50">Napiš nám</div>
+                <div class="mt-0.5 font-extrabold text-[24px] md:text-[28px] leading-none">info@domidomi.cz</div>
+              </div>
+            </div>
+            <div class="mt-5 text-[13px] text-white/50 flex items-center gap-2">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+              Odpovíme do 24 hodin
+            </div>
+          </div>
+          <span class="shrink-0 grid place-items-center w-10 h-10 rounded-full bg-white/5 border border-white/10 group-hover:bg-white group-hover:text-ink-900 transition">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M8 7h9v9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Mid row: brand + nav + regions -->
+    <div class="mt-16 grid md:grid-cols-12 gap-10">
+      <div class="md:col-span-5">
+        <a href="#" class="inline-flex items-center gap-2.5">
+          <span class="relative grid place-items-center w-10 h-10 rounded-lg bg-brand text-white font-extrabold text-lg">D</span>
+          <span class="font-extrabold tracking-tight text-xl">DOMIDOMI <span class="text-white/50 font-semibold text-base">· OTZ</span></span>
+        </a>
+        <p class="mt-5 text-white/55 text-[14px] max-w-[380px] leading-relaxed">Nábor obchodně-technických zástupců pro celý ekosystém služeb kolem moderního bydlení — FVE, tepelná čerpadla, energie, stavby, finance.</p>
+      </div>
+
+      <div class="md:col-span-3">
+        <div class="eyebrow text-white/40 mb-4">Stránka</div>
+        <ul class="space-y-2.5 text-[14px] text-white/70">
+          <li><a href="#benefity" class="inline-flex items-center gap-2 hover:text-white transition"><span class="w-1 h-1 rounded-full bg-white/30"></span>Benefity</a></li>
+          <li><a href="#ekosystem" class="inline-flex items-center gap-2 hover:text-white transition"><span class="w-1 h-1 rounded-full bg-white/30"></span>Ekosystém</a></li>
+          <li><a href="#pribehy" class="inline-flex items-center gap-2 hover:text-white transition"><span class="w-1 h-1 rounded-full bg-white/30"></span>Lidé</a></li>
+          <li><a href="#vydelky" class="inline-flex items-center gap-2 hover:text-white transition"><span class="w-1 h-1 rounded-full bg-white/30"></span>Výdělky</a></li>
+          <li><a href="#faq" class="inline-flex items-center gap-2 hover:text-white transition"><span class="w-1 h-1 rounded-full bg-white/30"></span>FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-4">
+        <div class="eyebrow text-white/40 mb-4">Pobočky · ČR / SK</div>
+        <div class="grid grid-cols-2 gap-x-5 gap-y-2.5 text-[14px] text-white/70">
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span>Praha</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span>Brno</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span>Ostrava</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span>Plzeň</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span>Hradec Králové</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-brand"></span>Liberec</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sun-400"></span>Bratislava</div>
+          <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sun-400"></span>Košice</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hair my-10"></div>
+
+    <!-- Bottom row: legal -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[12px] text-white/45">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span>© 2026 DOMIDOMI s.r.o.</span>
+        <span class="text-white/20">·</span>
+        <span>IČ 28787803</span>
+        <span class="text-white/20">·</span>
+        <span>U nákladového nádraží 3265/10, 130 00 Praha 3</span>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="#" class="underline underline-offset-4 decoration-white/20 hover:decoration-white hover:text-white/70 transition">GDPR</a>
+        <a href="#" class="hover:text-white/70 transition">Podmínky</a>
+        <a href="#" class="hover:text-white/70 transition">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SCROLL INTENT MODAL -->
+<div id="intent-modal" class="fixed inset-0 z-[99] hidden">
+  <div class="absolute inset-0 bg-ink-900/75 backdrop-blur-sm" data-intent-close></div>
+  <div class="relative h-full w-full grid place-items-center p-4">
+    <div class="relative w-full max-w-[520px] bg-white rounded-[28px] shadow-ring overflow-hidden animate-intent-in">
+      <button data-intent-close class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 grid place-items-center z-10">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+      <div class="h-1.5 bg-brand"></div>
+      <div class="p-7 md:p-10">
+        <div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-brand">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand animate-pulse"></span>
+          <span>vidíme tě</span>
+        </div>
+        <h3 class="mt-4 text-[28px] md:text-[34px] font-extrabold text-slate2-900 leading-[1.05]">
+          Zdá se, že tě tahle nabídka <span class="swoosh">vážně zaujala.</span>
+        </h3>
+        <p class="mt-4 text-slate2-600 text-[15px] leading-relaxed">Tak ať tady nejsi zbytečně. Nech nám na sebe kontakt — ozveme se do&nbsp;24&nbsp;hodin a&nbsp;projdeme spolu první krok.</p>
+        <div class="mt-7 flex flex-col sm:flex-row gap-3">
+          <button id="intent-open-form" class="btn-primary rounded-full py-2 pl-6 pr-2 text-[15px] font-semibold flex items-center gap-3 glow-red flex-1 min-w-0">
+            <span class="flex-1 text-left whitespace-nowrap">Chci se přidat k týmu</span>
+            <span class="shrink-0 grid place-items-center w-9 h-9 rounded-full bg-white/15">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <button data-intent-close class="rounded-full px-5 py-2 text-[14px] font-semibold text-slate2-600 hover:text-slate2-900 sm:shrink-0">Ještě se rozkoukám</button>
+        </div>
+        <div class="mt-5 pt-5 border-t border-line flex items-center gap-3 text-[12px] text-slate2-500">
+          <div class="flex -space-x-2">
+            <div class="w-7 h-7 rounded-full border-2 border-white bg-cover" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80')"></div>
+            <div class="w-7 h-7 rounded-full border-2 border-white bg-cover" style="background-image:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80')"></div>
+            <div class="w-7 h-7 rounded-full border-2 border-white bg-cover" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80')"></div>
+          </div>
+          <span>180+ kolegů · průměr 118k&nbsp;Kč/měs</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  @keyframes intentIn {
+    from { opacity: 0; transform: translateY(16px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes intentOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-8px) scale(.98); }
+  }
+  @keyframes intentBackdropOut {
+    from { opacity: 1; } to { opacity: 0; }
+  }
+  .animate-intent-in { animation: intentIn .35s cubic-bezier(.2,.8,.2,1); }
+  #intent-modal.intent-closing > div:first-child { animation: intentBackdropOut .28s ease forwards; }
+  #intent-modal.intent-closing .animate-intent-in { animation: intentOut .28s cubic-bezier(.4,0,.6,1) forwards; }
+</style>
+
+<!-- MODAL -->
+<div id="modal" class="fixed inset-0 z-[100] hidden">
+  <div class="absolute inset-0 bg-ink-900/80 backdrop-blur-sm" data-close-modal></div>
+  <div class="relative h-full w-full grid place-items-center p-4 overflow-y-auto">
+    <div class="relative w-full max-w-[620px] bg-white rounded-[28px] shadow-ring overflow-hidden my-8">
+      <div class="absolute top-4 right-4 z-10">
+        <button data-close-modal class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 grid place-items-center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div id="modal-host" class="p-6 md:p-10"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TWEAKS panel -->
+<div id="tweaks-panel" class="fixed bottom-4 right-4 z-[90] w-[300px] bg-ink-900 text-white rounded-2xl border border-white/10 shadow-ring hidden">
+  <div class="p-4">
+    <div class="flex items-center justify-between">
+      <div class="font-bold text-sm">Tweaks</div>
+      <button id="tweaks-close" class="text-white/50 hover:text-white text-xs">zavřít</button>
+    </div>
+    <div class="mt-3 text-[12px] text-white/60">Variace designu na živo.</div>
+
+    <div class="mt-4">
+      <div class="tw-field">
+        <div>
+          <div class="text-[13px] font-semibold">Přízvuk</div>
+          <div class="text-[11px] text-white/50">barva CTA a doplňků</div>
+        </div>
+        <div id="tw-accent" class="flex gap-1.5">
+          <button data-accent="#E30A1A" class="w-5 h-5 rounded-full border-2 border-white" style="background:#E30A1A"></button>
+          <button data-accent="#f97316" class="w-5 h-5 rounded-full border border-white/30" style="background:#f97316"></button>
+          <button data-accent="#0ea5e9" class="w-5 h-5 rounded-full border border-white/30" style="background:#0ea5e9"></button>
+          <button data-accent="#7c3aed" class="w-5 h-5 rounded-full border border-white/30" style="background:#7c3aed"></button>
+        </div>
+      </div>
+      <div class="tw-field">
+        <div>
+          <div class="text-[13px] font-semibold">Hero styl</div>
+          <div class="text-[11px] text-white/50">tmavý vs světlý</div>
+        </div>
+        <div id="tw-hero" class="flex text-[11px] font-semibold rounded-full bg-white/10 p-0.5">
+          <button data-hero="dark" class="px-2.5 py-1 rounded-full bg-white text-ink-900">Dark</button>
+          <button data-hero="light" class="px-2.5 py-1 rounded-full text-white/70">Light</button>
+        </div>
+      </div>
+      <div class="tw-field">
+        <div>
+          <div class="text-[13px] font-semibold">Animace</div>
+          <div class="text-[11px] text-white/50">scroll reveal + parallax</div>
+        </div>
+        <div id="tw-motion" class="switch on" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="tw-field">
+        <div>
+          <div class="text-[13px] font-semibold">Hero copy</div>
+          <div class="text-[11px] text-white/50">tonalita headlinu</div>
+        </div>
+        <select id="tw-copy" class="bg-white/10 border border-white/10 rounded-lg text-[12px] px-2 py-1">
+          <option value="freedom">Svoboda + smysl</option>
+          <option value="money">Peníze napřímo</option>
+          <option value="team">Tým + příběhy</option>
+        </select>
+      </div>
+      <div class="tw-field">
+        <div>
+          <div class="text-[13px] font-semibold">Density</div>
+          <div class="text-[11px] text-white/50">vzdušnost sekcí</div>
+        </div>
+        <div id="tw-density" class="flex text-[11px] font-semibold rounded-full bg-white/10 p-0.5">
+          <button data-density="cozy" class="px-2.5 py-1 rounded-full bg-white text-ink-900">Cozy</button>
+          <button data-density="compact" class="px-2.5 py-1 rounded-full text-white/70">Compact</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TWEAK defaults marker -->
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "#E30A1A",
+    "hero": "dark",
+    "motion": true,
+    "copy": "freedom",
+    "density": "cozy"
+  }/*EDITMODE-END*/;
+</script>
+
+<!-- APP JS -->
+<script>
+(() => {
+  // ------ scroll progress ------
+  const bar = document.querySelector('#scroll-progress .progressbar');
+  const onScroll = () => {
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    bar.style.transform = `scaleX(${Math.max(0, Math.min(1, pct))})`;
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ------ reveal on scroll ------
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach((el, i) => { el.style.setProperty('--i', el.style.getPropertyValue('--i') || i); });
+  if (!reduceMotion) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('in'));
+  }
+
+  // ------ leads chart ------
+  document.querySelectorAll('[data-leads-chart]').forEach(chart => {
+    const trigger = () => chart.classList.add('playing');
+    if (reduceMotion) { trigger(); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { trigger(); io.unobserve(e.target); } });
+    }, { threshold: 0.3 });
+    io.observe(chart);
+  });
+
+  // ------ residual counter (USP 2) ------
+  document.querySelectorAll('[data-residual-counter]').forEach(el => {
+    const target = parseInt(el.dataset.target, 10) || 0;
+    const nf = new Intl.NumberFormat('cs-CZ');
+    const run = () => {
+      if (reduceMotion) { el.textContent = nf.format(target) + ' Kč'; return; }
+      const dur = 1800; const start = performance.now();
+      const tick = (t) => {
+        const p = Math.min(1, (t - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = nf.format(Math.round(target * eased)) + ' Kč';
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { run(); io.unobserve(e.target); } });
+    }, { threshold: 0.4 });
+    io.observe(el);
+  });
+
+  // ------ scan scene (loops with different scenarios) ------
+  const scanScenarios = [
+    { inv: '24/0138', total: '9 842 Kč',  label: 'FVE + TČ + tarif',   saving: 42180, pct: 78 },
+    { inv: '24/0241', total: '14 560 Kč', label: 'Tepelné čerpadlo',   saving: 58400, pct: 84 },
+    { inv: '24/0327', total: '6 210 Kč',  label: 'Fixace tarifu',      saving: 18900, pct: 52 },
+    { inv: '24/0415', total: '11 480 Kč', label: 'FVE + baterie',      saving: 36750, pct: 71 },
+    { inv: '24/0508', total: '8 915 Kč',  label: 'Optimalizace odběru',saving: 24300, pct: 61 }
+  ];
+
+  document.querySelectorAll('[data-scan-scene]').forEach(scene => {
+    const counter = scene.querySelector('[data-scan-counter]');
+    const bar = scene.querySelector('[data-scan-bar]');
+    const pct = scene.querySelector('[data-scan-pct]');
+    const label = scene.querySelector('[data-scan-label]');
+    const invNum = scene.querySelector('[data-scan-invnum]');
+    const invTotal = scene.querySelector('[data-scan-invtotal]');
+    const nf = new Intl.NumberFormat('cs-CZ');
+    let idx = 0, running = false, timeouts = [], rafId = null;
+
+    const clearAll = () => {
+      timeouts.forEach(clearTimeout); timeouts = [];
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+    const later = (fn, ms) => { const t = setTimeout(fn, ms); timeouts.push(t); return t; };
+
+    const renderFinal = (s) => {
+      if (invNum) invNum.textContent = s.inv;
+      if (invTotal) invTotal.textContent = s.total;
+      if (label) label.textContent = s.label;
+      if (counter) counter.textContent = nf.format(s.saving) + ' Kč';
+      if (bar) bar.style.width = s.pct + '%';
+      if (pct) pct.textContent = s.pct + '%';
+    };
+
+    if (reduceMotion) {
+      renderFinal(scanScenarios[0]);
+      return;
+    }
+
+    const playOnce = () => {
+      const s = scanScenarios[idx % scanScenarios.length];
+      // swap invoice details before the scan begins
+      if (invNum) invNum.textContent = s.inv;
+      if (invTotal) invTotal.textContent = s.total;
+      if (label) label.textContent = s.label;
+      if (counter) counter.textContent = '0 Kč';
+      if (bar) bar.style.width = '0%';
+      if (pct) pct.textContent = '0%';
+
+      // restart CSS animations by removing/re-adding class
+      scene.classList.remove('playing', 'swapping');
+      // force reflow
+      void scene.offsetWidth;
+      scene.classList.add('playing');
+
+      // counter animation after laser finishes (~1.15s)
+      const countStart = 1150;
+      const duration = 900;
+      later(() => {
+        const t0 = performance.now();
+        const tick = (now) => {
+          const p = Math.min(1, (now - t0) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          if (counter) counter.textContent = nf.format(Math.round(s.saving * eased)) + ' Kč';
+          if (bar) bar.style.width = (s.pct * eased) + '%';
+          if (pct) pct.textContent = Math.round(s.pct * eased) + '%';
+          if (p < 1) rafId = requestAnimationFrame(tick);
+        };
+        rafId = requestAnimationFrame(tick);
+      }, countStart);
+
+      // swap-out transition → next iteration
+      const holdAfter = countStart + duration + 1100;
+      later(() => { scene.classList.add('swapping'); }, holdAfter);
+      later(() => { idx++; if (running) playOnce(); }, holdAfter + 380);
+    };
+
+    const start = () => { if (running) return; running = true; playOnce(); };
+    const stop  = () => { running = false; clearAll(); scene.classList.remove('playing'); };
+
+    const sceneIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) start(); else stop(); });
+    }, { threshold: 0.35 });
+    sceneIO.observe(scene);
+  });
+
+  // ------ modal ------
+  const modal = document.getElementById('modal');
+  const modalHost = document.getElementById('modal-host');
+  const inlineHost = document.getElementById('inline-form-host');
+
+  const openModal = () => {
+    modal.classList.remove('hidden');
+    mountForm(modalHost, 'modal');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeModal = () => {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+  document.querySelectorAll('[data-open-modal]').forEach(b => b.addEventListener('click', openModal));
+  document.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ------ form logic ------
+  const regions = ['Praha + Střední Čechy','Jižní Čechy + Plzeňsko','Morava (Brno/Olomouc)','Ostravsko + Slezsko','Vysočina + Pardubicko','Ústecko + Liberecko'];
+  const experience = ['0 – méně než rok','1 – 2 roky','3 – 5 let','5+ let'];
+
+  function mountForm(host, variant) {
+    const state = { step: 0, region: null, exp: null, license: null, name: '', phone: '', email: '' };
+    const total = 4;
+    const render = () => {
+      const stepTitles = ['O jaký podíl trhu máš zájem?','Máš zkušenosti s obchodem?','Máš řidičák?','Kam ti máme volat?'];
+      const pct = ((state.step) / total) * 100;
+      host.innerHTML = `
+        <div class="flex items-center gap-2 pr-12">
+          <span class="w-2 h-2 rounded-full bg-brand"></span>
+          <span class="font-mono text-[11px] uppercase tracking-[.2em] text-slate2-500">${state.step + 1}/${total}</span>
+          <span class="text-[11px] font-mono text-slate2-400 ml-auto hidden sm:inline">cca 60 s</span>
+        </div>
+        <div class="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+          <div class="h-full progressbar" style="transform: scaleX(${pct/100}); transform-origin: 0 50%"></div>
+        </div>
+        <h3 class="mt-6 h-tight text-[26px] md:text-3xl font-extrabold text-slate2-900">${state.step === 0 ? 'Máš na to u nás pracovat? <span class="text-brand">Ověř si to.</span>' : stepTitles[state.step]}</h3>
+        ${state.step === 0 ? `<p class="mt-2 text-slate2-600 text-[15px]">${stepTitles[0]}</p>` : ''}
+        <div id="step-body" class="step-enter mt-6"></div>
+      `;
+      const body = host.querySelector('#step-body');
+      if (state.step === 0) body.innerHTML = renderOptions(regions, state.region, (v)=>{ state.region=v; next(); });
+      if (state.step === 1) body.innerHTML = renderOptions(experience, state.exp, (v)=>{ state.exp=v; next(); });
+      if (state.step === 2) body.innerHTML = renderOptions(['Ano, aktivně řídím','Ano, ale zřídka','Zatím nemám'], state.license, (v)=>{ state.license=v; next(); });
+      if (state.step === 3) body.innerHTML = renderContact(state, submit);
+      // nav
+      const nav = document.createElement('div');
+      nav.className = 'mt-7 flex items-center justify-between';
+      nav.innerHTML = `
+        <button ${state.step === 0 ? 'disabled' : ''} id="prev" class="text-sm text-slate2-500 hover:text-slate2-900 disabled:opacity-40">← Zpět</button>
+      `;
+      host.appendChild(nav);
+      host.querySelector('#prev').addEventListener('click', () => { if (state.step>0) { state.step--; render(); } });
+      // wire option click listeners
+      wireOptions(body, state);
+      requestAnimationFrame(() => body.classList.add('step-in'));
+    };
+
+    const next = () => {
+      if (state.step < total - 1) { state.step++; render(); }
+    };
+    const submit = () => {
+      // show success
+      host.innerHTML = `
+        <div class="text-center py-4">
+          <div class="mx-auto w-16 h-16 rounded-full bg-lime2-200 grid place-items-center">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path class="drawMark" d="M20 6L9 17l-5-5" stroke="#3f6212" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="mt-5 h-tight text-2xl md:text-3xl font-extrabold text-slate2-900">Máme tě. 🙌</h3>
+          <p class="mt-2 text-slate2-600 max-w-[400px] mx-auto">Teamleader z tvého regionu ti zavolá do <b>24 hodin</b> a domluvíte termín.</p>
+          <div class="mt-6 rounded-2xl bg-slate-50 border border-line p-4 text-left text-sm max-w-[400px] mx-auto">
+            <div class="flex justify-between py-1.5"><span class="text-slate2-500">Trh</span><span class="font-semibold">${state.region || '—'}</span></div>
+            <div class="flex justify-between py-1.5 border-t border-line"><span class="text-slate2-500">Zkušenost</span><span class="font-semibold">${state.exp || '—'}</span></div>
+            <div class="flex justify-between py-1.5 border-t border-line"><span class="text-slate2-500">Řidičák</span><span class="font-semibold">${state.license || '—'}</span></div>
+            <div class="flex justify-between py-1.5 border-t border-line"><span class="text-slate2-500">Kontakt</span><span class="font-semibold">${state.phone || state.email || '—'}</span></div>
+          </div>
+        </div>
+      `;
+    };
+    render();
+  }
+
+  function renderOptions(opts, selected, onChoose) {
+    return `<div class="grid gap-2">
+      ${opts.map((o, i) => `
+        <button data-opt="${i}" data-val="${o}" class="radio-row text-left ${selected===o?'on':''}">
+          <span class="circle"></span>
+          <span class="font-semibold text-slate2-900">${o}</span>
+          <span class="ml-auto text-slate2-400"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+      `).join('')}
+    </div>`;
+  }
+  function wireOptions(body, state) {
+    body.querySelectorAll('[data-opt]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.dataset.val;
+        // fire onChoose via step
+        if (state.step === 0) { state.region = val; }
+        else if (state.step === 1) { state.exp = val; }
+        else if (state.step === 2) { state.license = val; }
+        body.querySelectorAll('[data-opt]').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        // auto-advance with slight delay
+        setTimeout(() => {
+          const ev = new CustomEvent('__next');
+          document.dispatchEvent(ev);
+        }, 260);
+      });
+    });
+  }
+
+  function renderContact(state, onSubmit) {
+    setTimeout(() => {
+      const f = document.getElementById('contact-form');
+      if (f) f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(f);
+        state.name = fd.get('name'); state.phone = fd.get('phone'); state.email = fd.get('email');
+        onSubmit();
+      });
+    }, 0);
+    return `
+      <form id="contact-form" class="grid gap-3">
+        <label class="grid gap-1.5">
+          <span class="text-[12px] font-semibold text-slate2-600">Jméno a příjmení</span>
+          <input name="name" required class="px-4 py-3 rounded-xl border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="Jan Novák"/>
+        </label>
+        <div class="grid md:grid-cols-2 gap-3">
+          <label class="grid gap-1.5">
+            <span class="text-[12px] font-semibold text-slate2-600">Telefon</span>
+            <input name="phone" required inputmode="tel" class="px-4 py-3 rounded-xl border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="+420 ___ ___ ___"/>
+          </label>
+          <label class="grid gap-1.5">
+            <span class="text-[12px] font-semibold text-slate2-600">E-mail</span>
+            <input name="email" type="email" required class="px-4 py-3 rounded-xl border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="jan@novak.cz"/>
+          </label>
+        </div>
+        <label class="flex items-start gap-3 mt-1 text-[13px] text-slate2-600">
+          <input type="checkbox" required class="mt-1 accent-[#E30A1A]"/>
+          <span>Souhlasím se zpracováním údajů za účelem náboru (platí 6 měsíců, možno kdykoli odvolat).</span>
+        </label>
+        <button type="submit" class="mt-2 btn-primary rounded-2xl py-4 font-semibold flex items-center justify-center gap-3 glow-red">
+          <span class="sm:hidden">Odeslat a domluvit schůzku</span>
+          <span class="hidden sm:inline">Odeslat a rezervovat termín pohovoru</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+    `;
+  }
+
+  // handle __next autoadvance
+  document.addEventListener('__next', () => {
+    // re-mount the current form where it is
+    const host = document.querySelector('#modal:not(.hidden) #modal-host') || document.querySelector('#inline-form-host');
+    // find state by reading radios — simpler: just call mountForm again if not on contact
+    // We stash state in a module-level closure per host; for simplicity, advance via DOM signal:
+    const e = new Event('advance'); host.dispatchEvent(e);
+  });
+
+  // Bind advance per host by monkeypatching mountForm to listen
+  const origMount = mountForm;
+  // wrap: when rendering, keep a handle to state
+  // (Above I defined mountForm using local state; re-wire so external advance works:)
+  // Simpler: replace mountForm with version that exposes state as dataset step and re-renders on 'advance'.
+  // Since auto-advance is done via setTimeout + local state.step++ in wireOptions? We didn't call next() there.
+  // Patch wireOptions to actually call state.step++ and re-render.
+  // (Rewriting is cleaner — do it inline.)
+
+  // Mount inline form initially
+  mountForm(inlineHost, 'inline');
+})();
+
+// Proper mountForm (replaces stub) ----------------
+(() => {
+  const regions = ['Praha + Střední Čechy','Jižní Čechy + Plzeňsko','Morava (Brno/Olomouc)','Ostravsko + Slezsko','Vysočina + Pardubicko','Ústecko + Liberecko'];
+  const experience = ['0 – méně než rok','1 – 2 roky','3 – 5 let','5+ let'];
+  const licenses = ['Ano, aktivně řídím','Ano, ale zřídka','Zatím nemám'];
+
+  window.__mountFormV2 = function(host, initial) {
+    const state = Object.assign({ step: 0, region: null, exp: null, license: null, name: '', phone: '', email: '' }, initial || {});
+    const total = 4;
+    const stepTitles = ['O jaký podíl trhu máš zájem?','Máš zkušenosti s obchodem?','Máš řidičák?','Kam ti máme volat?'];
+
+    function render() {
+      const pct = (state.step / total) * 100;
+      host.innerHTML = `
+        <div class="flex items-center gap-2 pr-12">
+          <span class="w-2 h-2 rounded-full bg-brand"></span>
+          <span class="font-mono text-[11px] uppercase tracking-[.2em] text-slate2-500">${state.step + 1}/${total}</span>
+          <span class="text-[11px] font-mono text-slate2-400 ml-auto hidden sm:inline">cca 60 s</span>
+        </div>
+        <div class="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+          <div class="h-full progressbar" style="transform: scaleX(${pct/100}); transform-origin: 0 50%"></div>
+        </div>
+        <h3 class="mt-6 h-tight text-[26px] md:text-3xl font-extrabold text-slate2-900">${state.step === 0 ? 'Máš na to u nás pracovat? <span class="text-brand">Ověř si to.</span>' : stepTitles[state.step]}</h3>
+        ${state.step === 0 ? `<p class="mt-2 text-slate2-600 text-[15px]">${stepTitles[0]}</p>` : ''}
+        <div id="step-body" class="step-enter mt-6"></div>
+        <div class="mt-7 flex items-center">
+          <button ${state.step === 0 ? 'disabled' : ''} id="prev" class="text-sm text-slate2-500 hover:text-slate2-900 disabled:opacity-40">← Zpět</button>
+        </div>
+      `;
+      const body = host.querySelector('#step-body');
+      if (state.step === 0) body.innerHTML = renderOpts(regions, state.region);
+      if (state.step === 1) body.innerHTML = renderOpts(experience, state.exp);
+      if (state.step === 2) body.innerHTML = renderOpts(licenses, state.license);
+      if (state.step === 3) body.innerHTML = renderContact();
+
+      host.querySelector('#prev').addEventListener('click', () => { if (state.step>0) { state.step--; render(); } });
+
+      body.querySelectorAll('[data-opt]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = btn.dataset.val;
+          if (state.step === 0) state.region = val;
+          else if (state.step === 1) state.exp = val;
+          else if (state.step === 2) state.license = val;
+          body.querySelectorAll('[data-opt]').forEach(b => b.classList.remove('on'));
+          btn.classList.add('on');
+          setTimeout(() => { if (state.step < total - 1) { state.step++; render(); } }, 240);
+        });
+      });
+      const cf = body.querySelector('#contact-form');
+      if (cf) cf.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fd = new FormData(cf);
+        state.name = fd.get('name'); state.phone = fd.get('phone'); state.email = fd.get('email');
+        success();
+      });
+
+      requestAnimationFrame(() => body.classList.add('step-in'));
+    }
+
+    function renderOpts(opts, selected) {
+      return `<div class="grid gap-2">
+        ${opts.map((o) => `
+          <button data-opt data-val="${o}" class="radio-row text-left ${selected===o?'on':''}">
+            <span class="circle"></span>
+            <span class="font-semibold text-slate2-900">${o}</span>
+            <span class="ml-auto text-slate2-400"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        `).join('')}
+      </div>`;
+    }
+
+    function renderContact() {
+      return `
+        <form id="contact-form" class="grid gap-3">
+          <label class="grid gap-1.5">
+            <span class="text-[12px] font-semibold text-slate2-600">Jméno a příjmení</span>
+            <input name="name" required class="px-4 py-3 rounded-xl border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="Jan Novák"/>
+          </label>
+          <div class="grid md:grid-cols-2 gap-3">
+            <label class="grid gap-1.5">
+              <span class="text-[12px] font-semibold text-slate2-600">Telefon</span>
+              <input name="phone" required inputmode="tel" class="px-4 py-3 rounded-xl border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="+420 ___ ___ ___"/>
+            </label>
+            <label class="grid gap-1.5">
+              <span class="text-[12px] font-semibold text-slate2-600">E-mail</span>
+              <input name="email" type="email" required class="px-4 py-3 rounded-xl border border-line focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="jan@novak.cz"/>
+            </label>
+          </div>
+          <label class="flex items-start gap-3 mt-1 text-[13px] text-slate2-600">
+            <input type="checkbox" required class="mt-1 accent-[#E30A1A]"/>
+            <span>Souhlasím se zpracováním údajů za účelem náboru (platí 6 měsíců, možno kdykoli odvolat).</span>
+          </label>
+          <button type="submit" class="mt-2 btn-primary rounded-2xl py-4 font-semibold flex items-center justify-center gap-3 glow-red">
+            <span class="sm:hidden">Odeslat a domluvit schůzku</span>
+            <span class="hidden sm:inline">Odeslat a rezervovat termín pohovoru</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>`;
+    }
+
+    function success() {
+      host.innerHTML = `
+        <div class="text-center py-4">
+          <div class="mx-auto w-16 h-16 rounded-full bg-lime2-200 grid place-items-center">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path class="drawMark" d="M20 6L9 17l-5-5" stroke="#3f6212" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 class="mt-5 h-tight text-2xl md:text-3xl font-extrabold text-slate2-900">Máme tě. 🙌</h3>
+          <p class="mt-2 text-slate2-600 max-w-[400px] mx-auto">Teamleader z tvého regionu ti zavolá do <b>24 hodin</b> a domluvíte termín.</p>
+          <div class="mt-6 rounded-2xl bg-slate-50 border border-line p-4 text-left text-sm max-w-[400px] mx-auto">
+            <div class="flex justify-between py-1.5"><span class="text-slate2-500">Trh</span><span class="font-semibold">${state.region || '—'}</span></div>
+            <div class="flex justify-between py-1.5 border-t border-line"><span class="text-slate2-500">Zkušenost</span><span class="font-semibold">${state.exp || '—'}</span></div>
+            <div class="flex justify-between py-1.5 border-t border-line"><span class="text-slate2-500">Řidičák</span><span class="font-semibold">${state.license || '—'}</span></div>
+            <div class="flex justify-between py-1.5 border-t border-line"><span class="text-slate2-500">Kontakt</span><span class="font-semibold">${state.phone || state.email || '—'}</span></div>
+          </div>
+        </div>`;
+    }
+
+    render();
+  };
+
+  // Replace initial mounts with V2
+  const inlineHost = document.getElementById('inline-form-host');
+  const modalHost = document.getElementById('modal-host');
+  if (inlineHost) window.__mountFormV2(inlineHost);
+
+  // expose for hero
+  window.__openModalWithState = function(initial) {
+    const modal = document.getElementById('modal');
+    modal.classList.remove('hidden');
+    window.__mountFormV2(modalHost, initial);
+    document.body.style.overflow = 'hidden';
+  };
+
+  // rebind open buttons to use V2 mount
+  const modal = document.getElementById('modal');
+  document.querySelectorAll('[data-open-modal]').forEach(b => {
+    b.addEventListener('click', (e) => {
+      window.__mountFormV2(modalHost);
+    });
+  });
+
+  // Hero step-1 options — click advances to step 2 with selected region
+  const heroHost = document.getElementById('hero-quiz-options');
+  if (heroHost) {
+    const regions = ['Praha + Střední Čechy','Jižní Čechy + Plzeňsko','Morava (Brno/Olomouc)','Ostravsko + Slezsko','Vysočina + Pardubicko','Ústecko + Liberecko'];
+    heroHost.innerHTML = regions.map(r => `
+      <button data-hero-opt data-val="${r}" class="radio-row text-left">
+        <span class="circle"></span>
+        <span class="font-semibold text-slate2-900">${r}</span>
+        <span class="ml-auto text-slate2-400"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+    `).join('');
+    heroHost.querySelectorAll('[data-hero-opt]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('on');
+        setTimeout(() => {
+          window.__openModalWithState({ step: 1, region: btn.dataset.val });
+        }, 180);
+      });
+    });
+  }
+})();
+
+// ---------- USP mobile carousel dots ----------
+(() => {
+  const scroller = document.querySelector('.usp-scroll');
+  const dots = document.querySelectorAll('[data-usp-dot]');
+  if (!scroller || !dots.length) return;
+  const cards = Array.from(scroller.children);
+
+  const sync = () => {
+    if (window.innerWidth >= 768) return;
+    const center = scroller.scrollLeft + scroller.clientWidth / 2;
+    let best = 0, bestDist = Infinity;
+    cards.forEach((c, i) => {
+      const cx = c.offsetLeft + c.offsetWidth / 2;
+      const d = Math.abs(cx - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    dots.forEach((d, i) => d.classList.toggle('on', i === best));
+  };
+
+  scroller.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  dots.forEach((d, i) => {
+    d.addEventListener('click', () => {
+      const c = cards[i];
+      if (!c) return;
+      const target = c.offsetLeft - (scroller.clientWidth - c.offsetWidth) / 2;
+      scroller.scrollTo({ left: target, behavior: 'smooth' });
+    });
+  });
+  sync();
+})();
+
+// ---------- Stories mobile carousel dots ----------
+(() => {
+  const scroller = document.querySelector('.stories-scroll');
+  const dots = document.querySelectorAll('[data-stories-dot]');
+  if (!scroller || !dots.length) return;
+  const cards = Array.from(scroller.children);
+
+  const sync = () => {
+    if (window.innerWidth >= 768) return;
+    const center = scroller.scrollLeft + scroller.clientWidth / 2;
+    let best = 0, bestDist = Infinity;
+    cards.forEach((c, i) => {
+      const cx = c.offsetLeft + c.offsetWidth / 2;
+      const d = Math.abs(cx - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    dots.forEach((d, i) => d.classList.toggle('on', i === best));
+  };
+
+  scroller.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  dots.forEach((d, i) => {
+    d.addEventListener('click', () => {
+      const c = cards[i];
+      if (!c) return;
+      const target = c.offsetLeft - (scroller.clientWidth - c.offsetWidth) / 2;
+      scroller.scrollTo({ left: target, behavior: 'smooth' });
+    });
+  });
+  sync();
+})();
+
+// ---------- Scroll intent modal (55% viewport) ----------
+(() => {
+  const intent = document.getElementById('intent-modal');
+  if (!intent) return;
+  const panel = intent.querySelector('.animate-intent-in');
+  const backdrop = intent.querySelector('[data-intent-close]');
+
+  const open = () => {
+    if (sessionStorage.getItem('dd_intent_shown')) return;
+    if (!document.getElementById('modal').classList.contains('hidden')) return;
+    intent.classList.remove('hidden');
+    intent.classList.remove('intent-closing');
+    document.body.style.overflow = 'hidden';
+    sessionStorage.setItem('dd_intent_shown', '1');
+  };
+  const close = (cb) => {
+    intent.classList.add('intent-closing');
+    setTimeout(() => {
+      intent.classList.add('hidden');
+      intent.classList.remove('intent-closing');
+      document.body.style.overflow = '';
+      if (cb) cb();
+    }, 280);
+  };
+  intent.querySelectorAll('[data-intent-close]').forEach(b => b.addEventListener('click', () => close()));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !intent.classList.contains('hidden')) close(); });
+
+  const openForm = document.getElementById('intent-open-form');
+  if (openForm) {
+    openForm.addEventListener('click', () => {
+      close(() => {
+        // smooth hand-off: tiny delay so the main modal's fade-in feels continuous
+        setTimeout(() => {
+          if (window.__openModalWithState) window.__openModalWithState({ step: 0 });
+          else document.querySelector('[data-open-modal]')?.click();
+        }, 80);
+      });
+    });
+  }
+
+  let fired = false;
+  const onScroll = () => {
+    if (fired) return;
+    const doc = document.documentElement;
+    const scrolled = window.scrollY + window.innerHeight;
+    const total = doc.scrollHeight;
+    const pct = scrolled / total;
+    if (pct >= 0.55) {
+      fired = true;
+      window.removeEventListener('scroll', onScroll);
+      // small delay so it feels intentional, not jumpy
+      setTimeout(open, 400);
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+// ---------- Tweaks / Edit Mode ----------
+(() => {
+  const tw = TWEAK_DEFAULTS;
+  const panel = document.getElementById('tweaks-panel');
+
+  function applyAccent(color) {
+    tw.accent = color;
+    document.querySelectorAll('.btn-primary').forEach(el => { el.style.background = color; });
+    document.documentElement.style.setProperty('--brand', color);
+    // update chips/accents that reference brand
+    document.querySelectorAll('.progressbar').forEach(b => { b.style.background = `linear-gradient(90deg, ${color} 0%, #f59e0b 55%, #a3e635 100%)`; });
+  }
+  function applyHero(style) {
+    tw.hero = style;
+    const hero = document.querySelector('.hero-bg');
+    if (!hero) return;
+    if (style === 'light') {
+      hero.style.background = `radial-gradient(900px 500px at 80% -10%, rgba(227,10,26,.14), transparent 60%), linear-gradient(180deg, #FAFBFC 0%, #F1F5F9 100%)`;
+      hero.classList.add('text-ink-900'); hero.classList.remove('text-white');
+      // swap heading color tokens where needed? Leave as cosmetic preview.
+    } else {
+      hero.style.background = `radial-gradient(900px 500px at 80% -10%, rgba(227,10,26,.22), transparent 60%), radial-gradient(700px 400px at -10% 30%, rgba(163,230,53,.08), transparent 55%), linear-gradient(180deg, #0c111d 0%, #0a0f18 100%)`;
+      hero.classList.remove('text-ink-900'); hero.classList.add('text-white');
+    }
+  }
+  function applyMotion(on) {
+    tw.motion = on;
+    document.documentElement.classList.toggle('motion-off', !on);
+    if (!on) {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+      document.querySelectorAll('.float-slow, .float-med, .spin-slow, .marquee').forEach(el => el.style.animation = 'none');
+    } else {
+      document.querySelectorAll('.float-slow').forEach(el => el.style.animation = '');
+      document.querySelectorAll('.float-med').forEach(el => el.style.animation = '');
+      document.querySelectorAll('.spin-slow').forEach(el => el.style.animation = '');
+      document.querySelectorAll('.marquee').forEach(el => el.style.animation = '');
+    }
+  }
+  function applyCopy(mode) {
+    tw.copy = mode;
+    const h1 = document.querySelector('section.hero-bg h1');
+    if (!h1) return;
+    if (mode === 'money') {
+      h1.innerHTML = `Vyděláváš <span class="text-lime2-300">80–150k</span>.<br/>Děláš, co tě <span class="swoosh">baví</span>.`;
+    } else if (mode === 'team') {
+      h1.innerHTML = `Nejsi v tom sám.<br/><span class="swoosh">Tým</span>, co drží.<br/>Leady, co chodí.`;
+    } else {
+      h1.innerHTML = `Získej svobodu,<br/>pasivní&nbsp;příjem<br/><span class="inline-block"><span class="swoosh">a&nbsp;práci,</span></span> která dává <span class="text-lime2-300">smysl</span>.`;
+    }
+  }
+  function applyDensity(mode) {
+    tw.density = mode;
+    document.documentElement.classList.toggle('density-compact', mode === 'compact');
+    // crude: scale vertical paddings
+    document.querySelectorAll('section').forEach(s => {
+      if (mode === 'compact') s.style.setProperty('--py-scale','.65');
+      else s.style.removeProperty('--py-scale');
+    });
+    const styleId = '__density-style';
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = styleId; document.head.appendChild(styleEl); }
+    styleEl.textContent = mode === 'compact'
+      ? `section { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }`
+      : '';
+  }
+
+  function persist() {
+    window.parent?.postMessage({ type: '__edit_mode_set_keys', edits: { ...tw } }, '*');
+  }
+
+  // listeners
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === '__activate_edit_mode') panel.classList.remove('hidden');
+    if (d.type === '__deactivate_edit_mode') panel.classList.add('hidden');
+  });
+  window.parent?.postMessage({ type: '__edit_mode_available' }, '*');
+
+  document.getElementById('tweaks-close').addEventListener('click', () => panel.classList.add('hidden'));
+
+  // Accent
+  panel.querySelectorAll('#tw-accent button').forEach(b => {
+    b.addEventListener('click', () => {
+      panel.querySelectorAll('#tw-accent button').forEach(x => { x.className = 'w-5 h-5 rounded-full border border-white/30'; x.style.background = x.dataset.accent; });
+      b.className = 'w-5 h-5 rounded-full border-2 border-white'; b.style.background = b.dataset.accent;
+      applyAccent(b.dataset.accent); persist();
+    });
+  });
+  // Hero
+  panel.querySelectorAll('#tw-hero button').forEach(b => {
+    b.addEventListener('click', () => {
+      panel.querySelectorAll('#tw-hero button').forEach(x => x.className = 'px-2.5 py-1 rounded-full text-white/70');
+      b.className = 'px-2.5 py-1 rounded-full bg-white text-ink-900';
+      applyHero(b.dataset.hero); persist();
+    });
+  });
+  // Motion
+  const sw = document.getElementById('tw-motion');
+  sw.addEventListener('click', () => {
+    sw.classList.toggle('on');
+    applyMotion(sw.classList.contains('on')); persist();
+  });
+  // Copy
+  document.getElementById('tw-copy').addEventListener('change', (e) => { applyCopy(e.target.value); persist(); });
+  // Density
+  panel.querySelectorAll('#tw-density button').forEach(b => {
+    b.addEventListener('click', () => {
+      panel.querySelectorAll('#tw-density button').forEach(x => x.className = 'px-2.5 py-1 rounded-full text-white/70');
+      b.className = 'px-2.5 py-1 rounded-full bg-white text-ink-900';
+      applyDensity(b.dataset.density); persist();
+    });
+  });
+
+  // apply defaults on load (no-op for cosmetic defaults)
+  applyAccent(tw.accent);
+})();
+</script>
+</body>
+</html>

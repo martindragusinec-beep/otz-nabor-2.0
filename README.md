@@ -33,9 +33,7 @@ Make.com webhook je již nakonfigurován v kódu:
 https://hook.eu1.make.com/l5t9g2zh9a1emivilr30m041cgn0t4o6
 ```
 
-Webhook automaticky přijímá data z obou formulářů:
-- **Hero formulář** - `source: "hero_form"`
-- **LeadBanner formulář** - `source: "lead_banner_form"`
+Webhook přijímá data z náborového formuláře:
 - **RecruitmentForm** - `source: "recruitment_form"`
 
 ## 📦 Lokální vývoj
@@ -86,7 +84,7 @@ npm run preview
 - ✅ **7-krokový formulář** s automatickým postupem
 - ✅ **Progress bar** s validací jednotlivých kroků
 - ✅ **Webhook integrace** pro odesílání dat
-- ✅ **Propojení Hero a LeadBanner** formulářů
+- ✅ **CTA a modální náborový formulář** napojené na webhook
 - ✅ **Sticky CTA lišta** pro maximální konverzi
 - ✅ **Profesionální stránka podmínek** ochrany osobních údajů
 - ✅ **Pixel-perfect design** podle Figma návrhů
